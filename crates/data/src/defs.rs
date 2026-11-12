@@ -83,6 +83,25 @@ impl Slot {
             (Slot::Back, Side::Kaiju) => "MUTATION",
         }
     }
+    /// Compact label (HUD lists).
+    pub fn short_for(self, side: Side) -> &'static str {
+        match (self, side) {
+            (Slot::Frame, Side::Saint) => "FRAME",
+            (Slot::Frame, Side::Kaiju) => "BODY",
+            (Slot::LeftArm, Side::Saint) => "L.ARM",
+            (Slot::LeftArm, Side::Kaiju) => "L.CLAW",
+            (Slot::RightArm, Side::Saint) => "R.ARM",
+            (Slot::RightArm, Side::Kaiju) => "R.CLAW",
+            (Slot::Legs, Side::Saint) => "LEGS",
+            (Slot::Legs, Side::Kaiju) => "LOCO",
+            (Slot::Core, Side::Saint) => "REACTOR",
+            (Slot::Core, Side::Kaiju) => "HEART",
+            (Slot::Head, Side::Saint) => "HEAD",
+            (Slot::Head, Side::Kaiju) => "SENSES",
+            (Slot::Back, Side::Saint) => "PACK",
+            (Slot::Back, Side::Kaiju) => "MUTATION",
+        }
+    }
     /// Lateral/longitudinal offset of the slot's mass from the frame centre, in metres
     /// (x = right, z = forward). Used for centre-of-mass and lean.
     pub fn mass_offset(self) -> (f32, f32) {

@@ -3,25 +3,33 @@ name = "iron-saint-leviathan"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "IRON SAINT // LEVIATHAN - a PlayStation 1-styled action soulslike."
+default-run = "iron-saint-leviathan"
 
 [[bin]]
 name = "iron-saint-leviathan"
 path = "src/main.rs"
 
+[features]
+default = []
+# Developer overlays and tools (hitboxes, AI state, frame graph, hot reload). Never in release.
+dev = []
+
 [dependencies]
-wgpu.workspace = true
+isl-sim.workspace = true
+isl-data.workspace = true
+isl-render.workspace = true
+isl-audio.workspace = true
+isl-input.workspace = true
+isl-assets.workspace = true
+isl-ghost.workspace = true
+isl-save.workspace = true
+isl-ui.workspace = true
 winit.workspace = true
-gilrs.workspace = true
-kira.workspace = true
 glam.workspace = true
-gltf.workspace = true
-image.workspace = true
 serde.workspace = true
 ron.workspace = true
-rand_pcg.workspace = true
-rand_core.workspace = true
-directories.workspace = true
-bytemuck.workspace = true
-pollster.workspace = true
-crc32fast.workspace = true
-data-encoding.workspace = true
+image.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true

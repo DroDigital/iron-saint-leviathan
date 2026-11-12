@@ -73,9 +73,10 @@ impl TideClock {
         if self.eternal_night {
             return 0.08;
         }
+        // Sunrise ~05:00, sunset ~20:00; dawn is already grey-lit.
         let h = self.hour_of_day() as f32;
-        let d = ((h - 6.0) / 14.0 * std::f32::consts::PI).sin();
-        d.clamp(0.08, 1.0)
+        let d = ((h - 4.5) / 16.0 * std::f32::consts::PI).sin();
+        (d * 1.1).clamp(0.12, 1.0)
     }
 
     /// Advance by `n` hours (resting = 1). Rolls weather whenever a tide turns.
