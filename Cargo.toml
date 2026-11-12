@@ -23,7 +23,7 @@ isl-ui = { path = "crates/ui" }
 wgpu = "30.0.1"
 winit = "0.30.13"
 gilrs = "0.11.2"
-kira = "0.12.6"
+kira = { version = "0.12.6", default-features = false, features = ["cpal"] }
 glam = { version = "0.34.3", features = ["serde", "libm"] }
 gltf = "1.4.1"
 image = { version = "0.25.10", default-features = false, features = ["png"] }

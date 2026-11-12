@@ -3,5 +3,10 @@ name = "isl-audio"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "kira wrapper: procedural SFX, tracker-style adaptive music layers, SPU mode and PS1 reverb presets."
 
 [dependencies]
+kira.workspace = true
+glam.workspace = true
+isl-data.workspace = true
+tracing.workspace = true
