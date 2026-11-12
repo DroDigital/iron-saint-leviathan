@@ -180,11 +180,7 @@ impl City {
     /// Ground height at an XZ position (land = 0, sea slopes to SEA_FLOOR).
     pub fn ground(&self, x: f32, z: f32) -> f32 {
         let _ = x;
-        if z >= self.shore_z {
-            0.0
-        } else {
-            (-(self.shore_z - z) * 0.45).max(SEA_FLOOR)
-        }
+        if z >= self.shore_z { 0.0 } else { (-(self.shore_z - z) * 0.45).max(SEA_FLOOR) }
     }
     pub fn half(&self) -> f32 {
         self.size * 0.5
@@ -218,7 +214,11 @@ impl City {
         let mut lamps = vec![];
         let mut pylons = vec![];
         let add = |b: &mut Vec<Building>, k: BuildingKind, c: Vec3, s: Vec3, col: [u8; 3]| {
-            b.push(Building::new(k, Aabb::new(Vec3::new(c.x - s.x / 2.0, c.y, c.z - s.z / 2.0), Vec3::new(c.x + s.x / 2.0, c.y + s.y, c.z + s.z / 2.0)), col));
+            b.push(Building::new(
+                k,
+                Aabb::new(Vec3::new(c.x - s.x / 2.0, c.y, c.z - s.z / 2.0), Vec3::new(c.x + s.x / 2.0, c.y + s.y, c.z + s.z / 2.0)),
+                col,
+            ));
         };
         // Landmark structures surround the arena.
         let lc = arena_c;
@@ -227,7 +227,13 @@ impl City {
                 for i in 0..3 {
                     let x = -40.0 + i as f32 * 40.0;
                     add(&mut buildings, BuildingKind::Crane, Vec3::new(x, 0.0, shore_z + 4.0), Vec3::new(4.0, 34.0, 4.0), [170, 120, 50]);
-                    add(&mut buildings, BuildingKind::Pier, Vec3::new(x + 10.0, -0.6, shore_z - 18.0), Vec3::new(8.0, 1.2, 34.0), [110, 90, 70]);
+                    add(
+                        &mut buildings,
+                        BuildingKind::Pier,
+                        Vec3::new(x + 10.0, -0.6, shore_z - 18.0),
+                        Vec3::new(8.0, 1.2, 34.0),
+                        [110, 90, 70],
+                    );
                 }
                 add(&mut buildings, BuildingKind::Warehouse, lc + Vec3::new(-44.0, 0.0, 30.0), Vec3::new(30.0, 12.0, 18.0), pal(&mut rng));
                 add(&mut buildings, BuildingKind::Warehouse, lc + Vec3::new(44.0, 0.0, 30.0), Vec3::new(30.0, 12.0, 18.0), pal(&mut rng));
@@ -255,7 +261,13 @@ impl City {
                 add(&mut buildings, BuildingKind::Tower, lc + Vec3::new(40.0, 0.0, 50.0), Vec3::new(10.0, 18.0, 10.0), [110, 110, 104]);
             }
             Landmark::Lighthouse => {
-                add(&mut buildings, BuildingKind::Lighthouse, Vec3::new(-50.0, 0.0, shore_z + 10.0), Vec3::new(10.0, 50.0, 10.0), [220, 210, 200]);
+                add(
+                    &mut buildings,
+                    BuildingKind::Lighthouse,
+                    Vec3::new(-50.0, 0.0, shore_z + 10.0),
+                    Vec3::new(10.0, 50.0, 10.0),
+                    [220, 210, 200],
+                );
                 lamps.push(Vec3::new(-50.0, 52.0, shore_z + 10.0));
                 fires.push(Vec3::new(-50.0, 52.0, shore_z + 10.0));
             }
@@ -266,7 +278,13 @@ impl City {
                 }
             }
             Landmark::Seawall => {
-                add(&mut buildings, BuildingKind::Wall, Vec3::new(0.0, 0.0, shore_z - 2.0), Vec3::new(size * 0.9, 9.0, 6.0), [130, 130, 124]);
+                add(
+                    &mut buildings,
+                    BuildingKind::Wall,
+                    Vec3::new(0.0, 0.0, shore_z - 2.0),
+                    Vec3::new(size * 0.9, 9.0, 6.0),
+                    [130, 130, 124],
+                );
             }
         }
         // City blocks on a grid.
@@ -353,8 +371,16 @@ impl City {
         let checkpoints = vec![
             Checkpoint { kind: CheckpointKind::HangarBay, pos: Vec3::new(0.0, 0.0, half - 30.0), name: format!("{} HANGAR BAY", d.name) },
             Checkpoint { kind: CheckpointKind::DeepNest, pos: Vec3::new(30.0, 0.0, shore_z - 6.0), name: format!("{} DEEP NEST", d.name) },
-            Checkpoint { kind: CheckpointKind::HangarBay, pos: arena_c + Vec3::new(-arena_r - 14.0, 0.0, 10.0), name: "FORWARD HANGAR".into() },
-            Checkpoint { kind: CheckpointKind::DeepNest, pos: arena_c + Vec3::new(arena_r + 14.0, 0.0, -10.0), name: "FORWARD NEST".into() },
+            Checkpoint {
+                kind: CheckpointKind::HangarBay,
+                pos: arena_c + Vec3::new(-arena_r - 14.0, 0.0, 10.0),
+                name: "FORWARD HANGAR".into(),
+            },
+            Checkpoint {
+                kind: CheckpointKind::DeepNest,
+                pos: arena_c + Vec3::new(arena_r + 14.0, 0.0, -10.0),
+                name: "FORWARD NEST".into(),
+            },
         ];
         let mut spawns = vec![];
         let mut sr = SimRng::new(d.seed ^ 0x5EED);
@@ -368,18 +394,7 @@ impl City {
                 spawns.push(p);
             }
         }
-        City {
-            size,
-            shore_z,
-            buildings,
-            checkpoints,
-            arena: (arena_c, arena_r),
-            pylons,
-            fires,
-            lamps,
-            spawns,
-            landmark: d.landmark,
-        }
+        City { size, shore_z, buildings, checkpoints, arena: (arena_c, arena_r), pylons, fires, lamps, spawns, landmark: d.landmark }
     }
 
     /// Persistent destruction mask (for the campaign save).
@@ -391,11 +406,7 @@ impl City {
     pub fn ruin(&self) -> f32 {
         let total: usize = self.buildings.iter().map(|b| b.alive.len()).sum();
         let dead: usize = self.buildings.iter().map(|b| b.alive.len() - b.alive_count()).sum();
-        if total == 0 {
-            0.0
-        } else {
-            dead as f32 / total as f32
-        }
+        if total == 0 { 0.0 } else { dead as f32 / total as f32 }
     }
 
     pub fn nearest_checkpoint(&self, p: Vec3, side: Side) -> Option<&Checkpoint> {

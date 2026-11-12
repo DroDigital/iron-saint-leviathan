@@ -78,7 +78,21 @@ impl TideRun {
             }
             fights.push(RunFight { district: d.id.clone(), state, side, spawns, boss });
         }
-        TideRun { seed, daily, rng, fights, index: 0, builds, omens, score: 0, offer: vec![], harvested: vec![], over: false, won: false, next_uid: 1 << 52 }
+        TideRun {
+            seed,
+            daily,
+            rng,
+            fights,
+            index: 0,
+            builds,
+            omens,
+            score: 0,
+            offer: vec![],
+            harvested: vec![],
+            over: false,
+            won: false,
+            next_uid: 1 << 52,
+        }
     }
 
     pub fn current(&self) -> Option<&RunFight> {

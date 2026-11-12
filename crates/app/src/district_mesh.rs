@@ -4,7 +4,7 @@
 use glam::{Vec2, Vec3};
 use isl_data::{DistrictDef, DistrictState};
 use isl_render::meshgen::{self, Mesh};
-use isl_render::{textures, Lighting, Vertex};
+use isl_render::{Lighting, Vertex, textures};
 use isl_sim::city::{BuildingKind, CheckpointKind, City};
 use isl_sim::tide::TideClock;
 
@@ -92,17 +92,51 @@ pub fn build(city: &City, d: &DistrictDef, light: &Lighting) -> Vec<Vertex> {
             let c = b.aabb.center();
             match b.kind {
                 BuildingKind::Tower if city.landmark == isl_data::Landmark::Cathedral => {
-                    let p = isl_data::Prim { shape: isl_data::Shape::Cone, at: [c.x, top + 7.0, c.z], size: [8.0, 14.0, 8.0], rot: [0.0; 3], tex: "stone".into(), col: [120, 110, 110], glow: false };
+                    let p = isl_data::Prim {
+                        shape: isl_data::Shape::Cone,
+                        at: [c.x, top + 7.0, c.z],
+                        size: [8.0, 14.0, 8.0],
+                        rot: [0.0; 3],
+                        tex: "stone".into(),
+                        col: [120, 110, 110],
+                        glow: false,
+                    };
                     m.append(&meshgen::prim_mesh(&p), glam::Mat4::IDENTITY);
                 }
                 BuildingKind::Lighthouse => {
-                    meshgen::add_box(&mut m, Vec3::new(c.x - 4.0, top, c.z - 4.0), Vec3::new(c.x + 4.0, top + 4.0, c.z + 4.0), [255, 240, 180], tl("glow"), 0.0, [true; 6], true);
+                    meshgen::add_box(
+                        &mut m,
+                        Vec3::new(c.x - 4.0, top, c.z - 4.0),
+                        Vec3::new(c.x + 4.0, top + 4.0, c.z + 4.0),
+                        [255, 240, 180],
+                        tl("glow"),
+                        0.0,
+                        [true; 6],
+                        true,
+                    );
                 }
                 BuildingKind::Stack => {
-                    meshgen::add_box(&mut m, Vec3::new(c.x - 3.0, top, c.z - 3.0), Vec3::new(c.x + 3.0, top + 1.0, c.z + 3.0), [255, 120, 40], tl("glow"), 0.0, [true; 6], true);
+                    meshgen::add_box(
+                        &mut m,
+                        Vec3::new(c.x - 3.0, top, c.z - 3.0),
+                        Vec3::new(c.x + 3.0, top + 1.0, c.z + 3.0),
+                        [255, 120, 40],
+                        tl("glow"),
+                        0.0,
+                        [true; 6],
+                        true,
+                    );
                 }
                 BuildingKind::Church => {
-                    let p = isl_data::Prim { shape: isl_data::Shape::Wedge, at: [c.x, top + 4.0, c.z], size: [b.aabb.max.x - b.aabb.min.x, 8.0, b.aabb.max.z - b.aabb.min.z], rot: [-90.0, 0.0, 0.0], tex: "stone".into(), col: [100, 80, 80], glow: false };
+                    let p = isl_data::Prim {
+                        shape: isl_data::Shape::Wedge,
+                        at: [c.x, top + 4.0, c.z],
+                        size: [b.aabb.max.x - b.aabb.min.x, 8.0, b.aabb.max.z - b.aabb.min.z],
+                        rot: [-90.0, 0.0, 0.0],
+                        tex: "stone".into(),
+                        col: [100, 80, 80],
+                        glow: false,
+                    };
                     m.append(&meshgen::prim_mesh(&p), glam::Mat4::IDENTITY);
                 }
                 _ => {}
@@ -114,17 +148,60 @@ pub fn build(city: &City, d: &DistrictDef, light: &Lighting) -> Vec<Vertex> {
         let p = cp.pos;
         match cp.kind {
             CheckpointKind::HangarBay => {
-                meshgen::add_box(&mut m, p + Vec3::new(-9.0, 0.0, -1.0), p + Vec3::new(9.0, 12.0, 8.0), [110, 110, 120], tl("corrugated"), 4.0, [true, true, true, false, true, false], false);
-                meshgen::add_box(&mut m, p + Vec3::new(-9.0, 0.0, -1.5), p + Vec3::new(9.0, 1.0, -1.0), [255, 255, 255], tl("hazard"), 2.0, [true; 6], false);
-                meshgen::add_box(&mut m, p + Vec3::new(-3.0, 12.5, 3.0), p + Vec3::new(3.0, 14.0, 3.5), [120, 200, 255], tl("glow"), 0.0, [true; 6], true);
+                meshgen::add_box(
+                    &mut m,
+                    p + Vec3::new(-9.0, 0.0, -1.0),
+                    p + Vec3::new(9.0, 12.0, 8.0),
+                    [110, 110, 120],
+                    tl("corrugated"),
+                    4.0,
+                    [true, true, true, false, true, false],
+                    false,
+                );
+                meshgen::add_box(
+                    &mut m,
+                    p + Vec3::new(-9.0, 0.0, -1.5),
+                    p + Vec3::new(9.0, 1.0, -1.0),
+                    [255, 255, 255],
+                    tl("hazard"),
+                    2.0,
+                    [true; 6],
+                    false,
+                );
+                meshgen::add_box(
+                    &mut m,
+                    p + Vec3::new(-3.0, 12.5, 3.0),
+                    p + Vec3::new(3.0, 14.0, 3.5),
+                    [120, 200, 255],
+                    tl("glow"),
+                    0.0,
+                    [true; 6],
+                    true,
+                );
             }
             CheckpointKind::DeepNest => {
                 for k in 0..7 {
                     let a = k as f32 / 7.0 * std::f32::consts::TAU;
-                    let pr = isl_data::Prim { shape: isl_data::Shape::Spike, at: [p.x + a.sin() * 7.0, p.y + 4.0, p.z + a.cos() * 7.0], size: [1.4, 9.0, 1.4], rot: [a.cos() * -25.0, 0.0, a.sin() * 25.0], tex: "bone".into(), col: [200, 190, 170], glow: false };
+                    let pr = isl_data::Prim {
+                        shape: isl_data::Shape::Spike,
+                        at: [p.x + a.sin() * 7.0, p.y + 4.0, p.z + a.cos() * 7.0],
+                        size: [1.4, 9.0, 1.4],
+                        rot: [a.cos() * -25.0, 0.0, a.sin() * 25.0],
+                        tex: "bone".into(),
+                        col: [200, 190, 170],
+                        glow: false,
+                    };
                     m.append(&meshgen::prim_mesh(&pr), glam::Mat4::IDENTITY);
                 }
-                let g = isl_data::Prim { shape: isl_data::Shape::Sphere, at: [p.x, p.y + 1.0, p.z], size: [5.0, 2.5, 5.0], rot: [0.0; 3], tex: "hide".into(), col: [120, 255, 220], glow: true };
+                let g = isl_data::Prim {
+                    shape: isl_data::Shape::Sphere,
+                    at: [p.x, p.y + 1.0, p.z],
+                    size: [5.0, 2.5, 5.0],
+                    rot: [0.0; 3],
+                    tex: "hide".into(),
+                    col: [120, 255, 220],
+                    glow: true,
+                };
                 m.append(&meshgen::prim_mesh(&g), glam::Mat4::IDENTITY);
             }
         }

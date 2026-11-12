@@ -1,12 +1,12 @@
 //! Platform-independent game: screens, flow between them, campaign bookkeeping and saving.
 //! The windowed app and the headless tools (screenshots, soak test) drive the same `Game`.
 
-use crate::foundry::Assembly;
 use crate::fmv::Fmv;
+use crate::foundry::Assembly;
 use crate::mission::{End, Mission, MissionKind};
 use crate::settings::Settings;
 use glam::Vec3;
-use isl_audio::{music::Layer, Audio, Sfx};
+use isl_audio::{Audio, Sfx, music::Layer};
 use isl_data::*;
 use isl_ghost::HabitProfile;
 use isl_input::{Action, Input, PlayerInput};
@@ -17,7 +17,7 @@ use isl_sim::build::{self, Loadout};
 use isl_sim::fighter::{Act, FighterKind, SimEvent};
 use isl_sim::parts::{Condition, Origin, PartInstance};
 use isl_sim::run::TideRun;
-use isl_sim::war::{side_ix, Campaign};
+use isl_sim::war::{Campaign, side_ix};
 use isl_sim::world::*;
 use isl_ui::Ui;
 use std::path::PathBuf;
@@ -201,7 +201,12 @@ impl Game {
         // Campaign always lives in one entry, updated in place.
         if let Some(c) = &self.campaign {
             let blocks = isl_save::campaign_blocks(c);
-            let e = Entry { title: format!("WAR {} - TIDE {}", c.war, c.tide.tide_count), icon: 0, blocks, data: BlockData::Campaign(Box::new(c.clone())) };
+            let e = Entry {
+                title: format!("WAR {} - TIDE {}", c.war, c.tide.tide_count),
+                icon: 0,
+                blocks,
+                data: BlockData::Campaign(Box::new(c.clone())),
+            };
             let r = match self.card.campaign_index() {
                 Some(i) => self.card.replace(i, e),
                 None => self.card.add(e).map(|_| ()),
@@ -494,7 +499,10 @@ impl Game {
                     assists,
                     persistent: vec![],
                     wrecks: vec![],
-                    spawns: Some(vec![SpawnSpec::Dummy { id: dummy.into(), habits: None }, SpawnSpec::Dummy { id: dummy.into(), habits: Some(habits) }]),
+                    spawns: Some(vec![
+                        SpawnSpec::Dummy { id: dummy.into(), habits: None },
+                        SpawnSpec::Dummy { id: dummy.into(), habits: Some(habits) },
+                    ]),
                     density: 1.0,
                     war: 0,
                     bell: false,
@@ -531,7 +539,14 @@ impl Game {
             m.note("TEST ARENA: LEFT DUMMY IS INERT, RIGHT DUMMY REPLAYS YOUR HABITS", [200, 200, 220, 255]);
         }
         if let Some(n) = m.world.fighters.iter().find(|f| matches!(f.kind, FighterKind::Nemesis { .. })) {
-            if let Some(spec) = m.world.cfg.spawns.as_ref().and_then(|s| s.iter().find_map(|x| if let SpawnSpec::Nemesis(n) = x { Some(n.clone()) } else { None })).or(m.world.cfg.static_night.first().cloned().map(Box::new)) {
+            if let Some(spec) = m
+                .world
+                .cfg
+                .spawns
+                .as_ref()
+                .and_then(|s| s.iter().find_map(|x| if let SpawnSpec::Nemesis(n) = x { Some(n.clone()) } else { None }))
+                .or(m.world.cfg.static_night.first().cloned().map(Box::new))
+            {
                 m.intro = Some(crate::mission::Intro { title: n.name.clone(), sub: "NEMESIS".into(), card: spec.intro.clone(), ttl: 5.0 });
             }
         }
@@ -611,7 +626,11 @@ impl Game {
                 camp.merge_wrecks(&district, m.world.wrecks.clone());
                 let carried = player.as_ref().map_or(0, |p| p.currency);
                 camp.inventory[side_ix(side)].currency += carried;
-                lines.push(format!("{} {}", if won { "VICTORY AT" } else { "RETREAT FROM" }, c.district(&district).map_or("", |d| d.name.as_str())));
+                lines.push(format!(
+                    "{} {}",
+                    if won { "VICTORY AT" } else { "RETREAT FROM" },
+                    c.district(&district).map_or("", |d| d.name.as_str())
+                ));
                 lines.push(format!("{} BANKED: {}", side.currency(), carried));
                 lines.push(format!("PARTS HARVESTED: {}", collected.len()));
                 for p in collected.iter().take(6) {
@@ -633,7 +652,9 @@ impl Game {
                     }
                 }
                 let xp = if won { 400 } else { 120 } + stats.kills * 15;
-                if let Some(ch) = player.as_ref().and_then(|p| p.loadout.chassis.clone()).or_else(|| player.as_ref().and_then(|p| p.loadout.get(Slot::Frame)).and_then(|p| p.origin.owner_tag().map(String::from))) {
+                if let Some(ch) = player.as_ref().and_then(|p| p.loadout.chassis.clone()).or_else(|| {
+                    player.as_ref().and_then(|p| p.loadout.get(Slot::Frame)).and_then(|p| p.origin.owner_tag().map(String::from))
+                }) {
                     for l in self.card.system.archive.add_xp(&ch, xp, c) {
                         lines.push(l);
                     }
@@ -720,7 +741,8 @@ impl Game {
             let e = a.daily_best.entry(day.clone()).or_default();
             *e = (*e).max(score);
         }
-        let mut lines = vec![format!("SCORE {score}"), format!("SEED {:08X}", run.seed as u32), format!("FIGHTS {}/{}", run.index, run.fights.len())];
+        let mut lines =
+            vec![format!("SCORE {score}"), format!("SEED {:08X}", run.seed as u32), format!("FIGHTS {}/{}", run.index, run.fights.len())];
         for p in run.harvested.iter().take(8) {
             lines.push(format!("CODEX: {}", self.content.part(&p.def).map_or(p.def.as_str(), |d| d.name.as_str())));
         }
@@ -731,7 +753,11 @@ impl Game {
             }
         }
         self.save_card();
-        self.screen = Screen::Results { title: if won { "THE TIDE RECEDES".into() } else { "THE TIDE TAKES YOU".into() }, lines, next: Box::new(Screen::Main { sel: 0 }) };
+        self.screen = Screen::Results {
+            title: if won { "THE TIDE RECEDES".into() } else { "THE TIDE TAKES YOU".into() },
+            lines,
+            next: Box::new(Screen::Main { sel: 0 }),
+        };
     }
 
     pub fn begin_ending(&mut self, ending: &str) {
@@ -934,7 +960,11 @@ impl Game {
             }
         }
         // Music layer from situation.
-        let boss = m.world.fighters.iter().find(|f| f.alive && f.kind.is_bossish() && f.ai.as_ref().is_some_and(|a| a.awake) && !matches!(f.act, Act::Dead));
+        let boss = m
+            .world
+            .fighters
+            .iter()
+            .find(|f| f.alive && f.kind.is_bossish() && f.ai.as_ref().is_some_and(|a| a.awake) && !matches!(f.act, Act::Dead));
         let layer = match boss {
             Some(b) => match b.boss_phase {
                 0 => Layer::Boss1,
@@ -943,7 +973,15 @@ impl Game {
             },
             None => {
                 let me = m.world.player(0);
-                let near = me.is_some_and(|p| m.world.fighters.iter().any(|f| f.alive && !matches!(f.act, Act::Dead) && f.team.hostile(p.team) && f.ai.as_ref().is_some_and(|a| a.awake) && f.pos.distance(p.pos) < 50.0));
+                let near = me.is_some_and(|p| {
+                    m.world.fighters.iter().any(|f| {
+                        f.alive
+                            && !matches!(f.act, Act::Dead)
+                            && f.team.hostile(p.team)
+                            && f.ai.as_ref().is_some_and(|a| a.awake)
+                            && f.pos.distance(p.pos) < 50.0
+                    })
+                });
                 if near { Layer::Combat } else { Layer::Explore }
             }
         };

@@ -19,7 +19,7 @@ use kira::effect::reverb::ReverbBuilder;
 use kira::sound::static_sound::{StaticSoundData, StaticSoundHandle, StaticSoundSettings};
 use kira::track::{TrackBuilder, TrackHandle};
 use kira::{AudioManager, AudioManagerSettings, Decibels, DefaultBackend, Frame, Mix, Panning, PlaybackRate, Tween};
-use music::{Layer, LAYERS};
+use music::{LAYERS, Layer};
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::sync::mpsc::{Receiver, channel};
@@ -105,13 +105,15 @@ impl Audio {
                     };
                     let mut tb = TrackBuilder::new().with_effect(ReverbBuilder::new().feedback(fb).damping(damp).mix(Mix(mix)));
                     if r == Reverb::SpaceEcho {
-                        tb = tb.with_effect(DelayBuilder::new().delay_time(Duration::from_millis(330)).feedback(Decibels(-7.0)).mix(Mix(0.3)));
+                        tb = tb
+                            .with_effect(DelayBuilder::new().delay_time(Duration::from_millis(330)).feedback(Decibels(-7.0)).mix(Mix(0.3)));
                     }
                     if let Ok(t) = m.add_sub_track(tb) {
                         a.reverb_tracks.push(t);
                     }
                 }
-                a.music_track = m.add_sub_track(TrackBuilder::new().with_effect(ReverbBuilder::new().feedback(0.6).damping(0.5).mix(Mix(0.12)))).ok();
+                a.music_track =
+                    m.add_sub_track(TrackBuilder::new().with_effect(ReverbBuilder::new().feedback(0.6).damping(0.5).mix(Mix(0.12)))).ok();
                 a.mgr = Some(m);
             }
             Err(e) => {

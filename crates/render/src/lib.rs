@@ -125,7 +125,12 @@ pub fn bake(mesh: &Mesh, light: &Lighting) -> Vec<Vertex> {
                 let pts = light.nearest(v.pos);
                 base * light.shade(v.pos, v.normal, &pts) * 0.5
             };
-            Vertex { pos: v.pos.to_array(), uv: v.uv.to_array(), color: [to_u8(c.x), to_u8(c.y), to_u8(c.z), 255], layer: v.layer as u32 | if v.glow { GLOW } else { 0 } }
+            Vertex {
+                pos: v.pos.to_array(),
+                uv: v.uv.to_array(),
+                color: [to_u8(c.x), to_u8(c.y), to_u8(c.z), 255],
+                layer: v.layer as u32 | if v.glow { GLOW } else { 0 },
+            }
         })
         .collect()
 }
@@ -206,7 +211,12 @@ struct DynBuf {
 
 impl DynBuf {
     fn new(device: &wgpu::Device, label: &'static str, cap: u64) -> DynBuf {
-        let buf = device.create_buffer(&wgpu::BufferDescriptor { label: Some(label), size: cap, usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::COPY_DST, mapped_at_creation: false });
+        let buf = device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some(label),
+            size: cap,
+            usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: false,
+        });
         DynBuf { buf, cap, label }
     }
     fn write(&mut self, device: &wgpu::Device, queue: &wgpu::Queue, data: &[u8]) {
@@ -385,13 +395,19 @@ impl Renderer {
         });
         for (i, l) in layers.iter().enumerate() {
             queue.write_texture(
-                wgpu::TexelCopyTextureInfo { texture: &tex, mip_level: 0, origin: wgpu::Origin3d { x: 0, y: 0, z: i as u32 }, aspect: wgpu::TextureAspect::All },
+                wgpu::TexelCopyTextureInfo {
+                    texture: &tex,
+                    mip_level: 0,
+                    origin: wgpu::Origin3d { x: 0, y: 0, z: i as u32 },
+                    aspect: wgpu::TextureAspect::All,
+                },
                 l,
                 wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(ts * 4), rows_per_image: Some(ts) },
                 wgpu::Extent3d { width: ts, height: ts, depth_or_array_layers: 1 },
             );
         }
-        let tex_view = tex.create_view(&wgpu::TextureViewDescriptor { dimension: Some(wgpu::TextureViewDimension::D2Array), ..Default::default() });
+        let tex_view =
+            tex.create_view(&wgpu::TextureViewDescriptor { dimension: Some(wgpu::TextureViewDimension::D2Array), ..Default::default() });
         let nearest = device.create_sampler(&wgpu::SamplerDescriptor {
             label: Some("nearest"),
             address_mode_u: wgpu::AddressMode::Repeat,
@@ -437,10 +453,19 @@ impl Renderer {
                 wgpu::BindGroupLayoutEntry {
                     binding: 0,
                     visibility: wgpu::ShaderStages::FRAGMENT,
-                    ty: wgpu::BindingType::Texture { sample_type: wgpu::TextureSampleType::Float { filterable: true }, view_dimension: wgpu::TextureViewDimension::D2Array, multisampled: false },
+                    ty: wgpu::BindingType::Texture {
+                        sample_type: wgpu::TextureSampleType::Float { filterable: true },
+                        view_dimension: wgpu::TextureViewDimension::D2Array,
+                        multisampled: false,
+                    },
                     count: None,
                 },
-                wgpu::BindGroupLayoutEntry { binding: 1, visibility: wgpu::ShaderStages::FRAGMENT, ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering), count: None },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 1,
+                    visibility: wgpu::ShaderStages::FRAGMENT,
+                    ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
+                    count: None,
+                },
             ],
         });
         let ui_bgl = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -449,16 +474,29 @@ impl Renderer {
                 wgpu::BindGroupLayoutEntry {
                     binding: 0,
                     visibility: wgpu::ShaderStages::VERTEX,
-                    ty: wgpu::BindingType::Buffer { ty: wgpu::BufferBindingType::Uniform, has_dynamic_offset: false, min_binding_size: None },
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
                     count: None,
                 },
                 wgpu::BindGroupLayoutEntry {
                     binding: 1,
                     visibility: wgpu::ShaderStages::FRAGMENT,
-                    ty: wgpu::BindingType::Texture { sample_type: wgpu::TextureSampleType::Float { filterable: true }, view_dimension: wgpu::TextureViewDimension::D2, multisampled: false },
+                    ty: wgpu::BindingType::Texture {
+                        sample_type: wgpu::TextureSampleType::Float { filterable: true },
+                        view_dimension: wgpu::TextureViewDimension::D2,
+                        multisampled: false,
+                    },
                     count: None,
                 },
-                wgpu::BindGroupLayoutEntry { binding: 2, visibility: wgpu::ShaderStages::FRAGMENT, ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering), count: None },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 2,
+                    visibility: wgpu::ShaderStages::FRAGMENT,
+                    ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
+                    count: None,
+                },
             ],
         });
         let post_bgl = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -467,13 +505,21 @@ impl Renderer {
                 wgpu::BindGroupLayoutEntry {
                     binding: 0,
                     visibility: wgpu::ShaderStages::FRAGMENT,
-                    ty: wgpu::BindingType::Texture { sample_type: wgpu::TextureSampleType::Float { filterable: false }, view_dimension: wgpu::TextureViewDimension::D2, multisampled: false },
+                    ty: wgpu::BindingType::Texture {
+                        sample_type: wgpu::TextureSampleType::Float { filterable: false },
+                        view_dimension: wgpu::TextureViewDimension::D2,
+                        multisampled: false,
+                    },
                     count: None,
                 },
                 wgpu::BindGroupLayoutEntry {
                     binding: 1,
                     visibility: wgpu::ShaderStages::FRAGMENT,
-                    ty: wgpu::BindingType::Buffer { ty: wgpu::BufferBindingType::Uniform, has_dynamic_offset: false, min_binding_size: None },
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
                     count: None,
                 },
             ],
@@ -490,7 +536,11 @@ impl Renderer {
             layout: &globals_bgl,
             entries: &[wgpu::BindGroupEntry {
                 binding: 0,
-                resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding { buffer: &globals, offset: 0, size: wgpu::BufferSize::new(std::mem::size_of::<Globals>() as u64) }),
+                resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
+                    buffer: &globals,
+                    offset: 0,
+                    size: wgpu::BufferSize::new(std::mem::size_of::<Globals>() as u64),
+                }),
             }],
         });
         let tex_bg = device.create_bind_group(&wgpu::BindGroupDescriptor {
@@ -501,7 +551,12 @@ impl Renderer {
                 wgpu::BindGroupEntry { binding: 1, resource: wgpu::BindingResource::Sampler(&nearest) },
             ],
         });
-        let ui_uniform = device.create_buffer(&wgpu::BufferDescriptor { label: Some("ui uniform"), size: 16, usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST, mapped_at_creation: false });
+        let ui_uniform = device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("ui uniform"),
+            size: 16,
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: false,
+        });
         let ui_bg = device.create_bind_group(&wgpu::BindGroupDescriptor {
             label: Some("ui"),
             layout: &ui_bgl,
@@ -511,25 +566,62 @@ impl Renderer {
                 wgpu::BindGroupEntry { binding: 2, resource: wgpu::BindingResource::Sampler(&nearest) },
             ],
         });
-        let mkpost = |label| device.create_buffer(&wgpu::BufferDescriptor { label: Some(label), size: 48, usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST, mapped_at_creation: false });
+        let mkpost = |label| {
+            device.create_buffer(&wgpu::BufferDescriptor {
+                label: Some(label),
+                size: 48,
+                usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+                mapped_at_creation: false,
+            })
+        };
         let post_uniform_fmv = mkpost("fmv uniform");
         let post_uniform_present = mkpost("present uniform");
 
-        let world_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("world"), source: wgpu::ShaderSource::Wgsl(include_str!("shaders/world.wgsl").into()) });
-        let ui_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("ui"), source: wgpu::ShaderSource::Wgsl(include_str!("shaders/ui.wgsl").into()) });
-        let post_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("post"), source: wgpu::ShaderSource::Wgsl(include_str!("shaders/post.wgsl").into()) });
+        let world_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some("world"),
+            source: wgpu::ShaderSource::Wgsl(include_str!("shaders/world.wgsl").into()),
+        });
+        let ui_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some("ui"),
+            source: wgpu::ShaderSource::Wgsl(include_str!("shaders/ui.wgsl").into()),
+        });
+        let post_sm = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some("post"),
+            source: wgpu::ShaderSource::Wgsl(include_str!("shaders/post.wgsl").into()),
+        });
 
-        let world_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor { label: Some("world"), bind_group_layouts: &[Some(&globals_bgl), Some(&tex_bgl)], immediate_size: 0 });
-        let ui_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor { label: Some("ui"), bind_group_layouts: &[Some(&ui_bgl)], immediate_size: 0 });
-        let post_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor { label: Some("post"), bind_group_layouts: &[Some(&post_bgl)], immediate_size: 0 });
+        let world_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+            label: Some("world"),
+            bind_group_layouts: &[Some(&globals_bgl), Some(&tex_bgl)],
+            immediate_size: 0,
+        });
+        let ui_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+            label: Some("ui"),
+            bind_group_layouts: &[Some(&ui_bgl)],
+            immediate_size: 0,
+        });
+        let post_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+            label: Some("post"),
+            bind_group_layouts: &[Some(&post_bgl)],
+            immediate_size: 0,
+        });
 
         let vattrs = wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x2, 2 => Unorm8x4, 3 => Uint32];
-        let vlayout = wgpu::VertexBufferLayout { array_stride: std::mem::size_of::<Vertex>() as u64, step_mode: wgpu::VertexStepMode::Vertex, attributes: &vattrs };
+        let vlayout = wgpu::VertexBufferLayout {
+            array_stride: std::mem::size_of::<Vertex>() as u64,
+            step_mode: wgpu::VertexStepMode::Vertex,
+            attributes: &vattrs,
+        };
         let world_pipe = |label: &'static str, blend: Option<wgpu::BlendState>, depth_write: bool| {
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: Some(label),
                 layout: Some(&world_layout),
-                vertex: wgpu::VertexState { module: &world_sm, entry_point: Some("vs"), compilation_options: Default::default(), buffers: &[Some(vlayout.clone())] },
+                vertex: wgpu::VertexState {
+                    module: &world_sm,
+                    entry_point: Some("vs"),
+                    compilation_options: Default::default(),
+                    buffers: &[Some(vlayout.clone())],
+                },
                 primitive: wgpu::PrimitiveState { cull_mode: None, ..Default::default() },
                 depth_stencil: Some(wgpu::DepthStencilState {
                     format: wgpu::TextureFormat::Depth32Float,
@@ -552,7 +644,11 @@ impl Renderer {
         let world_opaque = world_pipe("world opaque", None, true);
         let world_trans = world_pipe("world trans", Some(wgpu::BlendState::ALPHA_BLENDING), false);
         let additive = wgpu::BlendState {
-            color: wgpu::BlendComponent { src_factor: wgpu::BlendFactor::SrcAlpha, dst_factor: wgpu::BlendFactor::One, operation: wgpu::BlendOperation::Add },
+            color: wgpu::BlendComponent {
+                src_factor: wgpu::BlendFactor::SrcAlpha,
+                dst_factor: wgpu::BlendFactor::One,
+                operation: wgpu::BlendOperation::Add,
+            },
             alpha: wgpu::BlendComponent::OVER,
         };
         let world_add = world_pipe("world add", Some(additive), false);
@@ -565,7 +661,11 @@ impl Renderer {
                 module: &ui_sm,
                 entry_point: Some("vs"),
                 compilation_options: Default::default(),
-                buffers: &[Some(wgpu::VertexBufferLayout { array_stride: std::mem::size_of::<UiVertex>() as u64, step_mode: wgpu::VertexStepMode::Vertex, attributes: &uattrs })],
+                buffers: &[Some(wgpu::VertexBufferLayout {
+                    array_stride: std::mem::size_of::<UiVertex>() as u64,
+                    step_mode: wgpu::VertexStepMode::Vertex,
+                    attributes: &uattrs,
+                })],
             },
             primitive: Default::default(),
             // Drawn inside the world pass, so it must match its depth attachment.
@@ -581,7 +681,11 @@ impl Renderer {
                 module: &ui_sm,
                 entry_point: Some("fs"),
                 compilation_options: Default::default(),
-                targets: &[Some(wgpu::ColorTargetState { format: low_format, blend: Some(wgpu::BlendState::ALPHA_BLENDING), write_mask: wgpu::ColorWrites::ALL })],
+                targets: &[Some(wgpu::ColorTargetState {
+                    format: low_format,
+                    blend: Some(wgpu::BlendState::ALPHA_BLENDING),
+                    write_mask: wgpu::ColorWrites::ALL,
+                })],
             }),
             multiview_mask: None,
             cache: None,
@@ -590,7 +694,12 @@ impl Renderer {
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: Some(label),
                 layout: Some(&post_layout),
-                vertex: wgpu::VertexState { module: &post_sm, entry_point: Some("vs_full"), compilation_options: Default::default(), buffers: &[] },
+                vertex: wgpu::VertexState {
+                    module: &post_sm,
+                    entry_point: Some("vs_full"),
+                    compilation_options: Default::default(),
+                    buffers: &[],
+                },
                 primitive: Default::default(),
                 depth_stencil: None,
                 multisample: Default::default(),
@@ -607,7 +716,8 @@ impl Renderer {
         let fmv_pipe = full_pipe("fmv", "fs_fmv", low_format);
         let present_pipe = present_format.map(|f| full_pipe("present", "fs_present", f));
 
-        let (post_bg_fmv, post_bg_present_a, post_bg_present_b) = Self::post_bgs(&device, &post_bgl, &lowres, &post_uniform_fmv, &post_uniform_present);
+        let (post_bg_fmv, post_bg_present_a, post_bg_present_b) =
+            Self::post_bgs(&device, &post_bgl, &lowres, &post_uniform_fmv, &post_uniform_present);
         let mk = |n: &'static str| (0..MAX_VIEWS).map(|_| DynBuf::new(&device, n, 1 << 16)).collect::<Vec<_>>();
         Ok(Renderer {
             dyn_opaque: mk("dyn opaque"),
@@ -643,7 +753,13 @@ impl Renderer {
         })
     }
 
-    fn post_bgs(device: &wgpu::Device, bgl: &wgpu::BindGroupLayout, low: &LowRes, uf: &wgpu::Buffer, up: &wgpu::Buffer) -> (wgpu::BindGroup, wgpu::BindGroup, wgpu::BindGroup) {
+    fn post_bgs(
+        device: &wgpu::Device,
+        bgl: &wgpu::BindGroupLayout,
+        low: &LowRes,
+        uf: &wgpu::Buffer,
+        up: &wgpu::Buffer,
+    ) -> (wgpu::BindGroup, wgpu::BindGroup, wgpu::BindGroup) {
         let bg = |view: &wgpu::TextureView, u: &wgpu::Buffer| {
             device.create_bind_group(&wgpu::BindGroupDescriptor {
                 label: Some("post"),
@@ -742,7 +858,10 @@ impl Renderer {
                 view: &self.low.color_view,
                 depth_slice: None,
                 resolve_target: None,
-                ops: wgpu::Operations { load: wgpu::LoadOp::Clear(wgpu::Color { r: clear[0] as f64, g: clear[1] as f64, b: clear[2] as f64, a: 1.0 }), store: wgpu::StoreOp::Store },
+                ops: wgpu::Operations {
+                    load: wgpu::LoadOp::Clear(wgpu::Color { r: clear[0] as f64, g: clear[1] as f64, b: clear[2] as f64, a: 1.0 }),
+                    store: wgpu::StoreOp::Store,
+                },
             })],
             depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                 view: &self.low.depth_view,
@@ -768,8 +887,11 @@ impl Renderer {
                     self.stats.tris += n / 3;
                 }
             }
-            let draws: [(&wgpu::RenderPipeline, &DynBuf, usize); 3] =
-                [(&self.world_opaque, &self.dyn_opaque[vi], dl.opaque.len()), (&self.world_trans, &self.dyn_trans[vi], dl.trans.len()), (&self.world_add, &self.dyn_add[vi], dl.add.len())];
+            let draws: [(&wgpu::RenderPipeline, &DynBuf, usize); 3] = [
+                (&self.world_opaque, &self.dyn_opaque[vi], dl.opaque.len()),
+                (&self.world_trans, &self.dyn_trans[vi], dl.trans.len()),
+                (&self.world_add, &self.dyn_add[vi], dl.add.len()),
+            ];
             for (pipe, buf, n) in draws {
                 if n == 0 {
                     continue;
@@ -792,7 +914,11 @@ impl Renderer {
         }
         drop(pass);
         if post.fmv > 0.0 {
-            self.queue.write_buffer(&self.post_uniform_fmv, 0, bytemuck::cast_slice(&[post.fmv, post.time, self.low.w as f32, self.low.h as f32, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
+            self.queue.write_buffer(
+                &self.post_uniform_fmv,
+                0,
+                bytemuck::cast_slice(&[post.fmv, post.time, self.low.w as f32, self.low.h as f32, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
+            );
             let mut p = enc.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("fmv"),
                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
@@ -831,9 +957,18 @@ impl Renderer {
         self.encode_world(&mut enc, views, ui, post);
         let rect = self.present_rect(ow, oh, post.integer_scale, aspect);
         let u: [f32; 12] = [
-            rect[0], rect[1], rect[2], rect[3],
-            ow as f32, oh as f32, self.low.w as f32, self.low.h as f32,
-            post.crt as u8 as f32, post.scanline, post.composite as u8 as f32, post.time,
+            rect[0],
+            rect[1],
+            rect[2],
+            rect[3],
+            ow as f32,
+            oh as f32,
+            self.low.w as f32,
+            self.low.h as f32,
+            post.crt as u8 as f32,
+            post.scanline,
+            post.composite as u8 as f32,
+            post.time,
         ];
         self.queue.write_buffer(&self.post_uniform_present, 0, bytemuck::cast_slice(&u));
         {
@@ -879,10 +1014,18 @@ impl Renderer {
     fn readback(&self, mut enc: wgpu::CommandEncoder, src: &wgpu::Texture) -> Vec<u8> {
         let (w, h) = (self.low.w, self.low.h);
         let bpr = (w * 4).next_multiple_of(256);
-        let buf = self.device.create_buffer(&wgpu::BufferDescriptor { label: Some("readback"), size: (bpr * h) as u64, usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ, mapped_at_creation: false });
+        let buf = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("readback"),
+            size: (bpr * h) as u64,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
         enc.copy_texture_to_buffer(
             wgpu::TexelCopyTextureInfo { texture: src, mip_level: 0, origin: wgpu::Origin3d::ZERO, aspect: wgpu::TextureAspect::All },
-            wgpu::TexelCopyBufferInfo { buffer: &buf, layout: wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(bpr), rows_per_image: Some(h) } },
+            wgpu::TexelCopyBufferInfo {
+                buffer: &buf,
+                layout: wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(bpr), rows_per_image: Some(h) },
+            },
             wgpu::Extent3d { width: w, height: h, depth_or_array_layers: 1 },
         );
         self.queue.submit([enc.finish()]);
@@ -906,7 +1049,24 @@ impl Renderer {
 pub fn projection(fov: f32, aspect: f32, far: f32) -> Mat4 {
     let near = 0.5;
     let f = 1.0 / (fov * 0.5).tan();
-    Mat4::from_cols_array(&[f / aspect, 0.0, 0.0, 0.0, 0.0, f, 0.0, 0.0, 0.0, 0.0, far / (near - far), -1.0, 0.0, 0.0, near * far / (near - far), 0.0])
+    Mat4::from_cols_array(&[
+        f / aspect,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        f,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        far / (near - far),
+        -1.0,
+        0.0,
+        0.0,
+        near * far / (near - far),
+        0.0,
+    ])
 }
 
 /// Right-handed look-at view matrix.
@@ -919,5 +1079,22 @@ pub fn look_at(eye: Vec3, target: Vec3, up: Vec3) -> Mat4 {
 
 /// Orthographic, RH, depth 0..1 (war map, turntables).
 pub fn ortho(l: f32, r: f32, b: f32, t: f32, n: f32, f: f32) -> Mat4 {
-    Mat4::from_cols_array(&[2.0 / (r - l), 0.0, 0.0, 0.0, 0.0, 2.0 / (t - b), 0.0, 0.0, 0.0, 0.0, 1.0 / (n - f), 0.0, -(r + l) / (r - l), -(t + b) / (t - b), n / (n - f), 1.0])
+    Mat4::from_cols_array(&[
+        2.0 / (r - l),
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0 / (t - b),
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0 / (n - f),
+        0.0,
+        -(r + l) / (r - l),
+        -(t + b) / (t - b),
+        n / (n - f),
+        1.0,
+    ])
 }

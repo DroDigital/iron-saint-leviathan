@@ -58,7 +58,12 @@ impl MeshData {
         }
         if !self.colors.is_empty() {
             let (a, b) = (self.colors[i], self.colors[j]);
-            self.colors.push([((a[0] as u16 + b[0] as u16) / 2) as u8, ((a[1] as u16 + b[1] as u16) / 2) as u8, ((a[2] as u16 + b[2] as u16) / 2) as u8, a[3]]);
+            self.colors.push([
+                ((a[0] as u16 + b[0] as u16) / 2) as u8,
+                ((a[1] as u16 + b[1] as u16) / 2) as u8,
+                ((a[2] as u16 + b[2] as u16) / 2) as u8,
+                a[3],
+            ]);
         }
         (self.positions.len() - 1) as u32
     }

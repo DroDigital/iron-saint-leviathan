@@ -267,10 +267,13 @@ fn quirk_effects() {
     assert_eq!(b.fx.grudge_vs("mawgrave"), 1.0);
     // Meta cap: +10% total.
     let capped = isl_sim::parts::cap_meta_bonuses(&[Effect::StatMul(Stat::Damage, 1.08), Effect::StatMul(Stat::Hp, 1.08)], 0.10);
-    let total: f32 = capped.iter().map(|e| match e {
-        Effect::StatMul(_, m) => m - 1.0,
-        _ => 0.0,
-    }).sum();
+    let total: f32 = capped
+        .iter()
+        .map(|e| match e {
+            Effect::StatMul(_, m) => m - 1.0,
+            _ => 0.0,
+        })
+        .sum();
     assert!((total - 0.10).abs() < 1e-6);
 }
 
@@ -332,10 +335,13 @@ fn bosses_telegraph_and_phase() {
     let b = 1usize;
     w.fighters[b].ai.as_mut().unwrap().awake = true;
     let ev = run(&mut w, |_, _| Command::default(), 600);
-    let starts: Vec<&String> = ev.iter().filter_map(|e| match e {
-        SimEvent::AttackStart { id: 1, mv, .. } => Some(mv),
-        _ => None,
-    }).collect();
+    let starts: Vec<&String> = ev
+        .iter()
+        .filter_map(|e| match e {
+            SimEvent::AttackStart { id: 1, mv, .. } => Some(mv),
+            _ => None,
+        })
+        .collect();
     assert!(!starts.is_empty(), "boss attacks");
     for m in starts {
         assert!(content().mv(m).unwrap().windup >= 18, "boss move {m} telegraphs >= 300ms");

@@ -86,11 +86,7 @@ impl Settings {
     /// Internal resolution, widened to 16:9 when widescreen is on.
     pub fn low_res(&self) -> (u32, u32) {
         let (w, h) = RESOLUTIONS[self.resolution.min(RESOLUTIONS.len() - 1)];
-        if self.widescreen {
-            (((h as f32 * 16.0 / 9.0) as u32 + 1) & !1, h)
-        } else {
-            (w, h)
-        }
+        if self.widescreen { (((h as f32 * 16.0 / 9.0) as u32 + 1) & !1, h) } else { (w, h) }
     }
     pub fn aspect(&self) -> f32 {
         if self.widescreen { 16.0 / 9.0 } else { 4.0 / 3.0 }

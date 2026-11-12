@@ -206,7 +206,17 @@ pub enum Buffered {
 }
 
 impl Fighter {
-    pub fn new(id: u32, team: Team, kind: FighterKind, tag: String, name: String, loadout: Loadout, build: ResolvedBuild, pos: Vec3, scale: f32) -> Fighter {
+    pub fn new(
+        id: u32,
+        team: Team,
+        kind: FighterKind,
+        tag: String,
+        name: String,
+        loadout: Loadout,
+        build: ResolvedBuild,
+        pos: Vec3,
+        scale: f32,
+    ) -> Fighter {
         let part_hp = std::array::from_fn(|i| build.parts[i].as_ref().map_or(0.0, |p| p.hp));
         let destroyed = std::array::from_fn(|i| build.parts[i].is_none());
         let heal_max = match build.heal {

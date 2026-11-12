@@ -35,10 +35,7 @@ impl Content {
         uniq(&mut e, "omen", self.omens.iter().map(|x| x.id.as_str()));
 
         if self.quirks.iter().filter(|q| !q.special).count() < 30 {
-            e.push(format!(
-                "design requires at least 30 rollable quirks, found {}",
-                self.quirks.iter().filter(|q| !q.special).count()
-            ));
+            e.push(format!("design requires at least 30 rollable quirks, found {}", self.quirks.iter().filter(|q| !q.special).count()));
         }
 
         let min_iframes = *t.dodge_iframes.iter().min().unwrap_or(&8);
@@ -55,10 +52,7 @@ impl Content {
             // No unavoidable damage: a move that can only be avoided with i-frames must have an
             // active window no longer than the shortest dodge's i-frames.
             if m.damage > 0.0 && m.avoid == Avoid::Dodge && m.active > min_iframes {
-                e.push(format!(
-                    "move `{}` is dodge-only but active ({}) > min i-frames ({min_iframes})",
-                    m.id, m.active
-                ));
+                e.push(format!("move `{}` is dodge-only but active ({}) > min i-frames ({min_iframes})", m.id, m.active));
             }
             if m.damage > 0.0 && !m.blockable && m.avoid == Avoid::Distance && m.reach + m.radius > 16.0 {
                 e.push(format!("unblockable move `{}` reaches too far to outrun", m.id));
@@ -120,20 +114,13 @@ impl Content {
                     None => e.push(format!("{owner} references unknown part `{pid}`")),
                     Some(p) => {
                         if p.slot != Slot::ALL[i] {
-                            e.push(format!(
-                                "{owner}: part `{pid}` is a {:?} but sits in slot {:?}",
-                                p.slot,
-                                Slot::ALL[i]
-                            ));
+                            e.push(format!("{owner}: part `{pid}` is a {:?} but sits in slot {:?}", p.slot, Slot::ALL[i]));
                         }
                         // Cross-Harvest rule: an enemy's drops are its own parts, so its parts must
                         // be of its own anatomy. That guarantees Saint parts only drop while
                         // playing Kaiju and vice-versa.
                         if strict_side && p.side != side {
-                            e.push(format!(
-                                "{owner} ({side:?}) uses {:?} part `{pid}`, breaking the Cross-Harvest rule",
-                                p.side
-                            ));
+                            e.push(format!("{owner} ({side:?}) uses {:?} part `{pid}`, breaking the Cross-Harvest rule", p.side));
                         }
                     }
                 }
@@ -172,10 +159,7 @@ impl Content {
                     for id in of {
                         match self.chassis_def(id) {
                             Some(x) if x.side != *while_playing => {}
-                            _ => e.push(format!(
-                                "chassis `{}` unlock references `{id}`, which must be an opposite-side chassis",
-                                c.id
-                            )),
+                            _ => e.push(format!("chassis `{}` unlock references `{id}`, which must be an opposite-side chassis", c.id)),
                         }
                     }
                 }

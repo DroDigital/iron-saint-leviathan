@@ -45,9 +45,19 @@ pub enum SaveError {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum BlockData {
     Campaign(Box<Campaign>),
-    Build { loadout: Loadout, profile: HabitProfile, war: u32, tide: u32, usage: u64 },
+    Build {
+        loadout: Loadout,
+        profile: HabitProfile,
+        war: u32,
+        tide: u32,
+        usage: u64,
+    },
     /// NG+ carry-over: one part or one trait, permanently corrupted.
-    Corrupted { item: CorruptItem, war: u32, chain: u32 },
+    Corrupted {
+        item: CorruptItem,
+        war: u32,
+        chain: u32,
+    },
     Run(Box<TideRun>),
 }
 
@@ -218,11 +228,7 @@ pub fn load_card(path: &Path) -> Result<MemoryCard, SaveError> {
         Ok(c) => Ok(c),
         Err(e) => {
             let bak = path.with_extension("bak");
-            if bak.exists() {
-                decode_card(&std::fs::read(bak)?)
-            } else {
-                Err(e)
-            }
+            if bak.exists() { decode_card(&std::fs::read(bak)?) } else { Err(e) }
         }
     }
 }
@@ -298,7 +304,12 @@ mod tests {
     #[test]
     fn block_accounting() {
         let mut c = MemoryCard::new();
-        let tr = |n| Entry { title: "x".into(), icon: 0, blocks: n, data: BlockData::Corrupted { item: CorruptItem::Trait("t".into()), war: 1, chain: 1 } };
+        let tr = |n| Entry {
+            title: "x".into(),
+            icon: 0,
+            blocks: n,
+            data: BlockData::Corrupted { item: CorruptItem::Trait("t".into()), war: 1, chain: 1 },
+        };
         for _ in 0..5 {
             c.add(tr(3)).unwrap();
         }

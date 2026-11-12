@@ -33,7 +33,18 @@ impl App {
         let audio = Audio::new(AudioSettings { master: s.master, sfx: s.sfx, music: s.music, spu: s.spu });
         let mut input = Input::new(s.bindings.clone());
         input.rumble_enabled = s.rumble;
-        App { window: None, renderer: None, game, input, audio, last: Instant::now(), focused: true, minimized: false, grabbed: false, next_frame: Instant::now() }
+        App {
+            window: None,
+            renderer: None,
+            game,
+            input,
+            audio,
+            last: Instant::now(),
+            focused: true,
+            minimized: false,
+            grabbed: false,
+            next_frame: Instant::now(),
+        }
     }
 
     fn in_play(&self) -> bool {
@@ -111,9 +122,14 @@ impl App {
         }
         let dir = self.game.paths.photos();
         let _ = std::fs::create_dir_all(&dir);
-        let name = dir.join(format!("harrowmouth_{}.png", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs())));
+        let name = dir.join(format!(
+            "harrowmouth_{}.png",
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs())
+        ));
         match image::save_buffer(&name, &big, w * k, h * k, image::ColorType::Rgba8) {
-            Ok(_) => self.game.toast(format!("PHOTO SAVED {}", name.file_name().map_or(String::new(), |n| n.to_string_lossy().to_string()))),
+            Ok(_) => {
+                self.game.toast(format!("PHOTO SAVED {}", name.file_name().map_or(String::new(), |n| n.to_string_lossy().to_string())))
+            }
             Err(e) => self.game.toast(format!("PHOTO FAILED {e}")),
         }
     }
@@ -124,7 +140,10 @@ impl ApplicationHandler for App {
         if self.window.is_some() {
             return;
         }
-        let attrs = Window::default_attributes().with_title("IRON SAINT // LEVIATHAN").with_inner_size(winit::dpi::LogicalSize::new(960.0, 720.0)).with_min_inner_size(winit::dpi::LogicalSize::new(320.0, 240.0));
+        let attrs = Window::default_attributes()
+            .with_title("IRON SAINT // LEVIATHAN")
+            .with_inner_size(winit::dpi::LogicalSize::new(960.0, 720.0))
+            .with_min_inner_size(winit::dpi::LogicalSize::new(320.0, 240.0));
         let window = Arc::new(el.create_window(attrs).expect("window"));
         let size = window.inner_size();
         let low = self.game.settings.low_res();
@@ -183,7 +202,9 @@ impl ApplicationHandler for App {
                 if event.state.is_pressed() {
                     if let Some(t) = &event.text {
                         if matches!(self.game.screen, Screen::Codes { .. }) {
-                            self.game.typed.push_str(&t.to_uppercase().chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-').collect::<String>());
+                            self.game
+                                .typed
+                                .push_str(&t.to_uppercase().chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-').collect::<String>());
                         }
                     }
                 }

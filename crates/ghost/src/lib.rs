@@ -50,25 +50,13 @@ impl HabitProfile {
     pub fn left_bias(&self) -> f32 {
         let l = self.dodges[0] as f32;
         let r = self.dodges[1] as f32;
-        if l + r == 0.0 {
-            0.5
-        } else {
-            l / (l + r)
-        }
+        if l + r == 0.0 { 0.5 } else { l / (l + r) }
     }
     pub fn heal_below(&self) -> f32 {
-        if self.heal_hp.is_empty() {
-            0.3
-        } else {
-            self.heal_hp.iter().sum::<f32>() / self.heal_hp.len() as f32
-        }
+        if self.heal_hp.is_empty() { 0.3 } else { self.heal_hp.iter().sum::<f32>() / self.heal_hp.len() as f32 }
     }
     pub fn mean_distance(&self) -> f32 {
-        if self.distance_n == 0 {
-            12.0
-        } else {
-            (self.distance_sum / self.distance_n as f64) as f32
-        }
+        if self.distance_n == 0 { 12.0 } else { (self.distance_sum / self.distance_n as f64) as f32 }
     }
     pub fn parry_rate(&self) -> f32 {
         (self.parry_attempts as f32 / self.enemy_attacks.max(1) as f32).min(1.0)
@@ -77,11 +65,7 @@ impl HabitProfile {
         (self.dodge_total() as f32 / self.enemy_attacks.max(1) as f32).min(1.0)
     }
     pub fn feint_bite(&self) -> f32 {
-        if self.feints_seen == 0 {
-            0.5
-        } else {
-            self.feints_bitten as f32 / self.feints_seen as f32
-        }
+        if self.feints_seen == 0 { 0.5 } else { self.feints_bitten as f32 / self.feints_seen as f32 }
     }
     /// Attacks per minute.
     pub fn aggression(&self) -> f32 {
@@ -139,7 +123,7 @@ impl HabitProfile {
         p.engage = (d / 8.0).clamp(0.6, 4.0);
         let apm = self.aggression();
         p.aggression = (apm / 40.0).clamp(0.25, 0.95);
-        p.cadence = (60.0 - apm.min(50.0)) .max(18.0) as u16;
+        p.cadence = (60.0 - apm.min(50.0)).max(18.0) as u16;
         let k = &self.kinds;
         let tot = k.iter().sum::<u32>().max(1) as f32;
         p.w_light = 0.2 + k[0] as f32 / tot * 4.0;

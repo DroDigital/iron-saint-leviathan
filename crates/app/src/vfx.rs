@@ -2,7 +2,7 @@
 //! No VFX packs; tiny generated sprites from the texture library.
 
 use glam::Vec3;
-use isl_render::{billboard, ground_quad, textures, DrawList};
+use isl_render::{DrawList, billboard, ground_quad, textures};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Blend {
@@ -68,21 +68,54 @@ impl Vfx {
     pub fn sparks(&mut self, pos: Vec3, n: usize, color: [u8; 4]) {
         for _ in 0..n {
             let v = self.rv() * 14.0 + Vec3::Y * 6.0;
-            let pp = Particle { pos, vel: v, life: 0.0, max: 0.35 + self.r().abs() * 0.3, size: 0.7, grow: -0.5, layer: textures::layer("spark"), color, gravity: 20.0, blend: Blend::Add };
+            let pp = Particle {
+                pos,
+                vel: v,
+                life: 0.0,
+                max: 0.35 + self.r().abs() * 0.3,
+                size: 0.7,
+                grow: -0.5,
+                layer: textures::layer("spark"),
+                color,
+                gravity: 20.0,
+                blend: Blend::Add,
+            };
             self.push(pp);
         }
     }
     pub fn mist(&mut self, pos: Vec3, n: usize, color: [u8; 4]) {
         for _ in 0..n {
             let v = self.rv() * 4.0;
-            let pp = Particle { pos: pos + self.rv(), vel: v, life: 0.0, max: 0.9, size: 2.5, grow: 2.5, layer: textures::layer("smoke"), color, gravity: -0.5, blend: Blend::Alpha };
+            let pp = Particle {
+                pos: pos + self.rv(),
+                vel: v,
+                life: 0.0,
+                max: 0.9,
+                size: 2.5,
+                grow: 2.5,
+                layer: textures::layer("smoke"),
+                color,
+                gravity: -0.5,
+                blend: Blend::Alpha,
+            };
             self.push(pp);
         }
     }
     pub fn dust(&mut self, pos: Vec3, n: usize, scale: f32) {
         for _ in 0..n {
             let v = Vec3::new(self.r(), self.r().abs() * 0.4, self.r()) * 6.0 * scale;
-            let pp = Particle { pos: pos + Vec3::new(self.r(), 0.0, self.r()) * 2.0 * scale, vel: v, life: 0.0, max: 1.4, size: 3.0 * scale, grow: 3.0, layer: textures::layer("smoke"), color: [150, 140, 120, 150], gravity: -0.3, blend: Blend::Alpha };
+            let pp = Particle {
+                pos: pos + Vec3::new(self.r(), 0.0, self.r()) * 2.0 * scale,
+                vel: v,
+                life: 0.0,
+                max: 1.4,
+                size: 3.0 * scale,
+                grow: 3.0,
+                layer: textures::layer("smoke"),
+                color: [150, 140, 120, 150],
+                gravity: -0.3,
+                blend: Blend::Alpha,
+            };
             self.push(pp);
         }
     }
@@ -90,27 +123,71 @@ impl Vfx {
         for _ in 0..n {
             let v = Vec3::new(self.r() * 8.0, 6.0 + self.r().abs() * 10.0, self.r() * 8.0);
             let c = [color[0] / 2, color[1] / 2, color[2] / 2, 255];
-            let pp = Particle { pos: pos + self.rv() * spread, vel: v, life: 0.0, max: 2.0, size: 1.0 + self.r().abs() * 1.5, grow: 0.0, layer: textures::layer("concrete"), color: c, gravity: 24.0, blend: Blend::Debris };
+            let pp = Particle {
+                pos: pos + self.rv() * spread,
+                vel: v,
+                life: 0.0,
+                max: 2.0,
+                size: 1.0 + self.r().abs() * 1.5,
+                grow: 0.0,
+                layer: textures::layer("concrete"),
+                color: c,
+                gravity: 24.0,
+                blend: Blend::Debris,
+            };
             self.push(pp);
         }
     }
     pub fn spores(&mut self, pos: Vec3, radius: f32) {
         for _ in 0..40 {
             let p = pos + Vec3::new(self.r(), self.r().abs() * 0.5, self.r()) * radius;
-            let pp = Particle { pos: p, vel: self.rv() * 1.5, life: 0.0, max: 3.5, size: 2.0, grow: 0.6, layer: textures::layer("particle"), color: [200, 220, 120, 140], gravity: -0.4, blend: Blend::Alpha };
+            let pp = Particle {
+                pos: p,
+                vel: self.rv() * 1.5,
+                life: 0.0,
+                max: 3.5,
+                size: 2.0,
+                grow: 0.6,
+                layer: textures::layer("particle"),
+                color: [200, 220, 120, 140],
+                gravity: -0.4,
+                blend: Blend::Alpha,
+            };
             self.push(pp);
         }
     }
     pub fn fire(&mut self, pos: Vec3, n: usize) {
         for _ in 0..n {
-            let pp = Particle { pos: pos + self.rv() * 1.5, vel: Vec3::Y * 5.0 + self.rv() * 2.0, life: 0.0, max: 0.6, size: 2.0, grow: -1.5, layer: textures::layer("particle"), color: [255, 140, 40, 220], gravity: -2.0, blend: Blend::Add };
+            let pp = Particle {
+                pos: pos + self.rv() * 1.5,
+                vel: Vec3::Y * 5.0 + self.rv() * 2.0,
+                life: 0.0,
+                max: 0.6,
+                size: 2.0,
+                grow: -1.5,
+                layer: textures::layer("particle"),
+                color: [255, 140, 40, 220],
+                gravity: -2.0,
+                blend: Blend::Add,
+            };
             self.push(pp);
         }
     }
     pub fn splash(&mut self, pos: Vec3, n: usize) {
         for _ in 0..n {
             let v = Vec3::new(self.r() * 5.0, 8.0 + self.r().abs() * 8.0, self.r() * 5.0);
-            let pp = Particle { pos, vel: v, life: 0.0, max: 0.9, size: 1.2, grow: 0.5, layer: textures::layer("particle"), color: [200, 230, 255, 200], gravity: 22.0, blend: Blend::Alpha };
+            let pp = Particle {
+                pos,
+                vel: v,
+                life: 0.0,
+                max: 0.9,
+                size: 1.2,
+                grow: 0.5,
+                layer: textures::layer("particle"),
+                color: [200, 230, 255, 200],
+                gravity: 22.0,
+                blend: Blend::Alpha,
+            };
             self.push(pp);
         }
     }
@@ -154,7 +231,16 @@ impl Vfx {
                 Blend::Debris => {
                     let s = p.size * 0.5;
                     let mut m = isl_render::meshgen::Mesh::default();
-                    isl_render::meshgen::add_box(&mut m, p.pos - Vec3::splat(s), p.pos + Vec3::splat(s), [p.color[0], p.color[1], p.color[2]], p.layer as u16, 0.0, [true; 6], true);
+                    isl_render::meshgen::add_box(
+                        &mut m,
+                        p.pos - Vec3::splat(s),
+                        p.pos + Vec3::splat(s),
+                        [p.color[0], p.color[1], p.color[2]],
+                        p.layer as u16,
+                        0.0,
+                        [true; 6],
+                        true,
+                    );
                     for v in &m.verts {
                         dl.opaque.push(isl_render::Vertex { pos: v.pos.to_array(), uv: v.uv.to_array(), color: p.color, layer: p.layer });
                     }

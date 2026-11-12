@@ -53,15 +53,7 @@ pub enum Slot {
 }
 
 impl Slot {
-    pub const ALL: [Slot; 7] = [
-        Slot::Frame,
-        Slot::LeftArm,
-        Slot::RightArm,
-        Slot::Legs,
-        Slot::Core,
-        Slot::Head,
-        Slot::Back,
-    ];
+    pub const ALL: [Slot; 7] = [Slot::Frame, Slot::LeftArm, Slot::RightArm, Slot::Legs, Slot::Core, Slot::Head, Slot::Back];
     pub fn index(self) -> usize {
         self as usize
     }
@@ -652,9 +644,15 @@ pub struct QuirkDef {
 pub enum Unlock {
     Always,
     /// Sever the heads of all listed chassis while playing `side`.
-    SeverHeads { of: Vec<String>, while_playing: Side },
+    SeverHeads {
+        of: Vec<String>,
+        while_playing: Side,
+    },
     /// Harvest the hearts of all listed chassis while playing `side`.
-    HarvestCores { of: Vec<String>, while_playing: Side },
+    HarvestCores {
+        of: Vec<String>,
+        while_playing: Side,
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -793,12 +791,7 @@ pub enum DistrictState {
 }
 
 impl DistrictState {
-    pub const ALL: [DistrictState; 4] = [
-        DistrictState::Fortified,
-        DistrictState::Contested,
-        DistrictState::Flooded,
-        DistrictState::Ruined,
-    ];
+    pub const ALL: [DistrictState; 4] = [DistrictState::Fortified, DistrictState::Contested, DistrictState::Flooded, DistrictState::Ruined];
     pub fn name(self) -> &'static str {
         match self {
             DistrictState::Fortified => "FORTIFIED",

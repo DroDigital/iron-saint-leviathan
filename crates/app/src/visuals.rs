@@ -5,7 +5,7 @@
 use glam::{Mat4, Quat, Vec3};
 use isl_data::*;
 use isl_render::meshgen::{self, Mesh};
-use isl_render::{push_mesh, DrawList, Lighting};
+use isl_render::{DrawList, Lighting, push_mesh};
 use isl_sim::build::Loadout;
 use isl_sim::fighter::{Act, DodgeKind, Fighter};
 use std::collections::{HashMap, VecDeque};
@@ -15,10 +15,21 @@ pub enum Anim {
     Idle,
     Walk(f32),
     /// telegraph, windup progress 0..1, active progress 0..1, recovery progress 0..1, arc (rad), slot
-    Attack { tele: Telegraph, w: f32, a: f32, r: f32, arc: f32, slot: Slot, kind: MoveKind },
+    Attack {
+        tele: Telegraph,
+        w: f32,
+        a: f32,
+        r: f32,
+        arc: f32,
+        slot: Slot,
+        kind: MoveKind,
+    },
     Guard,
     Parry(f32),
-    Dodge { kind: DodgeKind, k: f32 },
+    Dodge {
+        kind: DodgeKind,
+        k: f32,
+    },
     Stagger(f32),
     Broken(f32),
     Dead(f32),
@@ -104,7 +115,15 @@ pub fn anim_of(f: &Fighter, content: &Content) -> Anim {
         Act::PostureBroken => Anim::Broken((t / 20.0).min(1.0)),
         Act::Vent => Anim::Vent(t),
         Act::Heal => Anim::Heal(t),
-        Act::Severing { .. } => Anim::Attack { tele: Telegraph::Raise, w: 1.0, a: (t / 40.0).min(1.0), r: 0.0, arc: 0.0, slot: Slot::RightArm, kind: MoveKind::Heavy },
+        Act::Severing { .. } => Anim::Attack {
+            tele: Telegraph::Raise,
+            w: 1.0,
+            a: (t / 40.0).min(1.0),
+            r: 0.0,
+            arc: 0.0,
+            slot: Slot::RightArm,
+            kind: MoveKind::Heavy,
+        },
         Act::Climbing { .. } => Anim::Climb,
         Act::Grabbed { .. } => Anim::Grabbed,
         Act::Dead => Anim::Dead((t / 50.0).min(1.0)),
@@ -147,7 +166,8 @@ impl Visuals {
 
     /// Count of triangles a pose would emit (for budgets / tests).
     pub fn draw(&mut self, dl: &mut DrawList, content: &Content, p: &Pose, light: &Lighting) {
-        let root = Mat4::from_translation(p.pos + Vec3::Y * p.altitude) * Mat4::from_rotation_y(p.yaw) * Mat4::from_scale(Vec3::splat(p.size));
+        let root =
+            Mat4::from_translation(p.pos + Vec3::Y * p.altitude) * Mat4::from_rotation_y(p.yaw) * Mat4::from_scale(Vec3::splat(p.size));
         match p.rig {
             RigKind::Humanoid => self.humanoid(dl, content, p, root, light),
             RigKind::Serpent => self.serpent(dl, content, p, light),
@@ -303,6 +323,10 @@ impl Visuals {
         let head = p.pos + Vec3::Y * (1.6 * p.size + p.altitude);
         let st = self.states.entry(p.id).or_default();
         let fwd = Vec3::new(p.yaw.sin(), 0.0, p.yaw.cos());
+        // A reused fighter slot (or a teleport) leaves a stale trail: rebuild it.
+        if st.trail.front().is_some_and(|f| f.distance(head) > spacing * 8.0) {
+            st.trail.clear();
+        }
         if st.trail.is_empty() {
             for i in 0..(n * 4) {
                 st.trail.push_back(head - fwd * (i as f32 * spacing * 0.25));
@@ -415,7 +439,8 @@ impl Visuals {
     }
 
     fn swarm(&mut self, dl: &mut DrawList, content: &Content, p: &Pose, root: Mat4, light: &Lighting) {
-        let n = p.bodies.clamp(1, 16) as usize;
+        // Draw at most 8 bodies (poly budget); HP is still the full body count in the sim.
+        let n = p.bodies.clamp(1, 8) as usize;
         let sink = if let Anim::Dead(k) = p.anim { -3.0 * k } else { 0.0 };
         let gather = match p.anim {
             Anim::Attack { w, a, .. } => 1.0 - 0.5 * w * (1.0 - a),
@@ -426,7 +451,10 @@ impl Visuals {
             let r = if k == 0 { 0.0 } else { (1.6 + (k as f32).sqrt() * 1.8) * gather };
             let bob = (p.time * 3.0 + k as f32 * 1.7).sin() * 0.25 + sink;
             let sway = (p.time * 2.0 + k as f32).sin() * 0.15;
-            let m = root * tr(a.sin() * r, bob, a.cos() * r) * rot(0.0, sway, sway * 0.5) * Mat4::from_scale(Vec3::splat(if k == 0 { 1.3 } else { 0.9 }));
+            let m = root
+                * tr(a.sin() * r, bob, a.cos() * r)
+                * rot(0.0, sway, sway * 0.5)
+                * Mat4::from_scale(Vec3::splat(if k == 0 { 1.3 } else { 0.9 }));
             self.put(dl, content, p, Slot::Frame, Group::All, m, light);
             self.put(dl, content, p, Slot::Head, Group::All, m * tr(0.0, 3.0, 0.0) * Mat4::from_scale(Vec3::splat(0.55)), light);
             if k == 0 {

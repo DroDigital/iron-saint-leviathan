@@ -42,7 +42,8 @@ impl Fmv {
     }
     pub fn intro(lines: Vec<String>, next: Box<Screen>) -> Fmv {
         let scenes = [Scene::City, Scene::Kaiju, Scene::Saint, Scene::Both];
-        let shots = lines.into_iter().enumerate().map(|(i, l)| Shot { dur: 3.2, lines: vec![l], scene: scenes[i % scenes.len()] }).collect();
+        let shots =
+            lines.into_iter().enumerate().map(|(i, l)| Shot { dur: 3.2, lines: vec![l], scene: scenes[i % scenes.len()] }).collect();
         Fmv { id: "intro".into(), t: 0.0, shots, next: Some(next) }
     }
     pub fn ending(id: &str, lines: Vec<String>, next: Box<Screen>) -> Fmv {

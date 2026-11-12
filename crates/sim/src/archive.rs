@@ -139,7 +139,13 @@ impl Archive {
     }
 
     /// Record mission results for unlock tracking.
-    pub fn record_mission(&mut self, content: &Content, side: Side, stats: &crate::world::MissionStats, harvested: &[PartInstance]) -> Vec<String> {
+    pub fn record_mission(
+        &mut self,
+        content: &Content,
+        side: Side,
+        stats: &crate::world::MissionStats,
+        harvested: &[PartInstance],
+    ) -> Vec<String> {
         let mut out = vec![];
         self.record.missions += 1;
         self.record.deaths += stats.deaths;
@@ -203,7 +209,10 @@ impl Archive {
         self.disc_rot_unlocked = (self.disc_rot_unlocked + 1).min(10);
         let mut out = vec![];
         for c in &content.conditions {
-            if !self.unlocked_conditions.contains(&c.id) && self.record.wars >= c.wars && c.endings.iter().all(|e| self.record.endings.contains(e)) {
+            if !self.unlocked_conditions.contains(&c.id)
+                && self.record.wars >= c.wars
+                && c.endings.iter().all(|e| self.record.endings.contains(e))
+            {
                 self.unlocked_conditions.insert(c.id.clone());
                 out.push(format!("CONDITION UNLOCKED: {}", c.name));
             }

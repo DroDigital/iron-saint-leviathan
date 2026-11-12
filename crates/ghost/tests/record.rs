@@ -12,9 +12,23 @@ fn records_dodge_bias_from_play() {
     let c = Content::load_dir(&Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data")).unwrap();
     let lo = Loadout::premade(c.chassis_def("st_wren").unwrap(), &c, 1);
     let cfg = WorldConfig {
-        district: "harbor".into(), state: DistrictState::Contested, side: Side::Saint, tide: TideClock::default(), seed: 3,
-        mode: Mode::Arena, player_fx: vec![], enemy_fx: vec![], assists: Assists::default(), persistent: vec![], wrecks: vec![],
-        spawns: Some(vec![SpawnSpec::Enemy("dummy_kaiju".into())]), density: 1.0, war: 1, bell: false, static_night: vec![], demo_disc: None,
+        district: "harbor".into(),
+        state: DistrictState::Contested,
+        side: Side::Saint,
+        tide: TideClock::default(),
+        seed: 3,
+        mode: Mode::Arena,
+        player_fx: vec![],
+        enemy_fx: vec![],
+        assists: Assists::default(),
+        persistent: vec![],
+        wrecks: vec![],
+        spawns: Some(vec![SpawnSpec::Enemy("dummy_kaiju".into())]),
+        density: 1.0,
+        war: 1,
+        bell: false,
+        static_night: vec![],
+        demo_disc: None,
     };
     let mut w = World::new(&c, cfg, vec![lo]);
     let mut rec = Recorder::new(0);

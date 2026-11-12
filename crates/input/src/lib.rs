@@ -44,16 +44,61 @@ pub enum Action {
 
 impl Action {
     pub const ALL: [Action; 31] = [
-        Action::MoveUp, Action::MoveDown, Action::MoveLeft, Action::MoveRight, Action::CamUp, Action::CamDown, Action::CamLeft, Action::CamRight,
-        Action::Light, Action::Heavy, Action::Guard, Action::Parry, Action::Dodge, Action::Special, Action::Heal, Action::Interact, Action::LockOn,
-        Action::LockPrev, Action::LockNext, Action::LockPart, Action::Heretic, Action::Pause, Action::Confirm, Action::Back, Action::MenuUp,
-        Action::MenuDown, Action::MenuLeft, Action::MenuRight, Action::TabPrev, Action::TabNext, Action::Photo,
+        Action::MoveUp,
+        Action::MoveDown,
+        Action::MoveLeft,
+        Action::MoveRight,
+        Action::CamUp,
+        Action::CamDown,
+        Action::CamLeft,
+        Action::CamRight,
+        Action::Light,
+        Action::Heavy,
+        Action::Guard,
+        Action::Parry,
+        Action::Dodge,
+        Action::Special,
+        Action::Heal,
+        Action::Interact,
+        Action::LockOn,
+        Action::LockPrev,
+        Action::LockNext,
+        Action::LockPart,
+        Action::Heretic,
+        Action::Pause,
+        Action::Confirm,
+        Action::Back,
+        Action::MenuUp,
+        Action::MenuDown,
+        Action::MenuLeft,
+        Action::MenuRight,
+        Action::TabPrev,
+        Action::TabNext,
+        Action::Photo,
     ];
     /// Actions shown on the rebinding screen.
     pub const REBINDABLE: [Action; 21] = [
-        Action::MoveUp, Action::MoveDown, Action::MoveLeft, Action::MoveRight, Action::Light, Action::Heavy, Action::Guard, Action::Parry,
-        Action::Dodge, Action::Special, Action::Heal, Action::Interact, Action::LockOn, Action::LockPrev, Action::LockNext, Action::LockPart,
-        Action::Heretic, Action::Pause, Action::Confirm, Action::Back, Action::Photo,
+        Action::MoveUp,
+        Action::MoveDown,
+        Action::MoveLeft,
+        Action::MoveRight,
+        Action::Light,
+        Action::Heavy,
+        Action::Guard,
+        Action::Parry,
+        Action::Dodge,
+        Action::Special,
+        Action::Heal,
+        Action::Interact,
+        Action::LockOn,
+        Action::LockPrev,
+        Action::LockNext,
+        Action::LockPart,
+        Action::Heretic,
+        Action::Pause,
+        Action::Confirm,
+        Action::Back,
+        Action::Photo,
     ];
     pub fn label(self) -> &'static str {
         match self {
@@ -416,7 +461,19 @@ impl Input {
         self.any_pressed = false;
         for pl in 0..2 {
             // P1: keyboard/mouse + first pad (or only kb in versus with 1 pad -> P2 gets pad 0).
-            let pad_idx = if versus { if self.pads.len() >= 2 { Some(pl) } else if pl == 1 { Some(0) } else { None } } else if pl == 0 { Some(0) } else { None };
+            let pad_idx = if versus {
+                if self.pads.len() >= 2 {
+                    Some(pl)
+                } else if pl == 1 {
+                    Some(0)
+                } else {
+                    None
+                }
+            } else if pl == 0 {
+                Some(0)
+            } else {
+                None
+            };
             let pad = pad_idx.and_then(|i| self.pads.get(i));
             let use_kb = pl == 0 && !(versus && self.pads.len() < 2 && pl == 1);
             let mut held = HashSet::new();
@@ -446,7 +503,8 @@ impl Input {
                 mv = mv.normalize();
             }
             let inv = if self.bindings.invert_y { -1.0 } else { 1.0 };
-            let cam = Vec2::new(g(Action::CamRight) - g(Action::CamLeft), (g(Action::CamUp) - g(Action::CamDown)) * inv) * self.bindings.pad_sens;
+            let cam =
+                Vec2::new(g(Action::CamRight) - g(Action::CamLeft), (g(Action::CamUp) - g(Action::CamDown)) * inv) * self.bindings.pad_sens;
             let pressed: HashSet<Action> = held.difference(&self.prev[pl]).copied().collect();
             if !pressed.is_empty() {
                 self.any_pressed = true;
@@ -472,9 +530,11 @@ impl Input {
     /// Replace the first binding of the same device class for an action.
     pub fn rebind(&mut self, a: Action, b: Binding) {
         let list = self.bindings.map.entry(a).or_default();
-        let same = |x: &Binding| std::mem::discriminant(x) == std::mem::discriminant(&b)
-            || (matches!(x, Binding::Key(_) | Binding::Mouse(_)) && matches!(b, Binding::Key(_) | Binding::Mouse(_)))
-            || (matches!(x, Binding::Pad(_) | Binding::Axis(..)) && matches!(b, Binding::Pad(_) | Binding::Axis(..)));
+        let same = |x: &Binding| {
+            std::mem::discriminant(x) == std::mem::discriminant(&b)
+                || (matches!(x, Binding::Key(_) | Binding::Mouse(_)) && matches!(b, Binding::Key(_) | Binding::Mouse(_)))
+                || (matches!(x, Binding::Pad(_) | Binding::Axis(..)) && matches!(b, Binding::Pad(_) | Binding::Axis(..)))
+        };
         if let Some(i) = list.iter().position(same) {
             list[i] = b;
         } else {
@@ -495,7 +555,11 @@ impl Input {
         use gilrs::ff::{BaseEffect, BaseEffectType, EffectBuilder, Replay, Ticks};
         let mag = (strength.clamp(0.0, 1.0) * u16::MAX as f32) as u16;
         let eff = EffectBuilder::new()
-            .add_effect(BaseEffect { kind: BaseEffectType::Strong { magnitude: mag }, scheduling: Replay { play_for: Ticks::from_ms(ms), ..Default::default() }, ..Default::default() })
+            .add_effect(BaseEffect {
+                kind: BaseEffectType::Strong { magnitude: mag },
+                scheduling: Replay { play_for: Ticks::from_ms(ms), ..Default::default() },
+                ..Default::default()
+            })
             .add_gamepad(&g.gamepad(pad.id))
             .finish(g);
         if let Ok(e) = eff {

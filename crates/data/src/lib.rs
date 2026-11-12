@@ -70,8 +70,7 @@ impl Content {
     pub fn read_dir(root: &Path) -> Result<FileSet, LoadError> {
         let mut out = FileSet::new();
         fn walk(base: &Path, dir: &Path, out: &mut FileSet) -> Result<(), LoadError> {
-            let rd = std::fs::read_dir(dir)
-                .map_err(|err| LoadError::Io { path: dir.display().to_string(), err })?;
+            let rd = std::fs::read_dir(dir).map_err(|err| LoadError::Io { path: dir.display().to_string(), err })?;
             let mut entries: Vec<_> = rd.filter_map(|e| e.ok()).map(|e| e.path()).collect();
             entries.sort();
             for p in entries {
@@ -79,8 +78,7 @@ impl Content {
                     walk(base, &p, out)?;
                 } else if p.extension().is_some_and(|e| e == "ron") {
                     let rel = p.strip_prefix(base).unwrap().to_string_lossy().replace('\\', "/");
-                    let s = std::fs::read_to_string(&p)
-                        .map_err(|err| LoadError::Io { path: p.display().to_string(), err })?;
+                    let s = std::fs::read_to_string(&p).map_err(|err| LoadError::Io { path: p.display().to_string(), err })?;
                     out.insert(rel, s);
                 }
             }
@@ -176,9 +174,7 @@ impl Content {
         self.parts.iter().filter(move |p| p.side == side && p.slot == slot)
     }
     pub fn starting_chassis(&self, side: Side) -> impl Iterator<Item = &ChassisDef> {
-        self.chassis
-            .iter()
-            .filter(move |c| c.side == side && matches!(c.unlock, Unlock::Always))
+        self.chassis.iter().filter(move |c| c.side == side && matches!(c.unlock, Unlock::Always))
     }
 }
 

@@ -35,11 +35,7 @@ impl SimRng {
         self.f32() < p
     }
     pub fn pick<'a, T>(&mut self, items: &'a [T]) -> Option<&'a T> {
-        if items.is_empty() {
-            None
-        } else {
-            Some(&items[self.below(items.len() as u32) as usize])
-        }
+        if items.is_empty() { None } else { Some(&items[self.below(items.len() as u32) as usize]) }
     }
     /// Weighted pick; returns index.
     pub fn weighted(&mut self, weights: &[u32]) -> Option<usize> {

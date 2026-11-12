@@ -86,7 +86,14 @@ fn get_part(r: &mut Reader, content: &Content, uid: u64, code: &str) -> Result<P
         }
     }
     let def = content.parts.iter().find(|p| h16(&p.id) == h).ok_or_else(|| SaveError::Code("unknown part".into()))?;
-    Ok(PartInstance { uid, def: def.id.clone(), condition: cond, quirks, origin: Origin::Import(code.chars().take(11).collect()), memory: def.memory.clone() })
+    Ok(PartInstance {
+        uid,
+        def: def.id.clone(),
+        condition: cond,
+        quirks,
+        origin: Origin::Import(code.chars().take(11).collect()),
+        memory: def.memory.clone(),
+    })
 }
 
 pub fn export_build(lo: &Loadout) -> String {

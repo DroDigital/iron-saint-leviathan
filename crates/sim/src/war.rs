@@ -177,7 +177,16 @@ impl Campaign {
     }
 
     /// Apply a mission result. Saint wins push toward Fortified, Kaiju wins toward Flooded.
-    pub fn apply_result(&mut self, content: &Content, district: &str, side: Side, won: bool, stats: &MissionStats, ruin: f32, damage: Vec<Vec<bool>>) {
+    pub fn apply_result(
+        &mut self,
+        content: &Content,
+        district: &str,
+        side: Side,
+        won: bool,
+        stats: &MissionStats,
+        ruin: f32,
+        damage: Vec<Vec<bool>>,
+    ) {
         let delta: i8 = match (side, won) {
             (Side::Saint, true) => 1,
             (Side::Kaiju, true) => -1,
@@ -263,7 +272,14 @@ impl Campaign {
     }
 
     /// Evaluate a district contract against mission stats. Returns the reward quirk on success.
-    pub fn check_contract(&mut self, content: &Content, district: &str, side: Side, stats: &MissionStats, won: bool) -> Option<(ContractDef, PartInstance)> {
+    pub fn check_contract(
+        &mut self,
+        content: &Content,
+        district: &str,
+        side: Side,
+        stats: &MissionStats,
+        won: bool,
+    ) -> Option<(ContractDef, PartInstance)> {
         let cid = self.district(district)?.contract.clone()?;
         let c = content.contracts.iter().find(|c| c.id == cid)?.clone();
         if c.side.is_some_and(|s| s != side) {

@@ -7,9 +7,38 @@ use isl_assets::quantize;
 pub const SIZE: u32 = 64;
 
 pub const NAMES: &[&str] = &[
-    "white", "plate", "grate", "steel", "gold", "rust", "glow", "scale", "belly", "hide", "fin", "bone", "fur", "chitin", "wing", "pale",
-    "camo", "tread", "hazard", "concrete", "brick", "corrugated", "stone", "wood", "asphalt", "water", "sand", "particle", "spark", "smoke",
-    "shadow", "window",
+    "white",
+    "plate",
+    "grate",
+    "steel",
+    "gold",
+    "rust",
+    "glow",
+    "scale",
+    "belly",
+    "hide",
+    "fin",
+    "bone",
+    "fur",
+    "chitin",
+    "wing",
+    "pale",
+    "camo",
+    "tread",
+    "hazard",
+    "concrete",
+    "brick",
+    "corrugated",
+    "stone",
+    "wood",
+    "asphalt",
+    "water",
+    "sand",
+    "particle",
+    "spark",
+    "smoke",
+    "shadow",
+    "window",
 ];
 
 pub fn layer(name: &str) -> u32 {
@@ -162,7 +191,13 @@ fn texel(name: &str, x: u32, y: u32) -> [f32; 4] {
         "window" => {
             let lit = hash(x as i32 / 8, y as i32 / 10, 77) > 0.55;
             let frame = x % 8 < 2 || y % 10 < 3;
-            if frame { [0.2, 0.2, 0.22, 1.0] } else if lit { [1.0, 0.85, 0.45, 1.0] } else { [0.15, 0.18, 0.25, 1.0] }
+            if frame {
+                [0.2, 0.2, 0.22, 1.0]
+            } else if lit {
+                [1.0, 0.85, 0.45, 1.0]
+            } else {
+                [0.15, 0.18, 0.25, 1.0]
+            }
         }
         _ => g(0.7),
     }

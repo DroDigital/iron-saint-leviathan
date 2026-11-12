@@ -57,21 +57,14 @@ pub fn atlas_rgba() -> Vec<u8> {
 
 fn glyph_index(c: char) -> usize {
     let u = c as u32;
-    if (32..=135).contains(&u) {
-        (u - 32) as usize
-    } else {
-        ('?' as u32 - 32) as usize
-    }
+    if (32..=135).contains(&u) { (u - 32) as usize } else { ('?' as u32 - 32) as usize }
 }
 
 fn glyph_uv(c: char) -> ([f32; 2], [f32; 2]) {
     let gi = glyph_index(c) as u32;
     let x = (gi % 16) * CELL;
     let y = (gi / 16) * CELL;
-    (
-        [x as f32 / ATLAS_W as f32, y as f32 / ATLAS_H as f32],
-        [(x + 5) as f32 / ATLAS_W as f32, (y + 7) as f32 / ATLAS_H as f32],
-    )
+    ([x as f32 / ATLAS_W as f32, y as f32 / ATLAS_H as f32], [(x + 5) as f32 / ATLAS_W as f32, (y + 7) as f32 / ATLAS_H as f32])
 }
 
 fn solid_uv() -> [f32; 2] {

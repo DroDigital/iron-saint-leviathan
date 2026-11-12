@@ -3,12 +3,12 @@
 
 use crate::ai::{self, AiParams, Brain, Percept, Seen};
 use crate::build::{self, Loadout, MoveRef, WeightClass};
-use crate::city::{City, CheckpointKind};
+use crate::city::{CheckpointKind, City};
 use crate::fighter::*;
 use crate::geom::{self, Aabb, Capsule};
 use crate::parts::{Condition, Effects, Origin, PartInstance};
 use crate::rng::SimRng;
-use crate::stamina::{StaminaCtx, DT};
+use crate::stamina::{DT, StaminaCtx};
 use crate::tide::{TideClock, Weather};
 use glam::{Vec2, Vec3};
 use isl_data::*;
@@ -45,7 +45,10 @@ pub enum SpawnSpec {
     Boss(String),
     Nemesis(Box<NemesisSpec>),
     /// Training dummy; with params it replays recorded habits.
-    Dummy { id: String, habits: Option<AiParams> },
+    Dummy {
+        id: String,
+        habits: Option<AiParams>,
+    },
     Ally(String),
 }
 
@@ -192,7 +195,15 @@ fn two<T>(v: &mut [T], a: usize, b: usize) -> (&mut T, &mut T) {
     }
 }
 
-pub fn parts_loadout(name: &str, side: Side, parts: &[String; 7], content: &Content, origin: Origin, uid: u64, paint: [[u8; 3]; 2]) -> Loadout {
+pub fn parts_loadout(
+    name: &str,
+    side: Side,
+    parts: &[String; 7],
+    content: &Content,
+    origin: Origin,
+    uid: u64,
+    paint: [[u8; 3]; 2],
+) -> Loadout {
     let slots = std::array::from_fn(|i| {
         content.part(&parts[i]).map(|d| PartInstance {
             uid: uid + i as u64,
@@ -259,12 +270,7 @@ impl World {
         };
         // Players.
         let side = w.cfg.side;
-        let start_cp = w
-            .city
-            .checkpoints
-            .iter()
-            .position(|c| c.kind.side() == side)
-            .unwrap_or(0);
+        let start_cp = w.city.checkpoints.iter().position(|c| c.kind.side() == side).unwrap_or(0);
         w.last_checkpoint = start_cp;
         for (n, lo) in players.into_iter().enumerate() {
             let mut pos = w.city.checkpoints[start_cp].pos + Vec3::new(n as f32 * 14.0, 0.0, -10.0);
@@ -348,9 +354,38 @@ impl World {
     }
 
     #[allow(clippy::too_many_arguments)]
-    pub fn spawn_loadout(&mut self, content: &Content, team: Team, kind: FighterKind, tag: String, name: String, lo: Loadout, fx: Vec<Effect>, pos: Vec3, scale: f32) -> u32 {
+    pub fn spawn_loadout(
+        &mut self,
+        content: &Content,
+        team: Team,
+        kind: FighterKind,
+        tag: String,
+        name: String,
+        lo: Loadout,
+        fx: Vec<Effect>,
+        pos: Vec3,
+        scale: f32,
+    ) -> u32 {
         let b = build::resolve(&lo, content, &fx, [false; 7]);
-        let id = self.fighters.len() as u32;
+        // Reuse a despawned slot so long sessions (many rests/respawns) never grow unbounded.
+        let reuse = self.fighters.iter().position(|f| !f.alive && !f.kind.is_player());
+        let id = reuse.unwrap_or(self.fighters.len()) as u32;
+        if reuse.is_some() {
+            for o in self.fighters.iter_mut() {
+                if o.lock.is_some_and(|l| l.target == id) {
+                    o.lock = None;
+                }
+                if let Some(a) = o.ai.as_mut() {
+                    if a.target == Some(id) {
+                        a.target = None;
+                    }
+                }
+                if o.owner == Some(id) {
+                    o.owner = None;
+                }
+            }
+            self.projectiles.retain(|p| p.owner != id);
+        }
         let mut f = Fighter::new(id, team, kind, tag, name, lo, b, pos, scale);
         f.extra_fx = fx;
         f.anim_speed = f.build.fx.get(Stat::AttackSpeed);
@@ -361,8 +396,15 @@ impl World {
         // Face the arena / opponent.
         let c = self.city.arena.0;
         f.yaw = geom::dir_yaw(c - pos);
-        self.fighters.push(f);
-        self.history.push(VecDeque::new());
+        if let Some(i) = reuse {
+            self.fighters[i] = f;
+            if let Some(h) = self.history.get_mut(i) {
+                h.clear();
+            }
+        } else {
+            self.fighters.push(f);
+            self.history.push(VecDeque::new());
+        }
         id
     }
 
@@ -380,7 +422,17 @@ impl World {
             SpawnSpec::Enemy(id) | SpawnSpec::Dummy { id, .. } => {
                 let e = content.enemy(&id)?.clone();
                 let lo = parts_loadout(&e.name, e.side, &e.parts, content, Origin::Enemy(e.id.clone()), uid, [e.color, e.color]);
-                let fid = self.spawn_loadout(content, Team::Enemy, FighterKind::Enemy(e.id.clone()), e.id.clone(), e.name.clone(), lo, vec![], pos, e.scale);
+                let fid = self.spawn_loadout(
+                    content,
+                    Team::Enemy,
+                    FighterKind::Enemy(e.id.clone()),
+                    e.id.clone(),
+                    e.name.clone(),
+                    lo,
+                    vec![],
+                    pos,
+                    e.scale,
+                );
                 let f = &mut self.fighters[fid as usize];
                 let hm = e.hp_mul * enemy_hp;
                 f.build.hp_max *= hm;
@@ -408,10 +460,28 @@ impl World {
             }
             SpawnSpec::Boss(id) | SpawnSpec::Ally(id) => {
                 let b = content.boss(&id)?.clone();
-                let lo = parts_loadout(&b.name, b.side, &b.parts, content, Origin::Boss(b.chassis.clone().unwrap_or(b.id.clone())), uid, [[200, 200, 200], [90, 90, 90]]);
+                let lo = parts_loadout(
+                    &b.name,
+                    b.side,
+                    &b.parts,
+                    content,
+                    Origin::Boss(b.chassis.clone().unwrap_or(b.id.clone())),
+                    uid,
+                    [[200, 200, 200], [90, 90, 90]],
+                );
                 let tag = b.chassis.clone().unwrap_or(b.id.clone());
                 let team = if ally { Team::Ally } else { Team::Enemy };
-                let fid = self.spawn_loadout(content, team, FighterKind::Boss(b.id.clone()), tag, b.name.clone(), lo, vec![], pos, b.scale / self.fighter_base_size(content, &b.parts));
+                let fid = self.spawn_loadout(
+                    content,
+                    team,
+                    FighterKind::Boss(b.id.clone()),
+                    tag,
+                    b.name.clone(),
+                    lo,
+                    vec![],
+                    pos,
+                    b.scale / self.fighter_base_size(content, &b.parts),
+                );
                 let old = self.cfg.assists.old_bones;
                 let f = &mut self.fighters[fid as usize];
                 f.build.hp_max *= b.hp_mul * enemy_hp;
@@ -635,20 +705,11 @@ impl World {
         let mut brain = brain;
         brain.target = best.map(|(_, id)| id);
         let seen = brain.target.and_then(|t| self.observe(t, brain.reaction)).cloned();
-        let reach = me
-            .build
-            .moves
-            .light
-            .as_ref()
-            .and_then(|m| content.mv(&m.id))
-            .map_or(3.0, |m| m.reach + m.radius * 0.5)
-            * me.size();
+        let reach = me.build.moves.light.as_ref().and_then(|m| content.mv(&m.id)).map_or(3.0, |m| m.reach + m.radius * 0.5) * me.size();
         let (boss_moves, boss_speed): (Vec<(String, u32)>, f32) = match &brain.boss {
-            Some(b) => content
-                .boss(b)
-                .and_then(|bd| bd.phases.get(me.boss_phase))
-                .map(|ph| (ph.moves.clone(), ph.speed))
-                .unwrap_or_default(),
+            Some(b) => {
+                content.boss(b).and_then(|bd| bd.phases.get(me.boss_phase)).map(|ph| (ph.moves.clone(), ph.speed)).unwrap_or_default()
+            }
             None => (vec![], 1.0),
         };
         let p = Percept {
@@ -818,7 +879,8 @@ impl World {
                     WeightClass::Heavy => DodgeKind::Slide,
                 };
                 let ci = class.index();
-                let mut dir = if c.move_dir.length_squared() > 0.04 { c.move_dir.normalize() } else { -Vec2::new(f.yaw.sin(), f.yaw.cos()) };
+                let mut dir =
+                    if c.move_dir.length_squared() > 0.04 { c.move_dir.normalize() } else { -Vec2::new(f.yaw.sin(), f.yaw.cos()) };
                 if f.build.overloaded {
                     dir *= 0.6;
                 }
@@ -1054,13 +1116,7 @@ impl World {
         let side = f.loadout.side;
         let pos = f.pos;
         // Rest at own-side checkpoint.
-        if let Some((ci, _)) = self
-            .city
-            .checkpoints
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.kind.side() == side && c.pos.distance(pos) < 14.0)
-        {
+        if let Some((ci, _)) = self.city.checkpoints.iter().enumerate().find(|(_, c)| c.kind.side() == side && c.pos.distance(pos) < 14.0) {
             self.rest(content, ci);
             return;
         }
@@ -1083,7 +1139,8 @@ impl World {
                     if let Some(d) = content.part(&p.def) {
                         let cond = if self.rng.chance(0.5) { Condition::Scarred } else { Condition::Mangled };
                         let uid = self.uid();
-                        let mut inst = PartInstance::harvest(d, cond, Origin::OwnRemains { war: w.war, tide: w.tide }, uid, &mut self.rng, content);
+                        let mut inst =
+                            PartInstance::harvest(d, cond, Origin::OwnRemains { war: w.war, tide: w.tide }, uid, &mut self.rng, content);
                         inst.memory = p.memory.clone();
                         names.push(d.name.clone());
                         self.stats.harvested.push((w.loadout.chassis.clone().unwrap_or_default(), d.slot));
@@ -1166,6 +1223,13 @@ impl World {
             if matches!(f.kind, FighterKind::Enemy(_) | FighterKind::Verse | FighterKind::Hallucination) {
                 f.alive = false;
                 f.act = Act::Dead;
+                f.lock = None;
+            }
+        }
+        let alive: Vec<bool> = self.fighters.iter().map(|f| f.alive).collect();
+        for f in self.fighters.iter_mut() {
+            if f.lock.is_some_and(|l| !alive.get(l.target as usize).copied().unwrap_or(false)) {
+                f.lock = None;
             }
         }
         let list = self.respawn_list.clone();
@@ -1381,8 +1445,7 @@ impl World {
                 if !f.build.fx.no_regrow {
                     let side = f.loadout.side;
                     if let Some(s) = Slot::ALL.into_iter().find(|s| {
-                        f.destroyed[s.index()]
-                            && f.loadout.get(*s).and_then(|p| content.part(&p.def)).is_some_and(|d| d.side == side)
+                        f.destroyed[s.index()] && f.loadout.get(*s).and_then(|p| content.part(&p.def)).is_some_and(|d| d.side == side)
                     }) {
                         f.destroyed[s.index()] = false;
                         f.build = build::resolve(&f.loadout, content, &f.extra_fx, f.destroyed);
@@ -1454,7 +1517,17 @@ impl World {
                     let a = k as f32 / n as f32 * std::f32::consts::TAU;
                     let p = f.pos + Vec3::new(a.sin(), 0.0, a.cos()) * (f.radius() + 6.0);
                     let lo = f.loadout.clone();
-                    let id = self.spawn_loadout(content, f.team, FighterKind::Verse, f.tag.clone(), format!("{} VERSE", f.name), lo, vec![], p, f.scale * 0.45);
+                    let id = self.spawn_loadout(
+                        content,
+                        f.team,
+                        FighterKind::Verse,
+                        f.tag.clone(),
+                        format!("{} VERSE", f.name),
+                        lo,
+                        vec![],
+                        p,
+                        f.scale * 0.45,
+                    );
                     let v = &mut self.fighters[id as usize];
                     v.build.hp_max = f.build.hp_max * 0.08;
                     v.hp = v.build.hp_max;
@@ -1702,11 +1775,8 @@ impl World {
         let heavy = matches!(m.kind, MoveKind::Heavy | MoveKind::Burst | MoveKind::Heretic | MoveKind::Grab);
         let slot = self.pick_part(i, j, from);
         let o = &self.fighters[j];
-        let armor = if slot == Slot::Frame {
-            o.build.armor
-        } else {
-            o.build.parts[slot.index()].as_ref().map_or(o.build.armor, |p| p.armor)
-        };
+        let armor =
+            if slot == Slot::Frame { o.build.armor } else { o.build.parts[slot.index()].as_ref().map_or(o.build.armor, |p| p.armor) };
         dmg *= 100.0 / (100.0 + armor);
         let guarding = matches!(o.act, Act::Guard) && facing && m.blockable;
         let mut blocked = false;
@@ -1790,7 +1860,9 @@ impl World {
                 // ST. NULL: copy the struck part's attack.
                 let pdef = self.fighters[j].loadout.get(slot).and_then(|p| content.part(&p.def));
                 if let Some(d) = pdef {
-                    if let Some(mid) = d.moves.iter().find(|x| content.mv(x).is_some_and(|mm| matches!(mm.kind, MoveKind::Light | MoveKind::Heavy))) {
+                    if let Some(mid) =
+                        d.moves.iter().find(|x| content.mv(x).is_some_and(|mm| matches!(mm.kind, MoveKind::Light | MoveKind::Heavy)))
+                    {
                         self.fighters[i].mimic = Some(MoveRef { id: mid.clone(), slot: Slot::RightArm });
                         self.emit(SimEvent::Mimic { id: i as u32, mv: mid.clone() });
                     }
@@ -1968,7 +2040,15 @@ impl World {
         tf.hp -= tf.build.hp_max * 0.01 * k;
         tf.posture += 6.0 * k;
         let pos = tf.center();
-        self.emit(SimEvent::Hit { attacker: i as u32, target: target as u32, slot, dmg: maxhp * 0.1 * k, pos, blocked: false, heavy: k > 0.9 });
+        self.emit(SimEvent::Hit {
+            attacker: i as u32,
+            target: target as u32,
+            slot,
+            dmg: maxhp * 0.1 * k,
+            pos,
+            blocked: false,
+            heavy: k > 0.9,
+        });
         if self.fighters[target].part_hp[slot.index()] <= 0.0 && self.fighters[target].part_alive(slot) {
             // Ripped off clean: pristine.
             let tag = self.fighters[target].tag.clone();
@@ -2073,10 +2153,13 @@ impl World {
     }
 
     fn check_wave_clear(&mut self) {
-        let left = self
-            .fighters
-            .iter()
-            .any(|f| f.team == Team::Enemy && f.alive && !matches!(f.act, Act::Dead) && !f.hallucination && !matches!(f.kind, FighterKind::Enemy(ref id) if id.starts_with("dummy")));
+        let left = self.fighters.iter().any(|f| {
+            f.team == Team::Enemy
+                && f.alive
+                && !matches!(f.act, Act::Dead)
+                && !f.hallucination
+                && !matches!(f.kind, FighterKind::Enemy(ref id) if id.starts_with("dummy"))
+        });
         if !left && self.cfg.spawns.is_some() {
             self.victory = true;
         }
@@ -2297,7 +2380,15 @@ impl World {
                 let a = b.chunk_aabb(ci);
                 let moved = Capsule { base: cap.base + Vec3::new(push.x, 0.0, push.y), ..cap };
                 if let Some(p) = moved.push_out_aabb(&a) {
-                    if big && matches!(b.kind, crate::city::BuildingKind::House | crate::city::BuildingKind::Stall | crate::city::BuildingKind::Railcar | crate::city::BuildingKind::Barricade) {
+                    if big
+                        && matches!(
+                            b.kind,
+                            crate::city::BuildingKind::House
+                                | crate::city::BuildingKind::Stall
+                                | crate::city::BuildingKind::Railcar
+                                | crate::city::BuildingKind::Barricade
+                        )
+                    {
                         smash.push((bi, ci));
                     } else {
                         push += p;
@@ -2324,7 +2415,11 @@ impl World {
                 if !fa.alive || !fb.alive || matches!(fa.act, Act::Dead) || matches!(fb.act, Act::Dead) {
                     continue;
                 }
-                if fa.burrowed || fb.burrowed || matches!(fa.act, Act::Climbing { .. } | Act::Grabbed { .. }) || matches!(fb.act, Act::Climbing { .. } | Act::Grabbed { .. }) {
+                if fa.burrowed
+                    || fb.burrowed
+                    || matches!(fa.act, Act::Climbing { .. } | Act::Grabbed { .. })
+                    || matches!(fb.act, Act::Climbing { .. } | Act::Grabbed { .. })
+                {
                     continue;
                 }
                 if (fa.altitude - fb.altitude).abs() > fa.height().max(fb.height()) {
@@ -2412,12 +2507,22 @@ impl World {
                             continue;
                         }
                         let o = &self.fighters[j];
-                        if o.alive && !matches!(o.act, Act::Dead) && p.team.hostile(o.team) && o.center().distance(p.pos) < p.radius * 1.6 + o.radius() {
+                        if o.alive
+                            && !matches!(o.act, Act::Dead)
+                            && p.team.hostile(o.team)
+                            && o.center().distance(p.pos) < p.radius * 1.6 + o.radius()
+                        {
                             self.resolve_hit(content, owner, j, &m, p.slot, p.pos, 0.6);
                         }
                     }
                     if m.effect == Some(MoveEffect::Burn) {
-                        self.hazards.push(Hazard { kind: HazardKind::Fire, pos: Vec3::new(p.pos.x, 0.0, p.pos.z), radius: p.radius * 1.4, life: 240, team: p.team });
+                        self.hazards.push(Hazard {
+                            kind: HazardKind::Fire,
+                            pos: Vec3::new(p.pos.x, 0.0, p.pos.z),
+                            radius: p.radius * 1.4,
+                            life: 240,
+                            team: p.team,
+                        });
                     }
                     // Shells crack buildings.
                     for bi in 0..self.city.buildings.len() {
@@ -2508,7 +2613,13 @@ impl World {
         let mut regen = side_bonus;
         if grid {
             let near = pylons.iter().any(|p| Vec2::new(p.x - f.pos.x, p.z - f.pos.z).length() < 45.0);
-            regen *= if blackout { 0.5 } else if near { 1.6 } else { 1.0 };
+            regen *= if blackout {
+                0.5
+            } else if near {
+                1.6
+            } else {
+                1.0
+            };
         }
         if f.status.spores > 0 {
             regen *= 0.5;
@@ -2569,7 +2680,8 @@ impl World {
     }
 
     fn pickup_tick(&mut self) {
-        let players: Vec<(usize, Vec3)> = self.fighters.iter().filter(|f| f.kind.is_player() && f.alive).map(|f| (f.id as usize, f.pos)).collect();
+        let players: Vec<(usize, Vec3)> =
+            self.fighters.iter().filter(|f| f.kind.is_player() && f.alive).map(|f| (f.id as usize, f.pos)).collect();
         let mut k = 0;
         while k < self.pickups.len() {
             self.pickups[k].age += 1;
@@ -2596,7 +2708,12 @@ impl World {
             return;
         }
         let side = self.cfg.side;
-        let pool: Vec<String> = content.enemies.iter().filter(|e| e.side != side && e.archetype != Archetype::Dummy && !e.id.starts_with("demo")).map(|e| e.id.clone()).collect();
+        let pool: Vec<String> = content
+            .enemies
+            .iter()
+            .filter(|e| e.side != side && e.archetype != Archetype::Dummy && !e.id.starts_with("demo"))
+            .map(|e| e.id.clone())
+            .collect();
         let Some(id) = self.rng.pick(&pool).cloned() else { return };
         let a = self.rng.range(0.0, std::f32::consts::TAU);
         let pos = ppos + Vec3::new(a.sin(), 0.0, a.cos()) * 28.0;

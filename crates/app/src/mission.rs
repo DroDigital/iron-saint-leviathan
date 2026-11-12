@@ -5,13 +5,13 @@ use crate::camera::{Camera, Focus};
 use crate::district_mesh;
 use crate::settings::Settings;
 use crate::vfx::Vfx;
-use crate::visuals::{pose_of, Visuals};
+use crate::visuals::{Visuals, pose_of};
 use glam::{Vec2, Vec3, Vec4};
-use isl_audio::{synth::cue_sfx, Audio, Sfx};
+use isl_audio::{Audio, Sfx, synth::cue_sfx};
 use isl_data::*;
 use isl_ghost::Recorder;
 use isl_input::{Action, PlayerInput};
-use isl_render::{billboard, textures, DrawList, Lighting, View};
+use isl_render::{DrawList, Lighting, View, billboard, textures};
 use isl_sim::fighter::*;
 use isl_sim::world::*;
 
@@ -216,8 +216,14 @@ impl Mission {
             let look = inp.cam_axis + Vec2::new(inp.mouse_delta.x, -inp.mouse_delta.y) * 0.08;
             let Some(pf) = self.world.player(p as u8) else { continue };
             let lock = pf.lock.and_then(|l| self.world.fighters.get(l.target as usize)).map(|t| (t.center(), t.height()));
-            let huge = self.world.fighters.iter().any(|f| f.alive && f.kind.is_bossish() && f.size() > 1.35 && f.pos.distance(pf.pos) < 90.0);
-            let focus = Focus { subject: self.interp(pf.id as usize, 1.0).0, subject_height: pf.height().max(4.0) + pf.altitude, lock, scale_mode: huge };
+            let huge =
+                self.world.fighters.iter().any(|f| f.alive && f.kind.is_bossish() && f.size() > 1.35 && f.pos.distance(pf.pos) < 90.0);
+            let focus = Focus {
+                subject: self.interp(pf.id as usize, 1.0).0,
+                subject_height: pf.height().max(4.0) + pf.altitude,
+                lock,
+                scale_mode: huge,
+            };
             let city = &self.world.city;
             self.cams[p].update(dt, look, &focus, |x, z| city.ground(x, z));
             if self.dead_timer.is_none() && self.end.is_none() {
@@ -476,7 +482,12 @@ impl Mission {
                 }
                 SimEvent::Death { pos, id, .. } => {
                     let f = &self.world.fighters[*id as usize];
-                    audio.play(if f.loadout.side == Side::Kaiju { Sfx::Roar } else { Sfx::Explosion }, Some(*pos), 1.0, 0.7 / f.size().max(0.5));
+                    audio.play(
+                        if f.loadout.side == Side::Kaiju { Sfx::Roar } else { Sfx::Explosion },
+                        Some(*pos),
+                        1.0,
+                        0.7 / f.size().max(0.5),
+                    );
                     self.vfx.debris(*pos + Vec3::Y * 3.0, 20, [120, 110, 100], 3.0 * f.size());
                     self.vfx.dust(*pos, 8, f.size());
                 }
@@ -591,7 +602,8 @@ impl Mission {
 
     /// The view for player `p` with viewport.
     pub fn view(&self, p: usize, viewport: [u32; 4], settings: &Settings) -> View {
-        let aspect = viewport[2] as f32 / viewport[3].max(1) as f32 * (settings.aspect() / (settings.low_res().0 as f32 / settings.low_res().1 as f32));
+        let aspect = viewport[2] as f32 / viewport[3].max(1) as f32
+            * (settings.aspect() / (settings.low_res().0 as f32 / settings.low_res().1 as f32));
         let (eye, vm) = if self.photo {
             let (pos, yaw, pitch) = self.photo_cam;
             let fwd = Vec3::new(yaw.sin() * pitch.cos(), pitch.sin(), yaw.cos() * pitch.cos());
@@ -623,7 +635,10 @@ impl Mission {
         if n.x.abs() > 1.2 || n.y.abs() > 1.2 {
             return None;
         }
-        Some(Vec2::new(view.viewport[0] as f32 + (n.x * 0.5 + 0.5) * view.viewport[2] as f32, view.viewport[1] as f32 + (0.5 - n.y * 0.5) * view.viewport[3] as f32))
+        Some(Vec2::new(
+            view.viewport[0] as f32 + (n.x * 0.5 + 0.5) * view.viewport[2] as f32,
+            view.viewport[1] as f32 + (0.5 - n.y * 0.5) * view.viewport[3] as f32,
+        ))
     }
 
     pub fn draw(&mut self, content: &Content, dl: &mut DrawList, view: &View, settings: &Settings) {
@@ -682,7 +697,11 @@ impl Mission {
         }
         // Projectiles.
         for p in &self.world.projectiles {
-            let c = if self.world.fighters.get(p.owner as usize).is_some_and(|f| f.loadout.side == Side::Kaiju) { [180, 255, 120, 255] } else { [255, 200, 120, 255] };
+            let c = if self.world.fighters.get(p.owner as usize).is_some_and(|f| f.loadout.side == Side::Kaiju) {
+                [180, 255, 120, 255]
+            } else {
+                [255, 200, 120, 255]
+            };
             billboard(&mut dl.add, p.pos, p.radius * 2.2 + 0.6, cr, cu, textures::layer("particle"), c);
         }
         // Pickups: glowing column.
@@ -690,7 +709,15 @@ impl Mission {
             let h = (t * 3.0).sin() * 0.5;
             billboard(&mut dl.add, pk.pos + Vec3::Y * (2.0 + h), 2.5, cr, cu, textures::layer("particle"), [255, 220, 120, 220]);
             for k in 0..4 {
-                billboard(&mut dl.add, pk.pos + Vec3::Y * (4.0 + k as f32 * 3.0), 1.0, cr, cu, textures::layer("spark"), [255, 230, 160, 120]);
+                billboard(
+                    &mut dl.add,
+                    pk.pos + Vec3::Y * (4.0 + k as f32 * 3.0),
+                    1.0,
+                    cr,
+                    cu,
+                    textures::layer("spark"),
+                    [255, 230, 160, 120],
+                );
             }
         }
         // Wrecks / carcasses.

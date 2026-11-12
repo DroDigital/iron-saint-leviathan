@@ -7,7 +7,7 @@ use isl_data::*;
 use isl_input::{Action, Binding, Bindings};
 use isl_render::View;
 use isl_sim::fighter::{Act, Fighter, FighterKind};
-use isl_ui::{col, icon, Ui};
+use isl_ui::{Ui, col, icon};
 
 fn stamina_label(f: &Fighter) -> (&'static str, [u8; 4], f32) {
     let s = &f.stamina;
@@ -25,10 +25,7 @@ fn stamina_label(f: &Fighter) -> (&'static str, [u8; 4], f32) {
 /// Draw the HUD for player `p` inside `vp` (x, y, w, h).
 /// Label of the first binding for an action on the active device class.
 pub fn prompt(b: &Bindings, a: Action, pad: bool) -> String {
-    b.map
-        .get(&a)
-        .and_then(|v| v.iter().find(|x| matches!(x, Binding::Pad(_) | Binding::Axis(..)) == pad))
-        .map_or("-".into(), |x| x.label())
+    b.map.get(&a).and_then(|v| v.iter().find(|x| matches!(x, Binding::Pad(_) | Binding::Axis(..)) == pad)).map_or("-".into(), |x| x.label())
 }
 
 pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, using_pad: bool, view: &View, p: u8) {
@@ -94,7 +91,14 @@ pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, us
     // Lock-on reticle and target part readout.
     if let Some(l) = f.lock {
         if let Some(t) = m.world.fighters.get(l.target as usize) {
-            let height = t.height() * if l.slot == Slot::Head { 0.9 } else if l.slot == Slot::Legs { 0.2 } else { 0.55 };
+            let height = t.height()
+                * if l.slot == Slot::Head {
+                    0.9
+                } else if l.slot == Slot::Legs {
+                    0.2
+                } else {
+                    0.55
+                };
             let (tp, _) = m.interp(t.id as usize, m.alpha());
             let wp = tp + glam::Vec3::Y * (height + t.altitude);
             if let Some(s) = Mission::project(view, wp) {
@@ -117,7 +121,13 @@ pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, us
                 let maxhp = t.build.parts[s.index()].as_ref().map(|p| p.hp);
                 let frac = if t.destroyed[s.index()] { 0.0 } else { maxhp.map_or(0.0, |mx| t.part_hp[s.index()] / mx) };
                 let sel = s == l.slot;
-                let c = if t.destroyed[s.index()] { col::DARK } else if sel { col::GOLD } else { col::GREY };
+                let c = if t.destroyed[s.index()] {
+                    col::DARK
+                } else if sel {
+                    col::GOLD
+                } else {
+                    col::GREY
+                };
                 let short = s.short_for(t.loadout.side);
                 ui.text(px, ly, &format!("{}{}", if sel { icon::CURSOR } else { ' ' }, short), c);
                 if show_hp && !t.destroyed[s.index()] {
@@ -133,7 +143,14 @@ pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, us
     }
     // Boss bar.
     if m.kind != MissionKind::Versus {
-        if let Some(b) = m.world.fighters.iter().find(|b| b.alive && !matches!(b.act, Act::Dead) && b.kind.is_bossish() && b.ai.as_ref().is_some_and(|a| a.awake) && b.team.hostile(f.team) && b.pos.distance(f.pos) < 160.0) {
+        if let Some(b) = m.world.fighters.iter().find(|b| {
+            b.alive
+                && !matches!(b.act, Act::Dead)
+                && b.kind.is_bossish()
+                && b.ai.as_ref().is_some_and(|a| a.awake)
+                && b.team.hostile(f.team)
+                && b.pos.distance(f.pos) < 160.0
+        }) {
             let bw = vw * 0.7;
             let bx = vx + (vw - bw) * 0.5;
             let by = vy + vh - 34.0;
@@ -157,11 +174,23 @@ pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, us
         if w.side == f.loadout.side && w.currency > 0 {
             ptxt = Some(format!("[{}] RECOVER {} {}", prompt(&settings.bindings, Action::Interact, pad), w.currency, w.side.currency()));
         } else if w.side != f.loadout.side && !w.harvested {
-            ptxt = Some(format!("[{}] HARVEST YOUR OLD {}", prompt(&settings.bindings, Action::Interact, pad), if w.side == Side::Saint { "WRECK" } else { "CARCASS" }));
+            ptxt = Some(format!(
+                "[{}] HARVEST YOUR OLD {}",
+                prompt(&settings.bindings, Action::Interact, pad),
+                if w.side == Side::Saint { "WRECK" } else { "CARCASS" }
+            ));
         }
     } else if matches!(f.act, Act::Climbing { .. }) {
-        ptxt = Some(format!("[{}] RIP   [{}] DROP", prompt(&settings.bindings, Action::Heavy, pad), prompt(&settings.bindings, Action::Dodge, pad)));
-    } else if m.world.fighters.iter().any(|b| matches!(&b.kind, FighterKind::Boss(id) if content.boss(id).is_some_and(|bd| bd.huge)) && matches!(b.act, Act::PostureBroken | Act::Stagger { .. }) && b.pos.distance(f.pos) < b.radius() + f.radius() + 10.0) {
+        ptxt = Some(format!(
+            "[{}] RIP   [{}] DROP",
+            prompt(&settings.bindings, Action::Heavy, pad),
+            prompt(&settings.bindings, Action::Dodge, pad)
+        ));
+    } else if m.world.fighters.iter().any(|b| {
+        matches!(&b.kind, FighterKind::Boss(id) if content.boss(id).is_some_and(|bd| bd.huge))
+            && matches!(b.act, Act::PostureBroken | Act::Stagger { .. })
+            && b.pos.distance(f.pos) < b.radius() + f.radius() + 10.0
+    }) {
         ptxt = Some(format!("[{}] CLIMB", prompt(&settings.bindings, Action::Interact, pad)));
     }
     if let Some(s) = ptxt {

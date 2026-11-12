@@ -44,11 +44,16 @@ pub enum Origin {
     /// From a nemesis built out of your own saved build.
     Nemesis(String),
     /// Stripped from your own wreck/carcass.
-    OwnRemains { war: u32, tide: u32 },
+    OwnRemains {
+        war: u32,
+        tide: u32,
+    },
     Import(String),
     Fabricated,
     Contract(String),
-    Corrupted { war: u32 },
+    Corrupted {
+        war: u32,
+    },
     Event(String),
     TideRun(u64),
 }
@@ -147,12 +152,8 @@ impl PartInstance {
     /// Re-roll all non-innate quirks (advanced Foundry/Nest feature).
     pub fn reroll(&mut self, rng: &mut SimRng, content: &Content) {
         let Some(def) = content.part(&self.def) else { return };
-        let keep: Vec<String> = self
-            .quirks
-            .iter()
-            .filter(|q| def.quirks.contains(q) || content.quirk(q).is_some_and(|d| d.special))
-            .cloned()
-            .collect();
+        let keep: Vec<String> =
+            self.quirks.iter().filter(|q| def.quirks.contains(q) || content.quirk(q).is_some_and(|d| d.special)).cloned().collect();
         self.quirks = keep;
         for q in roll_quirks(rng, content, def.side, self.condition.max(Condition::Scarred), false) {
             if !self.quirks.contains(&q) {

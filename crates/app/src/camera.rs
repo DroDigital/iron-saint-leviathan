@@ -17,7 +17,16 @@ pub struct Camera {
 
 impl Default for Camera {
     fn default() -> Self {
-        Camera { yaw: std::f32::consts::PI, pitch: 0.32, dist: 30.0, pos: Vec3::new(0.0, 20.0, -30.0), target: Vec3::ZERO, trauma: 0.0, fov: 1.05, t: 0.0 }
+        Camera {
+            yaw: std::f32::consts::PI,
+            pitch: 0.32,
+            dist: 30.0,
+            pos: Vec3::new(0.0, 20.0, -30.0),
+            target: Vec3::ZERO,
+            trauma: 0.0,
+            fov: 1.05,
+            t: 0.0,
+        }
     }
 }
 

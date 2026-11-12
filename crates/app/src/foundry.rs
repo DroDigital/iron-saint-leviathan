@@ -15,7 +15,19 @@ pub enum AMode {
     Paint,
 }
 
-pub const EXTRAS: [&str; 11] = ["PAINT", "LOAD PREMADE", "REPAIR PART", "RE-ROLL QUIRKS", "TRANSPLANT QUIRK", "FABRICATE", "SAVE TO CARD", "EXPORT CODE", "TEST ARENA", "RENAME", "DONE"];
+pub const EXTRAS: [&str; 11] = [
+    "PAINT",
+    "LOAD PREMADE",
+    "REPAIR PART",
+    "RE-ROLL QUIRKS",
+    "TRANSPLANT QUIRK",
+    "FABRICATE",
+    "SAVE TO CARD",
+    "EXPORT CODE",
+    "TEST ARENA",
+    "RENAME",
+    "DONE",
+];
 
 pub struct Assembly {
     pub side: Side,
@@ -36,8 +48,22 @@ pub struct Cand {
 }
 
 pub const PALETTE: [[u8; 3]; 16] = [
-    [150, 150, 160], [200, 200, 200], [90, 92, 100], [40, 40, 48], [180, 60, 40], [120, 40, 30], [220, 170, 60], [140, 110, 50],
-    [60, 110, 140], [30, 60, 90], [70, 120, 70], [40, 70, 50], [180, 160, 200], [110, 80, 140], [230, 230, 220], [20, 20, 20],
+    [150, 150, 160],
+    [200, 200, 200],
+    [90, 92, 100],
+    [40, 40, 48],
+    [180, 60, 40],
+    [120, 40, 30],
+    [220, 170, 60],
+    [140, 110, 50],
+    [60, 110, 140],
+    [30, 60, 90],
+    [70, 120, 70],
+    [40, 70, 50],
+    [180, 160, 200],
+    [110, 80, 140],
+    [230, 230, 220],
+    [20, 20, 20],
 ];
 
 impl Assembly {
@@ -79,5 +105,11 @@ pub fn part_label(p: &PartInstance, content: &Content, side: Side) -> String {
         Condition::Scarred => "S",
         Condition::Mangled => "M",
     };
-    format!("{}{} [{}]{}", if heretic { "*" } else { "" }, d.map_or(p.def.as_str(), |d| d.name.as_str()), c, if p.quirks.is_empty() { String::new() } else { format!(" +{}", p.quirks.len()) })
+    format!(
+        "{}{} [{}]{}",
+        if heretic { "*" } else { "" },
+        d.map_or(p.def.as_str(), |d| d.name.as_str()),
+        c,
+        if p.quirks.is_empty() { String::new() } else { format!(" +{}", p.quirks.len()) }
+    )
 }

@@ -110,7 +110,16 @@ pub fn screenshots(dir: &Path) -> anyhow::Result<()> {
         if let Some(m) = g.mission.as_ref() {
             for f in &m.world.fighters {
                 if f.alive && (f.kind.is_bossish() || f.kind.is_player()) {
-                    eprintln!("{:?} pos {:?} act {} alt {} burrowed {} lock {:?} cam {:?}", f.kind, f.pos, f.act.name(), f.altitude, f.burrowed, f.lock, m.cams[0].pos);
+                    eprintln!(
+                        "{:?} pos {:?} act {} alt {} burrowed {} lock {:?} cam {:?}",
+                        f.kind,
+                        f.pos,
+                        f.act.name(),
+                        f.altitude,
+                        f.burrowed,
+                        f.lock,
+                        m.cams[0].pos
+                    );
                 }
             }
         }
@@ -162,7 +171,9 @@ pub fn soak(secs: f32, render_every: usize) -> anyhow::Result<()> {
     let districts: Vec<String> = g.content.districts.iter().filter(|d| !d.finale).map(|d| d.id.clone()).collect();
     let mut missions = 0;
     for f in 0..frames {
-        if !matches!(g.screen, Screen::Mission | Screen::Loading { .. } | Screen::DiscSwap { .. }) || g.mission.is_none() && matches!(g.screen, Screen::Mission) {
+        if !matches!(g.screen, Screen::Mission | Screen::Loading { .. } | Screen::DiscSwap { .. })
+            || g.mission.is_none() && matches!(g.screen, Screen::Mission)
+        {
             // Start another sortie on a rotating district and side.
             let side = if missions % 2 == 0 { Side::Saint } else { Side::Kaiju };
             let d = districts[missions % districts.len()].clone();
@@ -222,7 +233,11 @@ pub fn soak(secs: f32, render_every: usize) -> anyhow::Result<()> {
             render(&mut g, &mut r);
         }
         if f % 3600 == 0 {
-            println!("soak: {}s, missions {missions}, screen ok, fighters {}", f / 60, g.mission.as_ref().map_or(0, |m| m.world.fighters.len()));
+            println!(
+                "soak: {}s, missions {missions}, screen ok, fighters {}",
+                f / 60,
+                g.mission.as_ref().map_or(0, |m| m.world.fighters.len())
+            );
         }
     }
     println!("soak complete: {missions} missions, {} frames", frames);

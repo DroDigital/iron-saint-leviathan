@@ -6,17 +6,17 @@ use crate::game::{Game, Launch, Request, Screen};
 use crate::hud;
 use crate::mission::MissionKind;
 use crate::settings::{Palette, RESOLUTIONS};
-use crate::visuals::{rig_of, size_of, Anim, Pose};
+use crate::visuals::{Anim, Pose, rig_of, size_of};
 use glam::{Mat4, Vec3};
 use isl_audio::{Audio, Sfx};
 use isl_data::*;
 use isl_input::{Action, Input, PlayerInput};
-use isl_render::{meshgen, textures, DrawList, Lighting, PostSettings, View};
+use isl_render::{DrawList, Lighting, PostSettings, View, meshgen, textures};
 use isl_save::{BlockData, CorruptItem};
 use isl_sim::build::{self, Loadout};
 use isl_sim::run::TideRun;
 use isl_sim::war::side_ix;
-use isl_ui::{col, icon, Ui};
+use isl_ui::{Ui, col, icon};
 
 #[derive(PartialEq, Eq)]
 enum Nav {
@@ -120,11 +120,7 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
     match screen {
         Screen::Boot(t) => {
             let t = t + dt;
-            if t > 2.6 || input.any_pressed {
-                Screen::Title(0.0)
-            } else {
-                Screen::Boot(t)
-            }
+            if t > 2.6 || input.any_pressed { Screen::Title(0.0) } else { Screen::Boot(t) }
         }
         Screen::Title(t) => {
             if t > 0.5 && (p.hit(Action::Confirm) || p.hit(Action::Pause)) {
@@ -163,7 +159,11 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
             }
         }
         Screen::NewWar { mut sel, mut condition, mut rot, mut use_corrupt } => {
-            let conds: Vec<String> = std::iter::once(String::new()).chain(g.content.conditions.iter().filter(|c| g.card.system.archive.unlocked_conditions.contains(&c.id)).map(|c| c.id.clone())).collect();
+            let conds: Vec<String> = std::iter::once(String::new())
+                .chain(
+                    g.content.conditions.iter().filter(|c| g.card.system.archive.unlocked_conditions.contains(&c.id)).map(|c| c.id.clone()),
+                )
+                .collect();
             let max_rot = g.card.system.archive.disc_rot_unlocked;
             match nav(&p, &mut sel, 5, audio) {
                 Nav::Left | Nav::Right => {
@@ -238,7 +238,11 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
                         g.toast(format!("BUILD INVALID: {}", issues[0].text()));
                         return Screen::Briefing { district, side, sel };
                     }
-                    g.start_launch(Launch::War { district: district.clone(), side, finale: if finale { Some(ending.unwrap_or_default()) } else { None } });
+                    g.start_launch(Launch::War {
+                        district: district.clone(),
+                        side,
+                        finale: if finale { Some(ending.unwrap_or_default()) } else { None },
+                    });
                     std::mem::replace(&mut g.screen, Screen::Mission)
                 }
                 _ => Screen::Briefing { district, side, sel },
@@ -567,7 +571,11 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                     };
                     let bank = g.campaign.as_ref().map_or(0, |c| c.inventory[side_ix(a.side)].currency);
                     if !allowed {
-                        a.msg = format!("LOCKED: HARVEST MORE FROM THE OTHER SIDE ({}/{})", g.card.system.archive.cross_harvests, if extra == "RE-ROLL QUIRKS" { 20 } else { 40 });
+                        a.msg = format!(
+                            "LOCKED: HARVEST MORE FROM THE OTHER SIDE ({}/{})",
+                            g.card.system.archive.cross_harvests,
+                            if extra == "RE-ROLL QUIRKS" { 20 } else { 40 }
+                        );
                     } else if bank < cost {
                         a.msg = format!("NEED {cost} {}", a.side.currency());
                     } else {
@@ -577,7 +585,9 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                             "RE-ROLL QUIRKS" => a.lo.slots[s.index()].as_mut().map(|p| p.reroll(&mut rng, c)).is_some(),
                             _ => {
                                 let next = Slot::ALL[(s.index() + 1) % 7];
-                                let q = a.lo.slots[s.index()].as_mut().and_then(|p| if p.quirks.is_empty() { None } else { Some(p.quirks.remove(0)) });
+                                let q = a.lo.slots[s.index()]
+                                    .as_mut()
+                                    .and_then(|p| if p.quirks.is_empty() { None } else { Some(p.quirks.remove(0)) });
                                 match (q, a.lo.slots[next.index()].as_mut()) {
                                     (Some(q), Some(t)) => {
                                         t.quirks.push(q);
@@ -623,7 +633,18 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                     return std::mem::replace(&mut g.screen, Screen::Mission);
                 }
                 "RENAME" => {
-                    let names = ["VIGIL", "ROOK", "MOTHWING", "UNDERTOW", "PENITENT", "SALT-9", "THE LATE SHIFT", "HARROW", "LANTERN", "GRAVE GOODS"];
+                    let names = [
+                        "VIGIL",
+                        "ROOK",
+                        "MOTHWING",
+                        "UNDERTOW",
+                        "PENITENT",
+                        "SALT-9",
+                        "THE LATE SHIFT",
+                        "HARROW",
+                        "LANTERN",
+                        "GRAVE GOODS",
+                    ];
                     let k = names.iter().position(|n| *n == a.lo.name).map_or(0, |i| (i + 1) % names.len());
                     a.lo.name = names[k].to_string();
                     a.lo.stencil = a.lo.name.clone();
@@ -669,7 +690,10 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                         }
                         a.lo.slots[slot.index()] = Some(new);
                         a.lo.chassis = None;
-                        if a.lo.name.ends_with("SAINT") || a.lo.name.contains("LEVIATHAN") || c.chassis.iter().any(|ch| ch.name == a.lo.name) {
+                        if a.lo.name.ends_with("SAINT")
+                            || a.lo.name.contains("LEVIATHAN")
+                            || c.chassis.iter().any(|ch| ch.name == a.lo.name)
+                        {
                             a.lo.name = "CUSTOM".into();
                         }
                     }
@@ -680,7 +704,8 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
             Screen::Foundry(Box::new(a))
         }
         AMode::Premade => {
-            let list: Vec<&ChassisDef> = c.chassis.iter().filter(|ch| ch.side == a.side && g.card.system.archive.chassis_available(ch)).collect();
+            let list: Vec<&ChassisDef> =
+                c.chassis.iter().filter(|ch| ch.side == a.side && g.card.system.archive.chassis_available(ch)).collect();
             let mut ls = a.list_sel;
             let nv = nav(p, &mut ls, list.len(), audio);
             a.list_sel = ls;
@@ -689,12 +714,21 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                 Nav::Confirm => {
                     let ch = list[a.list_sel];
                     if let Some(cp) = g.campaign.as_mut() {
-                        let old: Vec<_> = a.lo.slots.iter_mut().filter_map(|s| s.take()).filter(|p| !matches!(p.origin, isl_sim::parts::Origin::Premade(_))).collect();
+                        let old: Vec<_> =
+                            a.lo.slots
+                                .iter_mut()
+                                .filter_map(|s| s.take())
+                                .filter(|p| !matches!(p.origin, isl_sim::parts::Origin::Premade(_)))
+                                .collect();
                         cp.store_parts(old, c);
                     }
                     let lic = g.card.system.archive.licenses.get(&ch.id).map_or(0, |l| l.rank);
                     // Licence rank 3 unlocks the alternate starting loadout.
-                    let parts = if lic >= 3 && !ch.alt_parts.is_empty() && p.down(Action::Special) { ch.alt_parts[0].clone() } else { ch.parts.clone() };
+                    let parts = if lic >= 3 && !ch.alt_parts.is_empty() && p.down(Action::Special) {
+                        ch.alt_parts[0].clone()
+                    } else {
+                        ch.parts.clone()
+                    };
                     a.lo = Loadout::premade_with(ch, &parts, c, (g.time * 100.0) as u64);
                     a.mode = AMode::Slots;
                 }
@@ -755,11 +789,7 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
 }
 
 fn back_from_foundry(g: &Game) -> Screen {
-    if let Some(c) = &g.campaign {
-        Screen::WarMap { sel: 0, side: c.last_side }
-    } else {
-        Screen::Main { sel: 0 }
-    }
+    if let Some(c) = &g.campaign { Screen::WarMap { sel: 0, side: c.last_side } } else { Screen::Main { sel: 0 } }
 }
 
 fn settings_rows(g: &Game, tab: usize) -> Vec<(String, String)> {
@@ -805,7 +835,8 @@ fn settings_rows(g: &Game, tab: usize) -> Vec<(String, String)> {
         _ => isl_input::Action::REBINDABLE
             .iter()
             .map(|a| {
-                let b = s.bindings.map.get(a).map_or(String::new(), |v| v.iter().take(3).map(|b| b.label()).collect::<Vec<_>>().join(" / "));
+                let b =
+                    s.bindings.map.get(a).map_or(String::new(), |v| v.iter().take(3).map(|b| b.label()).collect::<Vec<_>>().join(" / "));
                 (a.label().to_string(), b)
             })
             .collect(),
@@ -952,12 +983,28 @@ fn archive_rows(g: &Game, tab: usize) -> Vec<String> {
 // ====================================================================== drawing
 
 fn stage_light() -> Lighting {
-    Lighting { ambient: Vec3::new(0.35, 0.36, 0.42), dirs: vec![(Vec3::new(-0.5, -0.8, -0.4).normalize(), Vec3::new(1.0, 0.92, 0.8)), (Vec3::new(0.7, -0.2, 0.6).normalize(), Vec3::new(0.25, 0.35, 0.55))], points: vec![] }
+    Lighting {
+        ambient: Vec3::new(0.35, 0.36, 0.42),
+        dirs: vec![
+            (Vec3::new(-0.5, -0.8, -0.4).normalize(), Vec3::new(1.0, 0.92, 0.8)),
+            (Vec3::new(0.7, -0.2, 0.6).normalize(), Vec3::new(0.25, 0.35, 0.55)),
+        ],
+        points: vec![],
+    }
 }
 
 fn stage(dl: &mut DrawList, light: &Lighting, t: f32, city: bool) {
     let mut m = meshgen::Mesh::default();
-    meshgen::add_box(&mut m, Vec3::new(-60.0, -1.0, -60.0), Vec3::new(60.0, 0.0, 60.0), [120, 120, 125], textures::layer("concrete") as u16, 6.0, [true; 6], false);
+    meshgen::add_box(
+        &mut m,
+        Vec3::new(-60.0, -1.0, -60.0),
+        Vec3::new(60.0, 0.0, 60.0),
+        [120, 120, 125],
+        textures::layer("concrete") as u16,
+        6.0,
+        [true; 6],
+        false,
+    );
     if city {
         let mut s = 7u32;
         for i in 0..14 {
@@ -966,7 +1013,16 @@ fn stage(dl: &mut DrawList, light: &Lighting, t: f32, city: bool) {
             let r = 62.0 + (s % 20) as f32;
             let h = 10.0 + (s % 30) as f32;
             let c = Vec3::new(a.sin() * r, 0.0, a.cos() * r);
-            meshgen::add_box(&mut m, c - Vec3::new(5.0, 0.0, 5.0), c + Vec3::new(5.0, h, 5.0), [100, 96, 104], textures::layer("window") as u16, 4.0, [true; 6], false);
+            meshgen::add_box(
+                &mut m,
+                c - Vec3::new(5.0, 0.0, 5.0),
+                c + Vec3::new(5.0, h, 5.0),
+                [100, 96, 104],
+                textures::layer("window") as u16,
+                4.0,
+                [true; 6],
+                false,
+            );
         }
     }
     isl_render::push_mesh(dl, &m, Mat4::IDENTITY, light, Vec3::ONE, 255);
@@ -1063,7 +1119,15 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
         }
         Screen::NewWar { sel, condition, rot, use_corrupt } => {
             draw_bg(g, views, t);
-            let conds: Vec<String> = std::iter::once("NONE".to_string()).chain(g.content.conditions.iter().filter(|c| g.card.system.archive.unlocked_conditions.contains(&c.id)).map(|c| c.name.clone())).collect();
+            let conds: Vec<String> = std::iter::once("NONE".to_string())
+                .chain(
+                    g.content
+                        .conditions
+                        .iter()
+                        .filter(|c| g.card.system.archive.unlocked_conditions.contains(&c.id))
+                        .map(|c| c.name.clone()),
+                )
+                .collect();
             let rows = vec![
                 format!("CONDITION   < {} >", conds.get(*condition).cloned().unwrap_or_default()),
                 format!("DISC ROT    < {} >", rot),
@@ -1075,7 +1139,12 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             g.ui.text(24.0, 46.0, "NEW WAR", col::GOLD);
             g.ui.menu(32.0, 60.0, &rows, *sel, &[true, true, g.card.corrupted().is_some(), true, true]);
             let desc = match sel {
-                0 => g.content.conditions.iter().find(|c| Some(&c.name) == conds.get(*condition)).map_or("A normal war.".into(), |c| c.desc.clone()),
+                0 => g
+                    .content
+                    .conditions
+                    .iter()
+                    .find(|c| Some(&c.name) == conds.get(*condition))
+                    .map_or("A normal war.".into(), |c| c.desc.clone()),
                 1 => g.content.disc_rot.iter().filter(|r| r.tier <= *rot).map(|r| r.rule.clone()).collect::<Vec<_>>().join(" "),
                 2 => "Carry the corrupted block from your last war into this one.".into(),
                 _ => "Harrowmouth, the seventh war.".into(),
@@ -1091,7 +1160,13 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             let spin = dt * 9.0;
             for r in (6..40).step_by(4) {
                 let shade = (120.0 + (spin + r as f32 * 0.3).sin() * 60.0) as u8;
-                g.ui.outline(cx - r as f32, cy - r as f32 * 0.98, r as f32 * 2.0, r as f32 * 1.96, [shade, shade, (shade as u16 + 40).min(255) as u8, 255]);
+                g.ui.outline(
+                    cx - r as f32,
+                    cy - r as f32 * 0.98,
+                    r as f32 * 2.0,
+                    r as f32 * 1.96,
+                    [shade, shade, (shade as u16 + 40).min(255) as u8, 255],
+                );
             }
             g.ui.rect(cx - 5.0, cy - 5.0, 10.0, 10.0, col::BLACK);
             g.ui.text_center_big(cx, h * 0.72, &format!("PLEASE INSERT DISC {}", to.disc()), col::WHITE, 2.0);
@@ -1189,7 +1264,13 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
                 g.ui.menu(30.0, 70.0, &["START".into(), "BACK".into()], *sel, &[]);
             } else {
                 g.ui.text(22.0, 24.0, "TIDE RUN - CHOOSE OMENS", col::GOLD);
-                let mut rows: Vec<String> = g.content.omens.iter().zip(omens).map(|(o, on)| format!("[{}] {} x{:.1}", if *on { "X" } else { " " }, o.name, o.reward)).collect();
+                let mut rows: Vec<String> = g
+                    .content
+                    .omens
+                    .iter()
+                    .zip(omens)
+                    .map(|(o, on)| format!("[{}] {} x{:.1}", if *on { "X" } else { " " }, o.name, o.reward))
+                    .collect();
                 rows.push("START".into());
                 rows.push("BACK".into());
                 g.ui.menu(30.0, 38.0, &rows, *sel, &[]);
@@ -1203,16 +1284,29 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             g.ui.panel(12.0, 16.0, w - 24.0, h - 32.0);
             if let Some(r) = &g.run {
                 g.ui.text(22.0, 24.0, &format!("DRAFT - FIGHT {}/{}  SCORE {}", r.index, r.fights.len(), r.score), col::GOLD);
-                let next = r.current().map_or("-".into(), |f| format!("NEXT: {} AS {}", g.content.district(&f.district).map_or("", |d| &d.name), f.side.name()));
+                let next = r.current().map_or("-".into(), |f| {
+                    format!("NEXT: {} AS {}", g.content.district(&f.district).map_or("", |d| &d.name), f.side.name())
+                });
                 g.ui.text(22.0, 36.0, &next, col::GREY);
-                let mut rows: Vec<String> = r.offer.iter().map(|p| {
-                    let d = g.content.part(&p.def);
-                    format!("{} {} [{}] -> {}", d.map_or("", |d| d.slot.name_for(d.side)), d.map_or(p.def.as_str(), |d| d.name.as_str()), p.condition.name(), d.map_or("", |d| d.side.name()))
-                }).collect();
+                let mut rows: Vec<String> = r
+                    .offer
+                    .iter()
+                    .map(|p| {
+                        let d = g.content.part(&p.def);
+                        format!(
+                            "{} {} [{}] -> {}",
+                            d.map_or("", |d| d.slot.name_for(d.side)),
+                            d.map_or(p.def.as_str(), |d| d.name.as_str()),
+                            p.condition.name(),
+                            d.map_or("", |d| d.side.name())
+                        )
+                    })
+                    .collect();
                 rows.push("SKIP".into());
                 g.ui.menu(30.0, 54.0, &rows, *sel, &[]);
                 if let Some(p) = r.offer.get(*sel) {
-                    let q: Vec<String> = p.quirks.iter().filter_map(|q| g.content.quirk(q)).map(|q| format!("{}: {}", q.name, q.desc)).collect();
+                    let q: Vec<String> =
+                        p.quirks.iter().filter_map(|q| g.content.quirk(q)).map(|q| format!("{}: {}", q.name, q.desc)).collect();
                     g.ui.text_wrap(22.0, h - 60.0, w - 44.0, &q.join(" "), col::GREY);
                 }
             }
@@ -1227,7 +1321,13 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
                 g.ui.text(30.0, 70.0 + i as f32 * 9.0, &format!("{}. {}", i + 1, n.name), col::WHITE);
             }
             if q.is_empty() {
-                g.ui.text_wrap(30.0, 70.0, w - 60.0, "No ghosts yet. Save builds of the other side to the memory card; they come back as bosses here.", col::GREY);
+                g.ui.text_wrap(
+                    30.0,
+                    70.0,
+                    w - 60.0,
+                    "No ghosts yet. Save builds of the other side to the memory card; they come back as bosses here.",
+                    col::GREY,
+                );
             }
         }
         Screen::Versus { sel, a, b } => {
@@ -1236,7 +1336,12 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             let pb = versus_pool(g, Side::Kaiju);
             g.ui.panel(12.0, 16.0, w - 24.0, 110.0);
             g.ui.text(22.0, 24.0, "LINK CABLE VERSUS", col::GOLD);
-            let rows = vec![format!("P1 SAINT < {} >", pa[*a % pa.len()].name), format!("P2 KAIJU < {} >", pb[*b % pb.len()].name), "FIGHT".into(), "BACK".into()];
+            let rows = vec![
+                format!("P1 SAINT < {} >", pa[*a % pa.len()].name),
+                format!("P2 KAIJU < {} >", pb[*b % pb.len()].name),
+                "FIGHT".into(),
+                "BACK".into(),
+            ];
             g.ui.menu(30.0, 40.0, &rows, *sel, &[]);
             g.ui.text_wrap(22.0, 140.0, w - 44.0, "P1: keyboard/mouse or pad 1. P2: pad 2 (or pad 1 if P1 uses the keyboard).", col::GREY);
         }
@@ -1307,7 +1412,12 @@ fn draw_warmap(g: &mut Game, sel: usize, side: Side) {
     let pw = w - px - 6.0;
     g.ui.panel(px, 6.0, pw, h - 12.0);
     let disc = format!("DISC {} {}", side.disc(), side.name());
-    g.ui.text(px + 6.0, 12.0, &format!("{} {}{}", icon::LEFT, disc, icon::RIGHT), if side == Side::Saint { [120, 200, 255, 255] } else { [80, 255, 200, 255] });
+    g.ui.text(
+        px + 6.0,
+        12.0,
+        &format!("{} {}{}", icon::LEFT, disc, icon::RIGHT),
+        if side == Side::Saint { [120, 200, 255, 255] } else { [80, 255, 200, 255] },
+    );
     g.ui.text(px + 6.0, 24.0, &format!("WAR {}  TIDE {}", c.war, c.tide.tide_count), col::WHITE);
     g.ui.text(px + 6.0, 33.0, &format!("{:02}:00 {}", c.tide.hour_of_day(), c.tide.weather.name()), col::GREY);
     g.ui.text(px + 6.0, 42.0, &format!("TIDE {:+.1}", c.tide.tide()), col::GREY);
@@ -1330,7 +1440,12 @@ fn draw_warmap(g: &mut Game, sel: usize, side: Side) {
     }
     if let Some(d) = rows.get(sel).and_then(|r| g.content.district(r)) {
         if let Some(dw) = c.district(&d.id) {
-            g.ui.text(mx, h - 34.0, &format!("{} - {}  CONTROL {:+}  RUIN {}%", d.name, dw.state().name(), dw.control, (dw.ruin * 100.0) as u32), col::WHITE);
+            g.ui.text(
+                mx,
+                h - 34.0,
+                &format!("{} - {}  CONTROL {:+}  RUIN {}%", d.name, dw.state().name(), dw.control, (dw.ruin * 100.0) as u32),
+                col::WHITE,
+            );
             let lore = &d.lore[(g.time as usize / 5) % d.lore.len()];
             g.ui.text(mx, h - 24.0, lore, col::GREY);
         }
@@ -1369,7 +1484,13 @@ fn draw_briefing(g: &mut Game, district: &str, side: Side, sel: usize) {
         let q = g.content.quirk(&ct.reward_quirk).map_or("", |q| q.name.as_str());
         g.ui.text(16.0, 100.0, &format!("CONTRACT: {} (REWARD: {}, {})", ct.name, q, ct.reward_currency), col::CYAN);
     }
-    let evs: Vec<String> = c.events.iter().filter(|e| e.district == district).filter_map(|e| g.content.events.iter().find(|x| x.id == e.id)).map(|e| e.name.clone()).collect();
+    let evs: Vec<String> = c
+        .events
+        .iter()
+        .filter(|e| e.district == district)
+        .filter_map(|e| g.content.events.iter().find(|x| x.id == e.id))
+        .map(|e| e.name.clone())
+        .collect();
     if !evs.is_empty() {
         g.ui.text(16.0, 110.0, &format!("EVENT: {}", evs.join(", ")), col::MAGENTA);
     }
@@ -1381,7 +1502,12 @@ fn draw_briefing(g: &mut Game, district: &str, side: Side, sel: usize) {
     g.ui.text(16.0, 130.0, &format!("TIDE ADVANTAGE x{bonus:.2}  WEATHER {}", c.tide.weather.name()), col::GREY);
     let lo = &c.active[side_ix(side)];
     let b = build::resolve(lo, &g.content, &[], [false; 7]);
-    g.ui.text(16.0, 142.0, &format!("BUILD: {}  {} {}  HERESY {}/7", lo.name, b.class.dodge_name(), b.stamina_kind.name(), b.heretic_count), col::WHITE);
+    g.ui.text(
+        16.0,
+        142.0,
+        &format!("BUILD: {}  {} {}  HERESY {}/7", lo.name, b.class.dodge_name(), b.stamina_kind.name(), b.heretic_count),
+        col::WHITE,
+    );
     let opts: Vec<String> = briefing_options(g, district, side).into_iter().map(|o| o.0).collect();
     g.ui.menu(24.0, h - 20.0 - opts.len() as f32 * 11.0, &opts, sel, &[]);
 }
@@ -1393,7 +1519,16 @@ fn draw_foundry(g: &mut Game, a: &Assembly, views: &mut Vec<(View, DrawList)>) {
     let light = stage_light();
     let mut dl = DrawList::default();
     let mut m = meshgen::Mesh::default();
-    meshgen::add_box(&mut m, Vec3::new(-12.0, -1.0, -12.0), Vec3::new(12.0, 0.0, 12.0), [90, 90, 96], textures::layer(if a.side == Side::Saint { "grate" } else { "hide" }) as u16, 4.0, [false, false, true, false, false, false], false);
+    meshgen::add_box(
+        &mut m,
+        Vec3::new(-12.0, -1.0, -12.0),
+        Vec3::new(12.0, 0.0, 12.0),
+        [90, 90, 96],
+        textures::layer(if a.side == Side::Saint { "grate" } else { "hide" }) as u16,
+        4.0,
+        [false, false, true, false, false, false],
+        false,
+    );
     isl_render::push_mesh(&mut dl, &m, Mat4::IDENTITY, &light, Vec3::ONE, 255);
     let mut pose = pose_lo(&a.lo, c, Vec3::ZERO, a.rot, g.time, Anim::Idle, 77);
     if a.lo.chassis.is_none() {
@@ -1504,11 +1639,25 @@ fn draw_foundry(g: &mut Game, a: &Assembly, views: &mut Vec<(View, DrawList)>) {
             for (i, cd) in cands.iter().enumerate().skip(start).take(14) {
                 let p = &inv[cd.inv][cd.idx];
                 let s = i == a.list_sel;
-                g.ui.text(158.0, 40.0 + (i - start) as f32 * 9.0, &format!("{}{}", if s { icon::CURSOR } else { ' ' }, foundry::part_label(p, c, a.side)).chars().take(30).collect::<String>(), if s { col::GOLD } else { col::WHITE });
+                g.ui.text(
+                    158.0,
+                    40.0 + (i - start) as f32 * 9.0,
+                    &format!("{}{}", if s { icon::CURSOR } else { ' ' }, foundry::part_label(p, c, a.side))
+                        .chars()
+                        .take(30)
+                        .collect::<String>(),
+                    if s { col::GOLD } else { col::WHITE },
+                );
             }
             if cands.is_empty() {
                 let other = if a.side == Side::Saint { "KAIJU" } else { "SAINT" };
-                g.ui.text_wrap(158.0, 44.0, w - 176.0, &format!("NOTHING HARVESTED FOR THIS SLOT. {} PARTS ONLY DROP WHILE PLAYING THE {} SIDE.", a.side.name(), other), col::GREY);
+                g.ui.text_wrap(
+                    158.0,
+                    44.0,
+                    w - 176.0,
+                    &format!("NOTHING HARVESTED FOR THIS SLOT. {} PARTS ONLY DROP WHILE PLAYING THE {} SIDE.", a.side.name(), other),
+                    col::GREY,
+                );
             } else if let Some(cd) = cands.get(a.list_sel) {
                 let p = &inv[cd.inv][cd.idx];
                 let q: Vec<String> = p.quirks.iter().filter_map(|q| c.quirk(q)).map(|q| format!("{}: {}", q.name, q.desc)).collect();
@@ -1517,12 +1666,18 @@ fn draw_foundry(g: &mut Game, a: &Assembly, views: &mut Vec<(View, DrawList)>) {
                 let mut test = a.lo.clone();
                 test.slots[slot.index()] = Some(p.clone());
                 let nb = build::resolve(&test, c, &[], [false; 7]);
-                text.push_str(&format!(" HP {:+.0} LOAD {:+.0}% SPEED {:+.1}", nb.hp_max - b.hp_max, (nb.load - b.load) * 100.0, nb.speed - b.speed));
+                text.push_str(&format!(
+                    " HP {:+.0} LOAD {:+.0}% SPEED {:+.1}",
+                    nb.hp_max - b.hp_max,
+                    (nb.load - b.load) * 100.0,
+                    nb.speed - b.speed
+                ));
                 g.ui.text_wrap(158.0, h - 72.0, w - 176.0, &text, col::GREY);
             }
         }
         AMode::Premade => {
-            let list: Vec<&ChassisDef> = c.chassis.iter().filter(|ch| ch.side == a.side && g.card.system.archive.chassis_available(ch)).collect();
+            let list: Vec<&ChassisDef> =
+                c.chassis.iter().filter(|ch| ch.side == a.side && g.card.system.archive.chassis_available(ch)).collect();
             g.ui.panel(150.0, 24.0, w - 160.0, 100.0);
             let rows: Vec<String> = list.iter().map(|ch| format!("{} - {}", ch.name, ch.playstyle)).collect();
             g.ui.menu(162.0, 32.0, &rows.iter().map(|r| r.chars().take(32).collect()).collect::<Vec<_>>(), a.list_sel, &[]);
@@ -1535,7 +1690,15 @@ fn draw_foundry(g: &mut Game, a: &Assembly, views: &mut Vec<(View, DrawList)>) {
             let start = a.list_sel.saturating_sub(12);
             for (i, d) in list.iter().enumerate().skip(start).take(14) {
                 let s = i == a.list_sel;
-                g.ui.text(158.0, 40.0 + (i - start) as f32 * 9.0, &format!("{}{} {}", if s { icon::CURSOR } else { ' ' }, d.name, isl_sim::archive::Archive::fabricate_cost(d)).chars().take(30).collect::<String>(), if s { col::GOLD } else { col::WHITE });
+                g.ui.text(
+                    158.0,
+                    40.0 + (i - start) as f32 * 9.0,
+                    &format!("{}{} {}", if s { icon::CURSOR } else { ' ' }, d.name, isl_sim::archive::Archive::fabricate_cost(d))
+                        .chars()
+                        .take(30)
+                        .collect::<String>(),
+                    if s { col::GOLD } else { col::WHITE },
+                );
             }
             if list.is_empty() {
                 g.ui.text_wrap(158.0, 44.0, w - 176.0, "SEVER A PART ONCE TO REGISTER IT.", col::GREY);
@@ -1543,7 +1706,11 @@ fn draw_foundry(g: &mut Game, a: &Assembly, views: &mut Vec<(View, DrawList)>) {
         }
         AMode::Paint => {
             g.ui.panel(150.0, 24.0, w - 160.0, 50.0);
-            let rows = vec![format!("PRIMARY   < {:?} >", a.lo.paint[0]), format!("SECONDARY < {:?} >", a.lo.paint[1]), format!("{} < {} >", if a.side == Side::Saint { "DECAL" } else { "SCARS" }, a.lo.decal)];
+            let rows = vec![
+                format!("PRIMARY   < {:?} >", a.lo.paint[0]),
+                format!("SECONDARY < {:?} >", a.lo.paint[1]),
+                format!("{} < {} >", if a.side == Side::Saint { "DECAL" } else { "SCARS" }, a.lo.decal),
+            ];
             g.ui.menu(162.0, 32.0, &rows, a.list_sel, &[]);
             for (i, pc) in a.lo.paint.iter().enumerate() {
                 g.ui.rect(w - 30.0, 32.0 + i as f32 * 11.0, 8.0, 8.0, [pc[0], pc[1], pc[2], 255]);
@@ -1580,7 +1747,13 @@ fn draw_card(g: &mut Game, sel: usize, confirm: bool) {
                 let e = &g.card.entries[i];
                 let c = match e.data {
                     BlockData::Campaign(_) => [60, 90, 160, 255],
-                    BlockData::Build { .. } => if e.icon == 1 { [90, 110, 140, 255] } else { [60, 120, 100, 255] },
+                    BlockData::Build { .. } => {
+                        if e.icon == 1 {
+                            [90, 110, 140, 255]
+                        } else {
+                            [60, 120, 100, 255]
+                        }
+                    }
                     BlockData::Corrupted { .. } => [120, 40, 120, 255],
                     BlockData::Run(_) => [120, 100, 40, 255],
                 };
@@ -1594,7 +1767,12 @@ fn draw_card(g: &mut Game, sel: usize, confirm: bool) {
         g.ui.text(x + 3.0, y + 11.0, label, col::WHITE);
     }
     let ly = oy + 3.0 * (bh + 4.0) + 6.0;
-    let mut rows: Vec<String> = g.card.entries.iter().map(|e| format!("{:<7} {:<20} {}BLK", e.kind_name(), e.title.chars().take(20).collect::<String>(), e.blocks)).collect();
+    let mut rows: Vec<String> = g
+        .card
+        .entries
+        .iter()
+        .map(|e| format!("{:<7} {:<20} {}BLK", e.kind_name(), e.title.chars().take(20).collect::<String>(), e.blocks))
+        .collect();
     rows.push("IMPORT CODE...".into());
     g.ui.menu(24.0, ly, &rows, sel, &[]);
     let hint = if confirm { "CONFIRM AGAIN TO DELETE" } else { "CONFIRM: LOAD BUILD  HEAVY: DELETE  SPECIAL: EXPORT CODE" };

@@ -66,22 +66,76 @@ pub fn add_box(m: &mut Mesh, mn: Vec3, mx: Vec3, col: [u8; 3], layer: u16, tile:
     let cell = 8.0;
     // +X, -X, +Y, -Y, +Z, -Z
     if faces[0] {
-        m.quad(Vec3::new(mx.x, mn.y, mx.z), Vec3::new(0.0, 0.0, -s.z), Vec3::new(0.0, s.y, 0.0), Vec2::new(t(s.z), t(s.y)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mx.x, mn.y, mx.z),
+            Vec3::new(0.0, 0.0, -s.z),
+            Vec3::new(0.0, s.y, 0.0),
+            Vec2::new(t(s.z), t(s.y)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
     if faces[1] {
-        m.quad(Vec3::new(mn.x, mn.y, mn.z), Vec3::new(0.0, 0.0, s.z), Vec3::new(0.0, s.y, 0.0), Vec2::new(t(s.z), t(s.y)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mn.x, mn.y, mn.z),
+            Vec3::new(0.0, 0.0, s.z),
+            Vec3::new(0.0, s.y, 0.0),
+            Vec2::new(t(s.z), t(s.y)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
     if faces[2] {
-        m.quad(Vec3::new(mn.x, mx.y, mn.z), Vec3::new(s.x, 0.0, 0.0), Vec3::new(0.0, 0.0, s.z), Vec2::new(t(s.x), t(s.z)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mn.x, mx.y, mn.z),
+            Vec3::new(s.x, 0.0, 0.0),
+            Vec3::new(0.0, 0.0, s.z),
+            Vec2::new(t(s.x), t(s.z)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
     if faces[3] {
-        m.quad(Vec3::new(mn.x, mn.y, mx.z), Vec3::new(s.x, 0.0, 0.0), Vec3::new(0.0, 0.0, -s.z), Vec2::new(t(s.x), t(s.z)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mn.x, mn.y, mx.z),
+            Vec3::new(s.x, 0.0, 0.0),
+            Vec3::new(0.0, 0.0, -s.z),
+            Vec2::new(t(s.x), t(s.z)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
     if faces[4] {
-        m.quad(Vec3::new(mn.x, mn.y, mx.z), Vec3::new(s.x, 0.0, 0.0), Vec3::new(0.0, s.y, 0.0), Vec2::new(t(s.x), t(s.y)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mn.x, mn.y, mx.z),
+            Vec3::new(s.x, 0.0, 0.0),
+            Vec3::new(0.0, s.y, 0.0),
+            Vec2::new(t(s.x), t(s.y)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
     if faces[5] {
-        m.quad(Vec3::new(mx.x, mn.y, mn.z), Vec3::new(-s.x, 0.0, 0.0), Vec3::new(0.0, s.y, 0.0), Vec2::new(t(s.x), t(s.y)), col, layer, glow, cell);
+        m.quad(
+            Vec3::new(mx.x, mn.y, mn.z),
+            Vec3::new(-s.x, 0.0, 0.0),
+            Vec3::new(0.0, s.y, 0.0),
+            Vec2::new(t(s.x), t(s.y)),
+            col,
+            layer,
+            glow,
+            cell,
+        );
     }
 }
 
@@ -125,7 +179,7 @@ pub fn prim_mesh(p: &Prim) -> Mesh {
         Shape::Cone => ring(&mut m, 8, Vec2::new(h.x, h.z), Vec2::ZERO, -h.y, h.y, col, layer, g, true),
         Shape::Spike => ring(&mut m, 4, Vec2::new(h.x, h.z), Vec2::ZERO, -h.y, h.y, col, layer, g, true),
         Shape::Sphere => {
-            let (st, sl) = (5, 8);
+            let (st, sl) = (4, 6);
             for i in 0..st {
                 let t0 = i as f32 / st as f32 * std::f32::consts::PI;
                 let t1 = (i + 1) as f32 / st as f32 * std::f32::consts::PI;

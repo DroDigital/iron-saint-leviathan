@@ -17,11 +17,7 @@ impl Rng {
 }
 
 pub fn env_ad(t: f32, a: f32, d: f32) -> f32 {
-    if t < a {
-        t / a.max(1e-4)
-    } else {
-        (-(t - a) / d.max(1e-4)).exp()
-    }
+    if t < a { t / a.max(1e-4) } else { (-(t - a) / d.max(1e-4)).exp() }
 }
 
 pub fn saw(p: f32) -> f32 {
@@ -112,9 +108,39 @@ pub enum Sfx {
 
 impl Sfx {
     pub const ALL: [Sfx; 33] = [
-        Sfx::Swing, Sfx::Clank, Sfx::Flesh, Sfx::Block, Sfx::Parry, Sfx::StepMech, Sfx::StepKaiju, Sfx::Roar, Sfx::Hiss, Sfx::Charge, Sfx::Bell,
-        Sfx::Click, Sfx::Drone, Sfx::Gurgle, Sfx::Shriek, Sfx::Explosion, Sfx::Sever, Sfx::Death, Sfx::Heal, Sfx::Vent, Sfx::Pickup, Sfx::UiMove,
-        Sfx::UiOk, Sfx::UiBack, Sfx::DiscSwap, Sfx::Lightning, Sfx::Eat, Sfx::Lock, Sfx::Coins, Sfx::Rest, Sfx::Shatter, Sfx::Splash, Sfx::Collapse,
+        Sfx::Swing,
+        Sfx::Clank,
+        Sfx::Flesh,
+        Sfx::Block,
+        Sfx::Parry,
+        Sfx::StepMech,
+        Sfx::StepKaiju,
+        Sfx::Roar,
+        Sfx::Hiss,
+        Sfx::Charge,
+        Sfx::Bell,
+        Sfx::Click,
+        Sfx::Drone,
+        Sfx::Gurgle,
+        Sfx::Shriek,
+        Sfx::Explosion,
+        Sfx::Sever,
+        Sfx::Death,
+        Sfx::Heal,
+        Sfx::Vent,
+        Sfx::Pickup,
+        Sfx::UiMove,
+        Sfx::UiOk,
+        Sfx::UiBack,
+        Sfx::DiscSwap,
+        Sfx::Lightning,
+        Sfx::Eat,
+        Sfx::Lock,
+        Sfx::Coins,
+        Sfx::Rest,
+        Sfx::Shatter,
+        Sfx::Splash,
+        Sfx::Collapse,
     ];
 }
 

@@ -30,9 +30,7 @@ impl Loadout {
         Self::premade_with(c, &c.parts, content, uid_base)
     }
     pub fn premade_with(c: &ChassisDef, parts: &[String; 7], content: &Content, uid_base: u64) -> Loadout {
-        let slots = std::array::from_fn(|i| {
-            content.part(&parts[i]).map(|d| PartInstance::premade(d, uid_base + i as u64, &c.id))
-        });
+        let slots = std::array::from_fn(|i| content.part(&parts[i]).map(|d| PartInstance::premade(d, uid_base + i as u64, &c.id)));
         Loadout {
             name: c.name.clone(),
             side: c.side,
@@ -192,12 +190,7 @@ pub fn rig_dims(rig: RigKind) -> (f32, f32) {
     }
 }
 
-fn first_move<'a>(
-    content: &'a Content,
-    slots: &[Option<(&'a PartDef, bool)>; 7],
-    order: &[Slot],
-    kinds: &[MoveKind],
-) -> Option<MoveRef> {
+fn first_move<'a>(content: &'a Content, slots: &[Option<(&'a PartDef, bool)>; 7], order: &[Slot], kinds: &[MoveKind]) -> Option<MoveRef> {
     for s in order {
         if let Some((d, _)) = slots[s.index()] {
             for m in &d.moves {
@@ -340,13 +333,7 @@ pub fn resolve(lo: &Loadout, content: &Content, extra: &[Effect], destroyed: [bo
     let reveal = head.is_some_and(|h| h.stats.reveal);
     let fog_vision = head.map_or(0.0, |h| h.stats.fog_vision);
 
-    let guard = defs
-        .iter()
-        .flatten()
-        .map(|(d, _)| d.stats.guard)
-        .fold(0.25f32, f32::max)
-        .min(0.95)
-        * fx.get(Stat::Guard);
+    let guard = defs.iter().flatten().map(|(d, _)| d.stats.guard).fold(0.25f32, f32::max).min(0.95) * fx.get(Stat::Guard);
     let can_parry = defs.iter().flatten().any(|(d, _)| d.parry);
 
     let hp_max = frame.map_or(200.0, |f| f.stats.hp) * cond(0) * fx.get(Stat::Hp);

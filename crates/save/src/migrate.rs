@@ -52,7 +52,10 @@ mod tests {
             archive: arch.clone(),
             slots: vec![
                 None,
-                Some(SlotV1 { title: "TRAIT".into(), data: BlockData::Corrupted { item: CorruptItem::Trait("old_grudge".into()), war: 2, chain: 1 } }),
+                Some(SlotV1 {
+                    title: "TRAIT".into(),
+                    data: BlockData::Corrupted { item: CorruptItem::Trait("old_grudge".into()), war: 2, chain: 1 },
+                }),
                 None,
             ],
         };

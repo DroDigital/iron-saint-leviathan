@@ -58,11 +58,17 @@ impl AiParams {
         };
         match a {
             Archetype::Brute => base,
-            Archetype::Gunner => AiParams { engage: 7.0, aggression: 0.45, w_light: 2.0, w_heavy: 2.0, dodge_rate: 0.1, combo: 1, cadence: 70, ..base },
-            Archetype::Swarmer => AiParams { engage: 0.7, aggression: 0.65, dodge_rate: 0.05, guard_rate: 0.0, combo: 1, cadence: 40, ..base },
+            Archetype::Gunner => {
+                AiParams { engage: 7.0, aggression: 0.45, w_light: 2.0, w_heavy: 2.0, dodge_rate: 0.1, combo: 1, cadence: 70, ..base }
+            }
+            Archetype::Swarmer => {
+                AiParams { engage: 0.7, aggression: 0.65, dodge_rate: 0.05, guard_rate: 0.0, combo: 1, cadence: 40, ..base }
+            }
             Archetype::Flyer => AiParams { engage: 6.0, aggression: 0.4, dodge_rate: 0.2, combo: 1, cadence: 70, ..base },
             Archetype::Ambusher => AiParams { engage: 0.8, aggression: 0.6, combo: 1, cadence: 60, ..base },
-            Archetype::Battery => AiParams { engage: 20.0, aggression: 0.5, dodge_rate: 0.0, guard_rate: 0.0, combo: 1, cadence: 90, w_heavy: 3.0, ..base },
+            Archetype::Battery => {
+                AiParams { engage: 20.0, aggression: 0.5, dodge_rate: 0.0, guard_rate: 0.0, combo: 1, cadence: 90, w_heavy: 3.0, ..base }
+            }
             Archetype::Boss => AiParams { engage: 0.9, aggression: 0.7, dodge_rate: 0.1, guard_rate: 0.1, combo: 1, cadence: 36, ..base },
             Archetype::Dummy => AiParams { aggression: 0.0, dodge_rate: 0.0, guard_rate: 0.0, combo: 0, ..base },
         }
