@@ -1,0 +1,42 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "iron_saint_halo",
+    name: "Halo Sensor",
+    slot: Head,
+    side: Saint,
+    weight: 5.0,
+    stats: (
+        hp: 100.0,
+        lock_range: 48.0,
+        fog_vision: 12.0,
+    ),
+    source: Chassis("iron_saint"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (255, 210, 120),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 1.5, 0.0),
+                size: (1.4, 0.12, 1.4),
+                tex: "gold",
+                col: (255, 210, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

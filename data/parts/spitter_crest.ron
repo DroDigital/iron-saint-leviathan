@@ -1,0 +1,44 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "spitter_crest",
+    name: "Bile Crest",
+    slot: Head,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        armor: 4.0,
+        lock_range: 52.0,
+        fog_vision: 24.0,
+    ),
+    moves: ["bile_lob"],
+    source: Enemy("brine_spitter"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.6),
+                size: (1.6, 1.4, 1.8),
+                tex: "hide",
+                col: (100, 110, 60),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (200, 255, 80),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (200, 255, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

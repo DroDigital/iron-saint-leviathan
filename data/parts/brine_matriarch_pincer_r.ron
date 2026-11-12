@@ -1,0 +1,43 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "brine_matriarch_pincer_r",
+    name: "Gutting Pincer",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 20.0,
+    stats: (
+        hp: 240.0,
+        armor: 28.0,
+        power: 1.25,
+        impact: 1.2,
+    ),
+    moves: ["pincer_snip", "carapace_slam"],
+    source: Boss("brine_matriarch"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (130, 70, 50),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (200, 160, 110),
+            ),
+            (
+                shape: Wedge,
+                at: (0.3, -2.8, 1.0),
+                size: (1.2, 0.6, 1.8),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

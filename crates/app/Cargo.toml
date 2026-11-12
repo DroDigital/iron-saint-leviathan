@@ -1,0 +1,27 @@
+[package]
+name = "iron-saint-leviathan"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "iron-saint-leviathan"
+path = "src/main.rs"
+
+[dependencies]
+wgpu.workspace = true
+winit.workspace = true
+gilrs.workspace = true
+kira.workspace = true
+glam.workspace = true
+gltf.workspace = true
+image.workspace = true
+serde.workspace = true
+ron.workspace = true
+rand_pcg.workspace = true
+rand_core.workspace = true
+directories.workspace = true
+bytemuck.workspace = true
+pollster.workspace = true
+crc32fast.workspace = true
+data-encoding.workspace = true

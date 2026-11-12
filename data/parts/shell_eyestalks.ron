@@ -1,0 +1,56 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "shell_eyestalks",
+    name: "Eyestalks",
+    slot: Head,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        lock_range: 40.0,
+        fog_vision: 20.0,
+    ),
+    source: Enemy("shellback"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.6),
+                size: (1.6, 1.4, 1.8),
+                tex: "hide",
+                col: (120, 80, 60),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 150, 90),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 150, 90),
+                glow: true,
+            ),
+            (
+                shape: Tube,
+                at: (-0.5, 0.8, 1.0),
+                size: (0.2, 1.2, 0.2),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Tube,
+                at: (0.5, 0.8, 1.0),
+                size: (0.2, 1.2, 0.2),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "wrecker_heart",
+    name: "Lantern Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 160.0,
+        stamina: 120.0,
+        regen: 42.0,
+    ),
+    source: Boss("wrecker"),
+    stamina: Blood,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.2, 0.0),
+                size: (1.2, 1.2, 1.2),
+                tex: "glow",
+                col: (255, 240, 160),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

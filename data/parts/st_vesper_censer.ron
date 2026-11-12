@@ -1,0 +1,50 @@
+// Part definition. Slot RightArm, side Saint.
+(
+    id: "st_vesper_censer",
+    name: "Censer Arm",
+    slot: RightArm,
+    side: Saint,
+    weight: 15.0,
+    stats: (
+        hp: 190.0,
+        armor: 20.0,
+        power: 1.15,
+        impact: 1.2,
+    ),
+    moves: ["censer_swing", "bell_toll"],
+    source: Boss("st_vesper"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.15, 0.25, 0.0),
+                size: (1.3, 0.9, 1.3),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Tube,
+                at: (0.0, -1.3, 0.0),
+                size: (0.8, 2.0, 0.8),
+                tex: "grate",
+                col: (120, 100, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, -3.0, 0.15),
+                size: (0.95, 1.9, 0.95),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -5.0, 0.9),
+                size: (1.1, 1.1, 1.1),
+                tex: "gold",
+                col: (255, 230, 160),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

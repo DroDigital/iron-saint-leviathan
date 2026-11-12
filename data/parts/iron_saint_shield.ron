@@ -1,0 +1,58 @@
+// Part definition. Slot LeftArm, side Saint.
+(
+    id: "iron_saint_shield",
+    name: "Votive Shield",
+    slot: LeftArm,
+    side: Saint,
+    weight: 13.0,
+    stats: (
+        hp: 190.0,
+        armor: 30.0,
+        guard: 0.85,
+        impact: 1.0,
+    ),
+    moves: ["shield_bash"],
+    source: Chassis("iron_saint"),
+    parry: true,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.15, 0.25, 0.0),
+                size: (1.3, 0.9, 1.3),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Tube,
+                at: (0.0, -1.3, 0.0),
+                size: (0.8, 2.0, 0.8),
+                tex: "grate",
+                col: (90, 92, 100),
+            ),
+            (
+                shape: Box,
+                at: (0.0, -3.0, 0.15),
+                size: (0.95, 1.9, 0.95),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (-0.55, -2.7, 0.6),
+                size: (0.3, 3.0, 2.2),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Wedge,
+                at: (-0.72, -2.4, 0.6),
+                size: (0.1, 1.4, 0.5),
+                tex: "gold",
+                col: (255, 210, 120),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "Every dent is a prayer someone made.",
+)

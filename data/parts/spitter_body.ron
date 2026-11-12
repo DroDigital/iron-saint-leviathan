@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "spitter_body",
+    name: "Spitter Body",
+    slot: Frame,
+    side: Kaiju,
+    weight: 14.0,
+    stats: (
+        hp: 300.0,
+        armor: 8.0,
+        capacity: 80.0,
+        poise: 40.0,
+        size: 0.45,
+    ),
+    moves: ["devour"],
+    source: Enemy("brine_spitter"),
+    heal: Regrowth,
+    rig: Quadruped,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (3.2, 2.6, 4.6),
+                tex: "hide",
+                col: (100, 110, 60),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.4, -1.6),
+                size: (2.6, 2.2, 2.8),
+                tex: "chitin",
+                col: (70, 80, 40),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

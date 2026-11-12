@@ -1,0 +1,34 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "st_wren_reel",
+    name: "Grapple Reel",
+    slot: Back,
+    side: Saint,
+    weight: 7.0,
+    stats: (
+        hp: 100.0,
+        armor: 8.0,
+    ),
+    moves: ["grapple_line"],
+    source: Chassis("st_wren"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (70, 110, 140),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.6, -0.9),
+                size: (1.4, 0.6, 1.4),
+                rot: (90.0, 0.0, 0.0),
+                tex: "steel",
+                col: (150, 150, 160),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

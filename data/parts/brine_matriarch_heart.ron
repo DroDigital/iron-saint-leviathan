@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "brine_matriarch_heart",
+    name: "Brood Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 14.0,
+    stats: (
+        hp: 190.0,
+        stamina: 130.0,
+        regen: 34.0,
+    ),
+    source: Boss("brine_matriarch"),
+    stamina: Hunger,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.9),
+                tex: "glow",
+                col: (255, 120, 90),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

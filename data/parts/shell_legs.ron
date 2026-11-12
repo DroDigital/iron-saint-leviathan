@@ -1,0 +1,53 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "shell_legs",
+    name: "Shellback Legs",
+    slot: Legs,
+    side: Kaiju,
+    weight: 16.0,
+    stats: (
+        hp: 200.0,
+        armor: 20.0,
+    ),
+    source: Enemy("shellback"),
+    locomotion: (
+        kind: Biped,
+        speed: 6.5,
+        swim: 1.0,
+        deep_water: true,
+        climb: true,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (-1.2, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (120, 80, 60),
+            ),
+            (
+                shape: Box,
+                at: (-1.2, -2.5, 0.2),
+                size: (0.9, 0.3, 1.2),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Tube,
+                at: (1.2, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (120, 80, 60),
+            ),
+            (
+                shape: Box,
+                at: (1.2, -2.5, 0.2),
+                size: (0.9, 0.3, 1.2),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

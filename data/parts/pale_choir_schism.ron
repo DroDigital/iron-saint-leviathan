@@ -1,0 +1,43 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "pale_choir_schism",
+    name: "Schism",
+    slot: Back,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 100.0,
+        armor: 2.0,
+    ),
+    moves: ["schism"],
+    source: Chassis("pale_choir"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, -0.3),
+                size: (0.3, 1.6, 0.3),
+                rot: (-30.0, 0.0, 0.0),
+                tex: "bone",
+                col: (180, 170, 170),
+            ),
+            (
+                shape: Spike,
+                at: (0.4, 0.2, -0.3),
+                size: (0.3, 1.2, 0.3),
+                rot: (-30.0, 0.0, -25.0),
+                tex: "bone",
+                col: (180, 170, 170),
+            ),
+            (
+                shape: Spike,
+                at: (-0.4, 0.2, -0.3),
+                size: (0.3, 1.2, 0.3),
+                rot: (-30.0, 0.0, 25.0),
+                tex: "bone",
+                col: (180, 170, 170),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

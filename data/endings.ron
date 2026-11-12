@@ -1,0 +1,41 @@
+// Endings.
+[
+    (
+        id: "drown_the_city",
+        name: "DROWN THE CITY",
+        card: [
+            "The sea came back for what was taken from it.",
+            "Every Saint part on your memory card rusts.",
+        ],
+    ),
+    (
+        id: "the_city_stands",
+        name: "THE CITY STANDS",
+        card: [
+            "Harrowmouth stands. The sea withdraws, for now.",
+            "Every Kaiju part on your memory card crumbles.",
+        ],
+    ),
+    (
+        id: "become_the_saint",
+        name: "BECOME THE SAINT",
+        card: [
+            "The monster climbs into the cockpit.",
+            "It fits perfectly. It always did.",
+        ],
+    ),
+    (
+        id: "tide_between",
+        name: "THE TIDE BETWEEN",
+        card: [
+            "Saint and Kaiju were never separate.",
+            "Every part you ever harvested comes home to one body.",
+            "The tide stops between the two shores.",
+        ],
+    ),
+    (
+        id: "disc3",
+        name: "DISC 3",
+        card: ["PLEASE INSERT DISC 3", "There is no Disc 3.", "There was always a Disc 3."],
+    ),
+]

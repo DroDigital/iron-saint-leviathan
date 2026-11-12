@@ -1,0 +1,38 @@
+// Part definition. Slot LeftArm, side Kaiju.
+(
+    id: "pale_choir_hands_l",
+    name: "Grasping Hands",
+    slot: LeftArm,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 120.0,
+        armor: 4.0,
+        guard: 0.55,
+        impact: 1.1,
+    ),
+    moves: ["many_hands"],
+    source: Chassis("pale_choir"),
+    parry: true,
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (-0.2, -1.0, 0.3),
+                size: (0.3, 2.2, 0.3),
+                rot: (30.0, 0.0, -15.0),
+                tex: "pale",
+                col: (225, 220, 210),
+            ),
+            (
+                shape: Tube,
+                at: (-0.5, -0.8, 0.0),
+                size: (0.25, 2.0, 0.25),
+                rot: (10.0, 0.0, -35.0),
+                tex: "pale",
+                col: (180, 170, 170),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

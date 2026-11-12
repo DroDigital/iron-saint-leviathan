@@ -1,0 +1,640 @@
+// Premade chassis. `parts` are in slot order: Frame, LeftArm, RightArm, Legs, Core, Head, Back.
+// Premade chassis are always available; custom builds use harvested parts.
+[
+    (
+        id: "iron_saint",
+        name: "IRON SAINT",
+        side: Saint,
+        playstyle: "Sword and shield, balanced",
+        rival: "leviathan",
+        parts: ("iron_saint_hull", "iron_saint_shield", "iron_saint_blade", "iron_saint_legs", "iron_saint_reliquary", "iron_saint_halo", "iron_saint_thrusters"),
+        alt_parts: [
+            ("iron_saint_hull", "st_vesper_chalice", "iron_saint_blade", "iron_saint_legs", "iron_saint_reliquary", "iron_saint_halo", "iron_saint_thrusters"),
+        ],
+        palette: ((150, 150, 160), (90, 92, 100)),
+        unlock: Always,
+        signature: "Vigil: parries restore a sliver of heat headroom.",
+        signature_effect: ParryWindow(1),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((90, 92, 100), (150, 150, 160)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Volunteer",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "The first Saint. Its pilot volunteered. Its pilot always volunteers.",
+    ),
+    (
+        id: "st_cinder",
+        name: "ST. CINDER",
+        side: Saint,
+        playstyle: "Heavy flamethrowers, Heat stamina",
+        rival: "goliath_moth",
+        parts: ("st_cinder_hull", "st_cinder_bellows", "st_cinder_pyre", "st_cinder_legs", "st_cinder_furnace", "st_cinder_visor", "st_cinder_mortar"),
+        alt_parts: [
+            ("st_cinder_hull", "iron_saint_shield", "st_cinder_pyre", "st_cinder_legs", "st_cinder_furnace", "st_cinder_visor", "st_cinder_mortar"),
+        ],
+        palette: ((120, 60, 40), (70, 62, 58)),
+        unlock: Always,
+        signature: "Kiln Blood: attacks ignite.",
+        signature_effect: Ignite,
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((70, 62, 58), (120, 60, 40)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Furnace That Never Went Out",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "Built in the Foundry Quarter from a furnace that never went out.",
+    ),
+    (
+        id: "st_wren",
+        name: "ST. WREN",
+        side: Saint,
+        playstyle: "Fast grappling-hook skirmisher, parry-focused",
+        rival: "pale_choir",
+        parts: ("st_wren_frame", "st_wren_buckler", "st_wren_talon", "st_wren_legs", "st_wren_cell", "st_wren_optic", "st_wren_reel"),
+        alt_parts: [
+            ("st_wren_frame", "st_wren_buckler", "st_wren_talon", "st_wren_legs", "st_wren_cell", "st_wren_optic", "iron_saint_thrusters"),
+        ],
+        palette: ((70, 110, 140), (40, 50, 60)),
+        unlock: Always,
+        signature: "Featherweight: dodges gain 2 i-frames.",
+        signature_effect: DodgeIframes(Any, 2),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((40, 50, 60), (70, 110, 140)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: Counting",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "The smallest Saint. It counts the Choir's bodies out loud.",
+    ),
+    (
+        id: "st_anchor",
+        name: "ST. ANCHOR",
+        side: Saint,
+        playstyle: "Harbor mech tethered to the city power grid",
+        rival: "mawgrave",
+        parts: ("st_anchor_hull", "st_anchor_winch", "st_anchor_fluke", "st_anchor_pylons", "st_anchor_coupling", "st_anchor_lamp", "st_anchor_capacitor"),
+        alt_parts: [
+            ("st_anchor_hull", "st_anchor_winch", "iron_saint_blade", "st_anchor_pylons", "st_anchor_coupling", "st_anchor_lamp", "st_anchor_capacitor"),
+        ],
+        palette: ((60, 80, 70), (150, 140, 60)),
+        unlock: Always,
+        signature: "Grid Tether: stamina regen doubles at full power, halves in blackout.",
+        signature_effect: StatMul(StaminaRegen, 1.05),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((150, 140, 60), (60, 80, 70)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Cable",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "It cannot leave the harbor. The cable is the length of its love.",
+    ),
+    (
+        id: "st_null",
+        name: "ST. NULL",
+        side: Saint,
+        playstyle: "A hollow frame that copies the last part it struck",
+        rival: "tide_widow",
+        parts: ("st_null_reliquary", "st_null_gauntlet", "st_null_hand", "st_null_legs", "st_null_engine", "st_null_mask", "st_null_rack"),
+        alt_parts: [],
+        palette: ((30, 30, 36), (60, 58, 66)),
+        unlock: SeverHeads(of: ["iron_saint", "st_cinder", "st_wren", "st_anchor"], while_playing: Kaiju),
+        signature: "Hollow Echo: copies the last struck part's light attack.",
+        signature_effect: Marker("mimic"),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((60, 58, 66), (30, 30, 36)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: Nobody Inside",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "When you took their heads, something took their place.",
+    ),
+    (
+        id: "leviathan",
+        name: "LEVIATHAN",
+        side: Kaiju,
+        playstyle: "Coiling sea serpent, grabs and constricts",
+        rival: "iron_saint",
+        parts: ("leviathan_coil", "leviathan_gill_hook", "leviathan_barb", "leviathan_tail", "leviathan_brine_heart", "leviathan_maw", "leviathan_bladder"),
+        alt_parts: [
+            ("leviathan_coil", "leviathan_gill_hook", "leviathan_barb", "leviathan_tail", "leviathan_brine_heart", "leviathan_maw", "goliath_moth_spore_sacs"),
+        ],
+        palette: ((40, 70, 90), (150, 170, 150)),
+        unlock: Always,
+        signature: "Undertow: +15% swim speed.",
+        signature_effect: StatMul(SwimSpeed, 1.15),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((150, 170, 150), (40, 70, 90)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Reef",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "It remembers the city when it was a reef.",
+    ),
+    (
+        id: "goliath_moth",
+        name: "GOLIATH MOTH",
+        side: Kaiju,
+        playstyle: "Flying spore clouds, drawn to fire and city lights",
+        rival: "st_cinder",
+        parts: ("goliath_moth_thorax", "goliath_moth_dust_leg", "goliath_moth_hook_leg", "goliath_moth_wings", "goliath_moth_pollen_heart", "goliath_moth_lamp_eyes", "goliath_moth_spore_sacs"),
+        alt_parts: [
+            ("goliath_moth_thorax", "goliath_moth_dust_leg", "goliath_moth_hook_leg", "goliath_moth_wings", "goliath_moth_pollen_heart", "goliath_moth_lamp_eyes", "leviathan_bladder"),
+        ],
+        palette: ((120, 110, 90), (70, 60, 50)),
+        unlock: Always,
+        signature: "Lure: +10% damage near fire and lit districts.",
+        signature_effect: StatMul(Damage, 1.03),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((70, 60, 50), (120, 110, 90)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: Every Night",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "It flies at the Foundry every night. Every night, it burns.",
+    ),
+    (
+        id: "pale_choir",
+        name: "THE PALE CHOIR",
+        side: Kaiju,
+        playstyle: "Swarm; HP is body count; splits and recombines",
+        rival: "st_wren",
+        parts: ("pale_choir_bodies", "pale_choir_hands_l", "pale_choir_hands_r", "pale_choir_procession", "pale_choir_pulse", "pale_choir_faces", "pale_choir_schism"),
+        alt_parts: [
+            ("pale_choir_bodies", "pale_choir_hands_l", "pale_choir_hands_r", "pale_choir_procession", "pale_choir_pulse", "pale_choir_faces", "pale_choir_schism"),
+        ],
+        palette: ((225, 220, 210), (180, 170, 170)),
+        unlock: Always,
+        signature: "Many Throats: Blood refills 20% faster.",
+        signature_effect: StatMul(StaminaRegen, 1.05),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((180, 170, 170), (225, 220, 210)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Congregation",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "The drowned congregation of Cathedral Row, still singing.",
+    ),
+    (
+        id: "mawgrave",
+        name: "MAWGRAVE",
+        side: Kaiju,
+        playstyle: "Burrower that ambushes from beneath the streets",
+        rival: "st_anchor",
+        parts: ("mawgrave_hide", "mawgrave_shovel", "mawgrave_ossuary", "mawgrave_belly", "mawgrave_marrow", "mawgrave_maw", "mawgrave_undermine"),
+        alt_parts: [
+            ("mawgrave_hide", "mawgrave_shovel", "mawgrave_ossuary", "mawgrave_belly", "mawgrave_marrow", "mawgrave_maw", "leviathan_bladder"),
+        ],
+        palette: ((90, 80, 70), (60, 54, 48)),
+        unlock: Always,
+        signature: "Undercity: +15% posture.",
+        signature_effect: StatMul(Posture, 1.05),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((60, 54, 48), (90, 80, 70)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: The Cemeteries",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "It eats the cemeteries first. Nobody knows why. Nobody wants to.",
+    ),
+    (
+        id: "tide_widow",
+        name: "THE TIDE-WIDOW",
+        side: Kaiju,
+        playstyle: "Leaves floods that heal it",
+        rival: "st_null",
+        parts: ("tide_widow_veil", "tide_widow_mourning", "tide_widow_keening", "tide_widow_gait", "tide_widow_undertow", "tide_widow_crown", "tide_widow_floodmourn"),
+        alt_parts: [],
+        palette: ((60, 80, 100), (200, 210, 220)),
+        unlock: HarvestCores(of: ["leviathan", "goliath_moth", "pale_choir", "mawgrave"], while_playing: Saint),
+        signature: "Mourning Tide: heals while standing in floodwater.",
+        signature_effect: Marker("flood_heal"),
+        ranks: [
+            (
+                rank: 1,
+                reward: "License issued",
+            ),
+            (
+                rank: 2,
+                reward: "Alternate palette",
+                palette: ((200, 210, 220), (60, 80, 100)),
+            ),
+            (
+                rank: 3,
+                reward: "Alternate starting loadout",
+            ),
+            (
+                rank: 4,
+                reward: "+2% permanent damage",
+                bonus: StatMul(Damage, 1.02),
+            ),
+            (
+                rank: 5,
+                reward: "Signature trait unlocked",
+                wins_against: 3,
+            ),
+            (
+                rank: 6,
+                reward: "Lore entry: Four Hearts",
+            ),
+            (
+                rank: 7,
+                reward: "+2% permanent HP",
+                bonus: StatMul(Hp, 1.02),
+            ),
+            (
+                rank: 8,
+                reward: "Gilded palette",
+                palette: ((200, 170, 80), (60, 50, 30)),
+            ),
+            (
+                rank: 9,
+                reward: "+1% permanent posture",
+                bonus: StatMul(Posture, 1.01),
+            ),
+            (
+                rank: 10,
+                reward: "Master stencil and title",
+            ),
+        ],
+        lore: "You took four hearts. One of them was hers.",
+    ),
+]

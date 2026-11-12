@@ -1,0 +1,50 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "wrecker_lure",
+    name: "False Light",
+    slot: Head,
+    side: Kaiju,
+    weight: 6.0,
+    stats: (
+        hp: 120.0,
+        lock_range: 60.0,
+        reveal: true,
+        fog_vision: 44.0,
+    ),
+    source: Boss("wrecker"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.2, 1.4),
+                size: (2.2, 1.6, 3.0),
+                tex: "scale",
+                col: (30, 40, 50),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, -0.5, 1.8),
+                size: (2.0, 0.8, 2.6),
+                tex: "belly",
+                col: (90, 110, 100),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 240, 160),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 240, 160),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

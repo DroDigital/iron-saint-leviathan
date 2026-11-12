@@ -1,0 +1,35 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "goliath_moth_spore_sacs",
+    name: "Spore Bloom",
+    slot: Back,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 110.0,
+        armor: 4.0,
+    ),
+    moves: ["spore_bloom"],
+    source: Chassis("goliath_moth"),
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (-0.8, 0.4, -0.4),
+                size: (1.2, 1.2, 1.2),
+                tex: "hide",
+                col: (255, 230, 120),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.8, 0.4, -0.4),
+                size: (1.2, 1.2, 1.2),
+                tex: "hide",
+                col: (255, 230, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,36 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "lurk_talon_r",
+    name: "Lurk Hook",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 7.0,
+    stats: (
+        hp: 90.0,
+        armor: 10.0,
+        power: 1.0,
+        impact: 1.0,
+    ),
+    moves: ["lurk_snap"],
+    source: Enemy("gravelurk"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.4, 0.0, 0.0),
+                size: (1.0, 2.4, 1.0),
+                rot: (60.0, 0.0, -40.0),
+                tex: "chitin",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Wedge,
+                at: (1.6, -1.2, 1.6),
+                size: (1.6, 0.4, 1.6),
+                tex: "bone",
+                col: (210, 200, 180),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

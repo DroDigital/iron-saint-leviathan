@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "shell_heart",
+    name: "Shellback Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 120.0,
+        stamina: 110.0,
+        regen: 30.0,
+    ),
+    source: Enemy("shellback"),
+    stamina: Blood,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.9),
+                tex: "glow",
+                col: (255, 150, 90),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

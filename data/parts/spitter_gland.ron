@@ -1,0 +1,44 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "spitter_gland",
+    name: "Brine Gland",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 70.0,
+        armor: 4.0,
+        power: 1.05,
+        impact: 0.9,
+    ),
+    moves: ["brine_spit"],
+    source: Enemy("brine_spitter"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (100, 110, 60),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (70, 80, 40),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -2.2, 0.6),
+                size: (0.9, 0.9, 0.9),
+                tex: "hide",
+                col: (200, 255, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

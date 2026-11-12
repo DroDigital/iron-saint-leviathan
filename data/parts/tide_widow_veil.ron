@@ -1,0 +1,46 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "tide_widow_veil",
+    name: "Widow's Veil",
+    slot: Frame,
+    side: Kaiju,
+    weight: 26.0,
+    stats: (
+        hp: 620.0,
+        armor: 14.0,
+        capacity: 100.0,
+        poise: 80.0,
+        size: 1.05,
+    ),
+    moves: ["devour"],
+    source: Chassis("tide_widow"),
+    heal: Regrowth,
+    rig: Quadruped,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (3.2, 2.6, 4.6),
+                tex: "hide",
+                col: (60, 80, 100),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.4, -1.6),
+                size: (2.6, 2.2, 2.8),
+                tex: "chitin",
+                col: (200, 210, 220),
+            ),
+            (
+                shape: Cone,
+                at: (0.0, 1.4, -0.6),
+                size: (3.6, 2.2, 4.4),
+                tex: "hide",
+                col: (210, 220, 228),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "She mourns the sea that left her on the shore. Where she walks, it returns.",
+)

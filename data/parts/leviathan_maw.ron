@@ -1,0 +1,52 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "leviathan_maw",
+    name: "Abyss Maw",
+    slot: Head,
+    side: Kaiju,
+    weight: 6.0,
+    stats: (
+        hp: 140.0,
+        armor: 10.0,
+        lock_range: 44.0,
+        fog_vision: 30.0,
+        power: 1.1,
+    ),
+    moves: ["abyss_bite"],
+    source: Chassis("leviathan"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.2, 1.4),
+                size: (2.2, 1.6, 3.0),
+                tex: "scale",
+                col: (40, 70, 90),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, -0.5, 1.8),
+                size: (2.0, 0.8, 2.6),
+                tex: "belly",
+                col: (150, 170, 150),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (120, 255, 230),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (120, 255, 230),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

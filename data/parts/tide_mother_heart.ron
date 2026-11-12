@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "tide_mother_heart",
+    name: "Moon Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 14.0,
+    stats: (
+        hp: 200.0,
+        stamina: 140.0,
+        regen: 44.0,
+    ),
+    source: Boss("tide_mother"),
+    stamina: Breath,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.2, 0.0),
+                size: (1.2, 1.2, 1.2),
+                tex: "glow",
+                col: (120, 255, 255),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

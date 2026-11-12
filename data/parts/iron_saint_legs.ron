@@ -1,0 +1,67 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "iron_saint_legs",
+    name: "Pilgrim Legs",
+    slot: Legs,
+    side: Saint,
+    weight: 20.0,
+    stats: (
+        hp: 220.0,
+        armor: 18.0,
+    ),
+    source: Chassis("iron_saint"),
+    locomotion: (
+        kind: Biped,
+        speed: 8.5,
+        swim: 0.7,
+        deep_water: false,
+        climb: true,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (90, 92, 100),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (90, 92, 100),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

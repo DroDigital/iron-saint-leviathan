@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "juv_coil",
+    name: "Juvenile Coil",
+    slot: Frame,
+    side: Kaiju,
+    weight: 18.0,
+    stats: (
+        hp: 380.0,
+        armor: 10.0,
+        capacity: 85.0,
+        poise: 60.0,
+        size: 0.6,
+    ),
+    moves: ["devour"],
+    source: Enemy("juvenile"),
+    heal: Regrowth,
+    rig: Serpent,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (2.6, 2.3, 3.0),
+                tex: "scale",
+                col: (50, 90, 100),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.5, 0.2),
+                size: (2.0, 1.4, 2.6),
+                tex: "belly",
+                col: (130, 160, 140),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

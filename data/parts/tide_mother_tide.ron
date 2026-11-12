@@ -1,0 +1,48 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "tide_mother_tide",
+    name: "High Tide",
+    slot: Back,
+    side: Kaiju,
+    weight: 18.0,
+    stats: (
+        hp: 170.0,
+        armor: 10.0,
+    ),
+    moves: ["high_tide"],
+    source: Boss("tide_mother"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 1.2, -0.8),
+                size: (0.5, 1.4, 0.6),
+                tex: "bone",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.0),
+                size: (0.5, 1.2, 0.6),
+                tex: "bone",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.8),
+                size: (0.5, 1.0, 0.6),
+                tex: "bone",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 1.0, -1.5),
+                size: (1.6, 1.2, 1.6),
+                tex: "hide",
+                col: (120, 255, 255),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "mawgrave_hide",
+    name: "Grave Hide",
+    slot: Frame,
+    side: Kaiju,
+    weight: 34.0,
+    stats: (
+        hp: 760.0,
+        armor: 28.0,
+        capacity: 105.0,
+        poise: 120.0,
+        size: 1.1,
+    ),
+    moves: ["devour"],
+    source: Chassis("mawgrave"),
+    heal: Regrowth,
+    rig: Burrower,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (5.0, 3.4, 7.0),
+                tex: "hide",
+                col: (90, 80, 70),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.8, -3.0),
+                size: (3.6, 2.4, 4.0),
+                tex: "chitin",
+                col: (60, 54, 48),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

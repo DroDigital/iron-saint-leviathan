@@ -1,0 +1,42 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "st_anchor_capacitor",
+    name: "Surge Capacitor",
+    slot: Back,
+    side: Saint,
+    weight: 14.0,
+    stats: (
+        hp: 150.0,
+        armor: 14.0,
+    ),
+    moves: ["grid_surge"],
+    source: Chassis("st_anchor"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (60, 80, 70),
+            ),
+            (
+                shape: Cylinder,
+                at: (-0.6, 0.4, -0.6),
+                size: (0.6, 2.4, 0.6),
+                tex: "glow",
+                col: (120, 255, 200),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.6, 0.4, -0.6),
+                size: (0.6, 2.4, 0.6),
+                tex: "glow",
+                col: (120, 255, 200),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

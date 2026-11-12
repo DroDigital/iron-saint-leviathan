@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "goliath_moth_thorax",
+    name: "Lantern Thorax",
+    slot: Frame,
+    side: Kaiju,
+    weight: 24.0,
+    stats: (
+        hp: 560.0,
+        armor: 10.0,
+        capacity: 95.0,
+        poise: 70.0,
+        size: 1.1,
+    ),
+    moves: ["devour"],
+    source: Chassis("goliath_moth"),
+    heal: Regrowth,
+    rig: Moth,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (2.4, 2.8, 2.4),
+                tex: "fur",
+                col: (120, 110, 90),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.8, -2.4),
+                size: (2.0, 2.0, 3.6),
+                tex: "hide",
+                col: (70, 60, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

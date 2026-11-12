@@ -1,0 +1,36 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "lampwright_dynamo",
+    name: "Fresnel Dynamo",
+    slot: Core,
+    side: Saint,
+    weight: 12.0,
+    stats: (
+        hp: 160.0,
+        stamina: 120.0,
+        regen: 40.0,
+    ),
+    source: Boss("lampwright"),
+    stamina: Battery,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (255, 255, 200),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (60, 60, 70),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,40 @@
+// Loading-screen lore, intro text, sync glitch strings and Disc 3 text.
+(
+    loading: [
+        "SALVAGE dropped on death becomes a wreck. Kaiju can strip it.",
+        "BIOMASS dropped on death becomes a carcass. Saints can harvest it.",
+        "Saint parts only drop while you play Kaiju. Kaiju parts only drop while you play Saint.",
+        "Break an enemy's posture, then hit HEAVY on a locked part to SEVER it pristine.",
+        "Resting advances the Tide Clock. High tide and night favour the Kaiju.",
+        "A lopsided build leans. A leaning build drifts.",
+        "Heretic grafts are powerful. Over half heretic unlocks HERETIC FORM.",
+        "Every saved build can come back as a boss on the other side.",
+        "The memory card has 15 blocks. Choose what to keep.",
+        "Storms reveal hidden kaiju with every lightning strike.",
+        "In a blackout, St. Anchor is weakened and Goliath Moth loses its lure.",
+        "Telegraphs always have a sound. Listen.",
+        "Parry: tap GUARD just before a hit lands.",
+        "Light builds dash. Medium builds hop. Heavy builds shoulder-slide.",
+    ],
+    intro: [
+        "HARROWMOUTH, 1998.",
+        "THE SEA HAS RISEN SIX TIMES.",
+        "SIX TIMES THE SAINTS HAVE WALKED INTO THE SURF.",
+        "THIS IS THE SEVENTH WAR.",
+    ],
+    sync_glitches: [
+        "SYNC 99%",
+        "SYNC 9̶9̶%",
+        "PILOT: [NO SIGNAL]",
+        "TISSUE MATCH: 100%",
+        "WHO IS DRIVING",
+        "SALT IN THE COOLANT",
+        "SYNC: YOU",
+    ],
+    disc3: [
+        "The corrupted block remembers every war.",
+        "Three wars. Three corruptions. One card.",
+        "The tide was never the enemy.",
+        "Neither were you.",
+    ],
+)

@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "lurk_heart",
+    name: "Lurk Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 80.0,
+        stamina: 100.0,
+        regen: 34.0,
+    ),
+    source: Enemy("gravelurk"),
+    stamina: Hunger,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (1.4, 1.4, 1.4),
+                tex: "glow",
+                col: (255, 170, 100),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

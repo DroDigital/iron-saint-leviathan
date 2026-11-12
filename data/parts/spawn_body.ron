@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "spawn_body",
+    name: "Brood Spawn",
+    slot: Frame,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 160.0,
+        armor: 2.0,
+        capacity: 65.0,
+        poise: 20.0,
+        size: 0.25,
+    ),
+    moves: ["devour"],
+    source: Enemy("brood_spawn"),
+    heal: Regrowth,
+    rig: Quadruped,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (3.2, 2.6, 4.6),
+                tex: "hide",
+                col: (60, 90, 80),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.4, -1.6),
+                size: (2.6, 2.2, 2.8),
+                tex: "chitin",
+                col: (40, 60, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

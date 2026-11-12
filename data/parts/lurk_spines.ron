@@ -1,0 +1,46 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "lurk_spines",
+    name: "Lurk Spines",
+    slot: Back,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 70.0,
+        armor: 8.0,
+    ),
+    source: Enemy("gravelurk"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (-0.6, 0.6, -1.4),
+                size: (0.6, 1.8, 0.6),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Spike,
+                at: (0.6, 0.6, -0.5),
+                size: (0.6, 1.8, 0.6),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Spike,
+                at: (-0.6, 0.6, 0.4),
+                size: (0.6, 1.8, 0.6),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Spike,
+                at: (0.6, 0.6, 1.3),
+                size: (0.6, 1.8, 0.6),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

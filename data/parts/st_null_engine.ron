@@ -1,0 +1,36 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "st_null_engine",
+    name: "Absence Engine",
+    slot: Core,
+    side: Saint,
+    weight: 8.0,
+    stats: (
+        hp: 130.0,
+        stamina: 120.0,
+        regen: 44.0,
+    ),
+    source: Chassis("st_null"),
+    stamina: Fuel,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (230, 230, 255),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (60, 58, 66),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

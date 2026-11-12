@@ -1,0 +1,19 @@
+// Global combat tuning. Dodge arrays are indexed [light dash, medium hop, heavy slide].
+(
+    parry_window: 8,
+    steady_hands_parry: 14,
+    dodge_iframes: (14, 12, 10),
+    dodge_distance: (9.0, 6.5, 5.0),
+    dodge_ticks: (18, 22, 26),
+    sever_window: 150,
+    posture_break_ticks: 150,
+    vent_ticks: 72,
+    heal_ticks: 48,
+    repair_heal: 0.35,
+    regrowth_heal: 0.22,
+    regrowth_cost: 150,
+    meta_cap: 0.1,
+    memory_blocks: 15,
+    min_boss_windup: 18,
+    old_bones_speed: 0.8,
+)

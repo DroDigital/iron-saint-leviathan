@@ -1,0 +1,52 @@
+// Part definition. Slot Frame, side Saint.
+(
+    id: "iron_saint_hull",
+    name: "Cathedral Hull",
+    slot: Frame,
+    side: Saint,
+    weight: 32.0,
+    stats: (
+        hp: 640.0,
+        armor: 26.0,
+        capacity: 100.0,
+        poise: 90.0,
+        size: 1.0,
+    ),
+    source: Chassis("iron_saint"),
+    heal: RepairCharges(5),
+    rig: Humanoid,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 2.1, 0.0),
+                size: (3.2, 3.0, 2.0),
+                tex: "plate",
+                col: (150, 150, 160),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, 0.0),
+                size: (2.24, 1.0, 1.4),
+                tex: "grate",
+                col: (90, 92, 100),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 3.75, 0.0),
+                size: (1.0, 0.5, 1.0),
+                tex: "plate",
+                col: (90, 92, 100),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, 2.4, 1.05),
+                size: (0.6, 1.8, 0.3),
+                tex: "gold",
+                col: (255, 210, 120),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "Poured from the melted bells of the old cathedral. Something inside it still tolls.",
+)

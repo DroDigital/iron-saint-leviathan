@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "juv_heart",
+    name: "Juvenile Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 90.0,
+        stamina: 100.0,
+        regen: 40.0,
+    ),
+    source: Enemy("juvenile"),
+    stamina: Breath,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.2, 0.0),
+                size: (1.2, 1.2, 1.2),
+                tex: "glow",
+                col: (140, 255, 220),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

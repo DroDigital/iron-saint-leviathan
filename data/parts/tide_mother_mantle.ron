@@ -1,0 +1,39 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "tide_mother_mantle",
+    name: "Tide Mantle",
+    slot: Frame,
+    side: Kaiju,
+    weight: 46.0,
+    stats: (
+        hp: 920.0,
+        armor: 26.0,
+        capacity: 124.0,
+        poise: 150.0,
+        size: 1.45,
+    ),
+    moves: ["devour"],
+    source: Boss("tide_mother"),
+    heal: Regrowth,
+    rig: Serpent,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (2.6, 2.3, 3.0),
+                tex: "hide",
+                col: (20, 50, 70),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.5, 0.2),
+                size: (2.0, 1.4, 2.6),
+                tex: "belly",
+                col: (230, 230, 220),
+            ),
+        ],
+    ),
+    complexity: 2,
+    lore: "Every kaiju is one of her teeth. Every Saint is one of her bones.",
+)

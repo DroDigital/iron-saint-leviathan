@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "spitter_heart",
+    name: "Bile Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        stamina: 100.0,
+        regen: 36.0,
+    ),
+    source: Enemy("brine_spitter"),
+    stamina: Hunger,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.9),
+                tex: "glow",
+                col: (200, 255, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,43 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "lampwright_lamp",
+    name: "Great Lamp",
+    slot: Head,
+    side: Saint,
+    weight: 8.0,
+    stats: (
+        hp: 130.0,
+        lock_range: 70.0,
+        reveal: true,
+        fog_vision: 50.0,
+    ),
+    source: Boss("lampwright"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (255, 255, 200),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 1.4, 0.2),
+                size: (1.0, 0.8, 1.0),
+                tex: "glow",
+                col: (255, 255, 200),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,43 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "st_vesper_mitre",
+    name: "Mitre Sensor",
+    slot: Head,
+    side: Saint,
+    weight: 6.0,
+    stats: (
+        hp: 120.0,
+        lock_range: 52.0,
+        reveal: true,
+        fog_vision: 16.0,
+    ),
+    source: Boss("st_vesper"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (255, 230, 160),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 1.5, 0.0),
+                size: (1.4, 0.12, 1.4),
+                tex: "gold",
+                col: (255, 230, 160),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 2,
+)

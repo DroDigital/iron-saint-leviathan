@@ -1,0 +1,48 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "wrecker_tail",
+    name: "Drowned Tail",
+    slot: Legs,
+    side: Kaiju,
+    weight: 20.0,
+    stats: (
+        hp: 250.0,
+        armor: 14.0,
+    ),
+    source: Boss("wrecker"),
+    locomotion: (
+        kind: Serpent,
+        speed: 9.5,
+        swim: 1.8,
+        deep_water: true,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Wedge,
+                at: (0.0, 0.2, -1.2),
+                size: (0.4, 2.6, 2.4),
+                tex: "fin",
+                col: (90, 110, 100),
+            ),
+            (
+                shape: Wedge,
+                at: (-1.2, -0.4, 0.0),
+                size: (1.8, 0.3, 1.4),
+                rot: (0.0, 0.0, 20.0),
+                tex: "fin",
+                col: (90, 110, 100),
+            ),
+            (
+                shape: Wedge,
+                at: (1.2, -0.4, 0.0),
+                size: (1.8, 0.3, 1.4),
+                rot: (0.0, 0.0, -20.0),
+                tex: "fin",
+                col: (90, 110, 100),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

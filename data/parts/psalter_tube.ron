@@ -1,0 +1,29 @@
+// Part definition. Slot RightArm, side Saint.
+(
+    id: "psalter_tube",
+    name: "Psalter Tube",
+    slot: RightArm,
+    side: Saint,
+    weight: 18.0,
+    stats: (
+        hp: 130.0,
+        armor: 14.0,
+        power: 1.2,
+        impact: 1.1,
+    ),
+    moves: ["psalter_shell", "spotter_flare"],
+    source: Enemy("artillery"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (0.0, 0.8, 0.8),
+                size: (0.8, 3.4, 0.8),
+                rot: (50.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 54, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

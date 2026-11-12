@@ -1,0 +1,41 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "st_cinder_visor",
+    name: "Smokeglass Visor",
+    slot: Head,
+    side: Saint,
+    weight: 5.0,
+    stats: (
+        hp: 110.0,
+        lock_range: 40.0,
+        fog_vision: 20.0,
+    ),
+    source: Chassis("st_cinder"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (255, 120, 40),
+                glow: true,
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.4, 0.4),
+                size: (1.3, 0.6, 0.6),
+                tex: "grate",
+                col: (70, 62, 58),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

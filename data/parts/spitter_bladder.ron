@@ -1,0 +1,40 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "spitter_bladder",
+    name: "Bile Bladder",
+    slot: Back,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 60.0,
+        armor: 2.0,
+    ),
+    source: Enemy("brine_spitter"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, 0.0),
+                size: (0.6, 1.4, 0.6),
+                tex: "bone",
+                col: (70, 80, 40),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 0.3, -1.0),
+                size: (0.5, 1.1, 0.5),
+                tex: "bone",
+                col: (70, 80, 40),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 0.4, -0.6),
+                size: (1.4, 1.0, 1.4),
+                tex: "hide",
+                col: (200, 255, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

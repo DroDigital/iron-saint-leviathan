@@ -1,0 +1,35 @@
+// Part definition. Slot LeftArm, side Kaiju.
+(
+    id: "leech_feeler",
+    name: "Leech Feeler",
+    slot: LeftArm,
+    side: Kaiju,
+    weight: 3.0,
+    stats: (
+        hp: 50.0,
+        guard: 0.3,
+        impact: 1.0,
+    ),
+    moves: ["leech_bite"],
+    source: Enemy("hull_leech"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (90, 60, 70),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (60, 40, 46),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

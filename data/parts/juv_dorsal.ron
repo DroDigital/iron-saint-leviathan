@@ -1,0 +1,39 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "juv_dorsal",
+    name: "Juvenile Dorsal",
+    slot: Back,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 70.0,
+        armor: 4.0,
+    ),
+    source: Enemy("juvenile"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 1.2, -0.8),
+                size: (0.5, 1.4, 0.6),
+                tex: "bone",
+                col: (130, 160, 140),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.0),
+                size: (0.5, 1.2, 0.6),
+                tex: "bone",
+                col: (130, 160, 140),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.8),
+                size: (0.5, 1.0, 0.6),
+                tex: "bone",
+                col: (130, 160, 140),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

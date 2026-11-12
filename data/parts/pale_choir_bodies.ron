@@ -1,0 +1,39 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "pale_choir_bodies",
+    name: "Choir of Bodies",
+    slot: Frame,
+    side: Kaiju,
+    weight: 22.0,
+    stats: (
+        hp: 600.0,
+        armor: 6.0,
+        capacity: 90.0,
+        poise: 60.0,
+        size: 0.95,
+    ),
+    moves: ["devour"],
+    source: Chassis("pale_choir"),
+    heal: Regrowth,
+    rig: Swarm,
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, 1.2, 0.0),
+                size: (0.7, 2.4, 0.5),
+                tex: "pale",
+                col: (225, 220, 210),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 2.7, 0.0),
+                size: (0.6, 0.7, 0.6),
+                tex: "pale",
+                col: (180, 170, 170),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "HP is a headcount. Every body sings a different note of the same hymn.",
+)

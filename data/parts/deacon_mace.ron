@@ -1,0 +1,50 @@
+// Part definition. Slot RightArm, side Saint.
+(
+    id: "deacon_mace",
+    name: "Deacon Mace",
+    slot: RightArm,
+    side: Saint,
+    weight: 10.0,
+    stats: (
+        hp: 110.0,
+        armor: 10.0,
+        power: 1.0,
+        impact: 1.1,
+    ),
+    moves: ["deacon_mace", "deacon_crush"],
+    source: Enemy("deacon"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.15, 0.25, 0.0),
+                size: (1.3, 0.9, 1.3),
+                tex: "plate",
+                col: (110, 110, 100),
+            ),
+            (
+                shape: Tube,
+                at: (0.0, -1.3, 0.0),
+                size: (0.8, 2.0, 0.8),
+                tex: "grate",
+                col: (70, 70, 64),
+            ),
+            (
+                shape: Box,
+                at: (0.0, -3.0, 0.15),
+                size: (0.95, 1.9, 0.95),
+                tex: "plate",
+                col: (110, 110, 100),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -5.0, 0.9),
+                size: (1.1, 1.1, 1.1),
+                tex: "gold",
+                col: (255, 200, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

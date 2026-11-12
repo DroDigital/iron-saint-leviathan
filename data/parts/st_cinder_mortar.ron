@@ -1,0 +1,34 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "st_cinder_mortar",
+    name: "Napalm Mortar",
+    slot: Back,
+    side: Saint,
+    weight: 16.0,
+    stats: (
+        hp: 140.0,
+        armor: 12.0,
+    ),
+    moves: ["napalm_mortar"],
+    source: Chassis("st_cinder"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.5, 1.4, -0.4),
+                size: (0.7, 1.6, 0.7),
+                rot: (-20.0, 0.0, 0.0),
+                tex: "rust",
+                col: (60, 50, 45),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

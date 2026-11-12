@@ -1,0 +1,81 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "st_cinder_legs",
+    name: "Foundry Legs",
+    slot: Legs,
+    side: Saint,
+    weight: 24.0,
+    stats: (
+        hp: 260.0,
+        armor: 26.0,
+    ),
+    source: Chassis("st_cinder"),
+    locomotion: (
+        kind: Biped,
+        speed: 7.0,
+        swim: 0.6,
+        deep_water: false,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (70, 62, 58),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Box,
+                at: (-1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (70, 62, 58),
+            ),
+            (
+                shape: Box,
+                at: (0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (70, 62, 58),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (120, 60, 40),
+            ),
+            (
+                shape: Box,
+                at: (1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (70, 62, 58),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

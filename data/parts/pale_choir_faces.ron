@@ -1,0 +1,42 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "pale_choir_faces",
+    name: "Many Faces",
+    slot: Head,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 90.0,
+        lock_range: 46.0,
+        fog_vision: 24.0,
+    ),
+    source: Chassis("pale_choir"),
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.5, 0.0),
+                size: (1.2, 1.4, 1.0),
+                tex: "pale",
+                col: (225, 220, 210),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.5, 0.48),
+                size: (0.8, 0.12, 0.1),
+                tex: "glow",
+                col: (255, 80, 80),
+                glow: true,
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, 0.48),
+                size: (0.5, 0.12, 0.1),
+                tex: "glow",
+                col: (255, 80, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

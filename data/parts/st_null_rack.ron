@@ -1,0 +1,33 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "st_null_rack",
+    name: "Echo Rack",
+    slot: Back,
+    side: Saint,
+    weight: 8.0,
+    stats: (
+        hp: 110.0,
+        armor: 8.0,
+    ),
+    moves: ["echo_rack"],
+    source: Chassis("st_null"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (30, 30, 36),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, -0.9),
+                size: (2.4, 0.3, 0.3),
+                tex: "grate",
+                col: (14, 14, 18),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

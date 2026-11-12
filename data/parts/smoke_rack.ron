@@ -1,0 +1,33 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "smoke_rack",
+    name: "Smoke Rack",
+    slot: Back,
+    side: Saint,
+    weight: 6.0,
+    stats: (
+        hp: 70.0,
+        armor: 6.0,
+    ),
+    moves: ["smoke_screen"],
+    source: Enemy("tank"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (-0.6, 0.0, 0.0),
+                size: (0.4, 0.8, 0.4),
+                tex: "steel",
+                col: (60, 66, 50),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.6, 0.0, 0.0),
+                size: (0.4, 0.8, 0.4),
+                tex: "steel",
+                col: (60, 66, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

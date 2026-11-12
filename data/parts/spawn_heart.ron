@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "spawn_heart",
+    name: "Spawn Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+        stamina: 80.0,
+        regen: 34.0,
+    ),
+    source: Enemy("brood_spawn"),
+    stamina: Hunger,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.9),
+                tex: "glow",
+                col: (200, 255, 160),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)
