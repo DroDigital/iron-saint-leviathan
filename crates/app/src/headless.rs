@@ -102,9 +102,12 @@ pub fn screenshots(dir: &Path) -> anyhow::Result<()> {
         let (c, _) = m.world.city.arena;
         let pid = m.world.player_id(0).unwrap() as usize;
         m.world.fighters[pid].pos = c + glam::Vec3::new(0.0, 0.0, -26.0);
-        m.world.fighters[pid].lock = None;
+        m.world.fighters[pid].yaw = 0.0;
+        m.cams[0].yaw = std::f32::consts::PI;
+        let boss = m.world.boss.unwrap_or(1);
+        m.world.fighters[pid].lock = Some(isl_sim::fighter::LockOn { target: boss, slot: isl_data::Slot::Head });
     }
-    step(&mut g, &mut input, &mut audio, press(&[Action::LockOn], Vec2::new(0.0, 0.3), Vec2::ZERO), 120);
+    step(&mut g, &mut input, &mut audio, press(&[], Vec2::new(0.0, 0.3), Vec2::ZERO), 300);
     step(&mut g, &mut input, &mut audio, press(&[Action::Light], Vec2::ZERO, Vec2::ZERO), 20);
     if std::env::var("ISL_DEBUG").is_ok()
         && let Some(m) = g.mission.as_ref()

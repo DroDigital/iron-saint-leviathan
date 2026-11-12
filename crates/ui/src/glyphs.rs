@@ -1,4 +1,4 @@
-// Generated from the hand-drawn glyph table in docs (5x7, MSB = leftmost column).
+// Hand-drawn 5x7 glyphs (MSB = leftmost column). ASCII 32..126 then 9 custom icons.
 pub const GLYPHS: [[u8; 7]; 104] = [
     [0, 0, 0, 0, 0, 0, 0],        // ' '
     [4, 4, 4, 4, 4, 0, 4],        // '!'

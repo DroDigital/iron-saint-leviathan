@@ -13,6 +13,7 @@ pub struct Camera {
     pub trauma: f32,
     pub fov: f32,
     pub t: f32,
+    pub shoulder: f32,
 }
 
 impl Default for Camera {
@@ -26,6 +27,7 @@ impl Default for Camera {
             trauma: 0.0,
             fov: 1.05,
             t: 0.0,
+            shoulder: 0.0,
         }
     }
 }
@@ -58,7 +60,9 @@ impl Camera {
             let diff = (want_yaw - self.yaw + std::f32::consts::PI).rem_euclid(std::f32::consts::TAU) - std::f32::consts::PI;
             self.yaw += diff * (dt * 6.0).min(1.0);
             let span = Vec2::new(d.x, d.z).length();
-            let want_pitch = (0.22 + (lh / span.max(1.0)) * 0.25).clamp(0.12, 0.6);
+            // Shorter targets (serpents, burrowers) need a higher camera to see past your own hull.
+            let short = ((f.subject_height - lh) / f.subject_height.max(1.0)).clamp(0.0, 1.0);
+            let want_pitch = (0.22 + (lh / span.max(1.0)) * 0.25 + short * 0.22).clamp(0.12, 0.7);
             self.pitch += (want_pitch - self.pitch) * (dt * 4.0).min(1.0);
             let mid = head.lerp(lp + Vec3::Y * lh * 0.5, 0.35);
             self.target = self.target.lerp(mid, (dt * 10.0).min(1.0));
@@ -68,7 +72,11 @@ impl Camera {
             self.target = self.target.lerp(head, (dt * 10.0).min(1.0));
         }
         let back = Vec3::new(self.yaw.sin() * self.pitch.cos(), self.pitch.sin(), self.yaw.cos() * self.pitch.cos());
-        let mut p = self.target + back * self.dist;
+        // Over-the-shoulder offset while locked so your own body never hides the target.
+        let want_sh = if f.lock.is_some() { f.subject_height * 0.28 } else { 0.0 };
+        self.shoulder += (want_sh - self.shoulder) * (dt * 4.0).min(1.0);
+        let right = Vec3::new(self.yaw.cos(), 0.0, -self.yaw.sin());
+        let mut p = self.target + back * self.dist - right * self.shoulder;
         let g = ground(p.x, p.z).max(0.0) + 2.0;
         if p.y < g {
             p.y = g;

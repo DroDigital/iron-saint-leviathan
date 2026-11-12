@@ -366,10 +366,16 @@ impl Visuals {
             Anim::Broken(_) => -0.8 * p.size,
             _ => 0.0,
         };
+        // Cobra posture: the head and neck stay raised so a serpent looms over a 10 m Saint.
+        let lift = match p.anim {
+            Anim::Dead(k) => 5.0 * p.size * (1.0 - k),
+            Anim::Broken(k) => 5.0 * p.size * (1.0 - k * 0.8),
+            _ => 5.0 * p.size,
+        };
         let swim = p.moving.min(1.0);
         for (i, s) in segs.iter_mut().enumerate() {
             let k = i as f32 / n as f32;
-            s.y += rear * (1.0 - k * 2.5).max(0.0);
+            s.y += (rear + lift) * (1.0 - k * 2.5).max(0.0);
             let side = Vec3::new(fwd.z, 0.0, -fwd.x);
             *s += side * ((p.time * 4.0 - i as f32 * 0.9).sin() * 0.6 * p.size * swim * k);
         }
