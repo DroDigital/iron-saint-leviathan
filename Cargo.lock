@@ -956,6 +956,12 @@ dependencies = [
 [[package]]
 name = "isl-ghost"
 version = "0.9.0"
+dependencies = [
+ "glam",
+ "isl-data",
+ "isl-sim",
+ "serde",
+]
 
 [[package]]
 name = "isl-input"
@@ -968,6 +974,17 @@ version = "0.9.0"
 [[package]]
 name = "isl-save"
 version = "0.9.0"
+dependencies = [
+ "crc32fast",
+ "data-encoding",
+ "directories",
+ "isl-data",
+ "isl-ghost",
+ "isl-sim",
+ "ron",
+ "serde",
+ "thiserror 2.0.21",
+]
 
 [[package]]
 name = "isl-sim"

@@ -3,5 +3,10 @@ name = "isl-ghost"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Habit recording, profile extraction and nemesis AI parameter mapping."
 
 [dependencies]
+isl-sim.workspace = true
+isl-data.workspace = true
+serde.workspace = true
+glam.workspace = true

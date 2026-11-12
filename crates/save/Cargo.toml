@@ -3,5 +3,15 @@ name = "isl-save"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Versioned, checksummed saves; 15-block memory card; migrations; export/import codes."
 
 [dependencies]
+isl-sim.workspace = true
+isl-data.workspace = true
+isl-ghost.workspace = true
+serde.workspace = true
+ron.workspace = true
+crc32fast.workspace = true
+data-encoding.workspace = true
+directories.workspace = true
+thiserror.workspace = true
