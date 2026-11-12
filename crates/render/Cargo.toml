@@ -3,5 +3,17 @@ name = "isl-render"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "wgpu PSX pipeline: low-res target, vertex snap, affine mapping, 15-bit dither, fog, Gouraud, fake-FMV, CRT, upscale."
 
 [dependencies]
+wgpu.workspace = true
+glam.workspace = true
+bytemuck.workspace = true
+pollster.workspace = true
+isl-assets.workspace = true
+isl-ui.workspace = true
+isl-data.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+image.workspace = true
