@@ -208,48 +208,49 @@ pub fn think(b: &mut Brain, p: &Percept, rng: &mut SimRng) -> Think {
     }
 
     // Defensive reactions to an observed swing.
-    if let Some((_, since, windup, feint, active, reach)) = &t.attack {
-        if t.act_start != b.reacted_to && gap < reach + 6.0 {
-            b.reacted_to = t.act_start;
-            let r = rng.f32();
-            let pr = &b.params;
-            let reaction = if p.can_parry && r < pr.parry_rate {
-                Some(Reaction::Parry)
-            } else if r < pr.parry_rate + pr.dodge_rate {
-                Some(Reaction::Dodge)
-            } else if r < pr.parry_rate + pr.dodge_rate + pr.guard_rate {
-                Some(Reaction::Guard)
-            } else {
-                None
+    if let Some((_, since, windup, feint, active, reach)) = &t.attack
+        && t.act_start != b.reacted_to
+        && gap < reach + 6.0
+    {
+        b.reacted_to = t.act_start;
+        let r = rng.f32();
+        let pr = &b.params;
+        let reaction = if p.can_parry && r < pr.parry_rate {
+            Some(Reaction::Parry)
+        } else if r < pr.parry_rate + pr.dodge_rate {
+            Some(Reaction::Dodge)
+        } else if r < pr.parry_rate + pr.dodge_rate + pr.guard_rate {
+            Some(Reaction::Guard)
+        } else {
+            None
+        };
+        if let Some(kind) = reaction {
+            // When to fire: impatient brains react to the nominal windup and eat feints.
+            let patient = rng.chance(b.params.feint_patience);
+            let hit_at = *windup as i64 + if patient { *feint as i64 } else { 0 } - *since as i64 - b.reaction as i64;
+            let lead = match kind {
+                Reaction::Parry => 4,
+                Reaction::Dodge => 6,
+                Reaction::Guard => 14,
             };
-            if let Some(kind) = reaction {
-                // When to fire: impatient brains react to the nominal windup and eat feints.
-                let patient = rng.chance(b.params.feint_patience);
-                let hit_at = *windup as i64 + if patient { *feint as i64 } else { 0 } - *since as i64 - b.reaction as i64;
-                let lead = match kind {
-                    Reaction::Parry => 4,
-                    Reaction::Dodge => 6,
-                    Reaction::Guard => 14,
-                };
-                let at = p.tick + (hit_at - lead).max(0) as u64;
-                let lat = if rng.chance(b.params.dodge_left) { -1.0 } else { 1.0 };
-                b.pending = Some((at, kind, lat));
-                let _ = active;
-            }
+            let at = p.tick + (hit_at - lead).max(0) as u64;
+            let lat = if rng.chance(b.params.dodge_left) { -1.0 } else { 1.0 };
+            b.pending = Some((at, kind, lat));
+            let _ = active;
         }
     }
-    if let Some((at, kind, lat)) = b.pending {
-        if p.tick >= at {
-            b.pending = None;
-            match kind {
-                Reaction::Parry => cmd.parry = true,
-                Reaction::Guard => b.guard_hold = 30,
-                Reaction::Dodge => {
-                    cmd.dodge = true;
-                    let side = Vec2::new(-dir.y, dir.x) * lat;
-                    cmd.move_dir = if rng.chance(b.params.dodge_back) { -dir } else { side };
-                    return Think { cmd, script };
-                }
+    if let Some((at, kind, lat)) = b.pending
+        && p.tick >= at
+    {
+        b.pending = None;
+        match kind {
+            Reaction::Parry => cmd.parry = true,
+            Reaction::Guard => b.guard_hold = 30,
+            Reaction::Dodge => {
+                cmd.dodge = true;
+                let side = Vec2::new(-dir.y, dir.x) * lat;
+                cmd.move_dir = if rng.chance(b.params.dodge_back) { -dir } else { side };
+                return Think { cmd, script };
             }
         }
     }
@@ -278,7 +279,7 @@ pub fn think(b: &mut Brain, p: &Percept, rng: &mut SimRng) -> Think {
                 b.state = AiState::Retreat;
             } else {
                 b.state = AiState::Engage;
-                if b.timer % 120 == 0 && rng.chance(0.5) {
+                if b.timer.is_multiple_of(120) && rng.chance(0.5) {
                     b.strafe = -b.strafe;
                 }
                 cmd.move_dir = Vec2::new(-dir.y, dir.x) * b.strafe * 0.35;

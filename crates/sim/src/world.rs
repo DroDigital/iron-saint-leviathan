@@ -375,10 +375,10 @@ impl World {
                 if o.lock.is_some_and(|l| l.target == id) {
                     o.lock = None;
                 }
-                if let Some(a) = o.ai.as_mut() {
-                    if a.target == Some(id) {
-                        a.target = None;
-                    }
+                if let Some(a) = o.ai.as_mut()
+                    && a.target == Some(id)
+                {
+                    a.target = None;
                 }
                 if o.owner == Some(id) {
                     o.owner = None;
@@ -563,14 +563,17 @@ impl World {
         let t = content.tuning().clone();
         // Fix up allies spawned via the bell.
         for f in self.fighters.iter_mut() {
-            if let FighterKind::Boss(id) = f.kind.clone() {
-                if self.cfg.bell && id == "boss_st_vesper" && self.cfg.side == Side::Saint && f.team == Team::Enemy {
-                    f.team = Team::Ally;
-                    f.kind = FighterKind::Ally(id.clone());
-                    if let Some(b) = f.ai.as_mut() {
-                        b.aggro = 80.0;
-                        b.boss = Some(id);
-                    }
+            if let FighterKind::Boss(id) = f.kind.clone()
+                && self.cfg.bell
+                && id == "boss_st_vesper"
+                && self.cfg.side == Side::Saint
+                && f.team == Team::Enemy
+            {
+                f.team = Team::Ally;
+                f.kind = FighterKind::Ally(id.clone());
+                if let Some(b) = f.ai.as_mut() {
+                    b.aggro = 80.0;
+                    b.boss = Some(id);
                 }
             }
         }
@@ -672,7 +675,7 @@ impl World {
     /// What `who` looked like `delay` ticks ago.
     pub fn observe(&self, who: u32, delay: u16) -> Option<&Seen> {
         let h = self.history.get(who as usize)?;
-        let idx = h.len().checked_sub(1 + delay as usize).unwrap_or(0);
+        let idx = h.len().saturating_sub(1 + delay as usize);
         h.get(idx)
     }
 
@@ -810,16 +813,14 @@ impl World {
         if let Some(sidx) = script {
             // Scripted boss move.
             let f = &self.fighters[i];
-            if self.can_start(i) {
-                if let Some(b) = f.ai.as_ref().and_then(|b| b.boss.clone()) {
-                    if let Some(ph) = content.boss(&b).and_then(|bd| bd.phases.get(f.boss_phase)) {
-                        if let Some((mid, _)) = ph.moves.get(sidx) {
-                            let mv = MoveRef { id: mid.clone(), slot: Slot::Frame };
-                            self.start_attack(content, i, mv, true);
-                            return;
-                        }
-                    }
-                }
+            if self.can_start(i)
+                && let Some(b) = f.ai.as_ref().and_then(|b| b.boss.clone())
+                && let Some(ph) = content.boss(&b).and_then(|bd| bd.phases.get(f.boss_phase))
+                && let Some((mid, _)) = ph.moves.get(sidx)
+            {
+                let mv = MoveRef { id: mid.clone(), slot: Slot::Frame };
+                self.start_attack(content, i, mv, true);
+                return;
             }
         }
         // Combo window: allow cancelling late recovery into the next light/heavy/dodge.
@@ -934,18 +935,18 @@ impl World {
                 true
             }
             Buffered::Special => {
-                if let Some(m) = f.build.moves.special.clone() {
-                    if can {
-                        self.start_attack(content, i, m, false);
-                    }
+                if let Some(m) = f.build.moves.special.clone()
+                    && can
+                {
+                    self.start_attack(content, i, m, false);
                 }
                 true
             }
             Buffered::Bash => {
-                if let Some(m) = f.build.moves.bash.clone() {
-                    if can {
-                        self.start_attack(content, i, m, false);
-                    }
+                if let Some(m) = f.build.moves.bash.clone()
+                    && can
+                {
+                    self.start_attack(content, i, m, false);
                 }
                 true
             }
@@ -961,26 +962,28 @@ impl World {
                     self.set_act(i, Act::Severing { target, slot });
                     return true;
                 }
-                if let Some(m) = f.build.moves.heavy.clone() {
-                    if can {
-                        self.start_attack(content, i, m, false);
-                    }
+                if let Some(m) = f.build.moves.heavy.clone()
+                    && can
+                {
+                    self.start_attack(content, i, m, false);
                 }
                 true
             }
             Buffered::Light => {
                 let m = f.mimic.clone().or_else(|| f.build.moves.light.clone());
                 // Hunger: devour a nearby building when standing next to one and not locked.
-                if let Some(eat) = f.build.moves.eat.clone() {
-                    if f.lock.is_none() && self.nearest_chunk(i, 6.0).is_some() && f.stamina.food < 0.95 {
-                        self.start_attack(content, i, eat, false);
-                        return true;
-                    }
+                if let Some(eat) = f.build.moves.eat.clone()
+                    && f.lock.is_none()
+                    && self.nearest_chunk(i, 6.0).is_some()
+                    && f.stamina.food < 0.95
+                {
+                    self.start_attack(content, i, eat, false);
+                    return true;
                 }
-                if let Some(m) = m {
-                    if can {
-                        self.start_attack(content, i, m, false);
-                    }
+                if let Some(m) = m
+                    && can
+                {
+                    self.start_attack(content, i, m, false);
                 }
                 true
             }
@@ -1019,12 +1022,14 @@ impl World {
         let Some(m) = content.mv(&mv.id) else { return };
         // Echo omen: enemies copy the player's last move.
         let mut mv = mv;
-        if self.enemy_fx.echo && self.fighters[i].team == Team::Enemy && !scripted && m.kind == MoveKind::Light {
-            if let Some(last) = self.player(0).and_then(|p| p.last_move.clone()) {
-                if content.mv(&last).is_some_and(|x| x.windup >= 10) {
-                    mv = MoveRef { id: last, slot: mv.slot };
-                }
-            }
+        if self.enemy_fx.echo
+            && self.fighters[i].team == Team::Enemy
+            && !scripted
+            && m.kind == MoveKind::Light
+            && let Some(last) = self.player(0).and_then(|p| p.last_move.clone())
+            && content.mv(&last).is_some_and(|x| x.windup >= 10)
+        {
+            mv = MoveRef { id: last, slot: mv.slot };
         }
         let m = content.mv(&mv.id).unwrap();
         let f = &mut self.fighters[i];
@@ -1594,10 +1599,10 @@ impl World {
         let (c, r) = self.hitbox(i, m, k);
         // Eat / building damage.
         if m.kind == MoveKind::Eat {
-            if k == 0 {
-                if let Some((bi, ci)) = self.nearest_chunk(i, m.reach * self.fighters[i].size() + 4.0) {
-                    self.destroy_chunk(bi, ci, Some(i));
-                }
+            if k == 0
+                && let Some((bi, ci)) = self.nearest_chunk(i, m.reach * self.fighters[i].size() + 4.0)
+            {
+                self.destroy_chunk(bi, ci, Some(i));
             }
             return;
         }
@@ -1650,10 +1655,10 @@ impl World {
                         }
                     }
                 }
-                if n > 0 {
-                    if let Act::Attack { chunks_hit, .. } = &mut self.fighters[i].act {
-                        *chunks_hit = true;
-                    }
+                if n > 0
+                    && let Act::Attack { chunks_hit, .. } = &mut self.fighters[i].act
+                {
+                    *chunks_hit = true;
                 }
             }
         }
@@ -1681,10 +1686,12 @@ impl World {
     fn pick_part(&mut self, attacker: usize, target: usize, from: Vec3) -> Slot {
         let a = &self.fighters[attacker];
         let o = &self.fighters[target];
-        if let Some(l) = a.lock {
-            if l.target == target as u32 && o.part_alive(l.slot) && self.rng.chance(0.75) {
-                return l.slot;
-            }
+        if let Some(l) = a.lock
+            && l.target == target as u32
+            && o.part_alive(l.slot)
+            && self.rng.chance(0.75)
+        {
+            return l.slot;
         }
         // Geometry: which side of the target faces the attacker?
         let to = (from - o.pos).normalize_or_zero();
@@ -1846,10 +1853,10 @@ impl World {
             if ignite {
                 of.status.burn = of.status.burn.max(120);
             }
-            if let Some(e) = eff {
-                if matches!(e, MoveEffect::Burn | MoveEffect::Spores | MoveEffect::Tether | MoveEffect::Static) {
-                    self.emit(SimEvent::StatusApplied { id: j as u32, effect: e });
-                }
+            if let Some(e) = eff
+                && matches!(e, MoveEffect::Burn | MoveEffect::Spores | MoveEffect::Tether | MoveEffect::Static)
+            {
+                self.emit(SimEvent::StatusApplied { id: j as u32, effect: e });
             }
             if eff == Some(MoveEffect::Constrict) && !self.fighters[j].kind.is_bossish() {
                 self.set_act(j, Act::Grabbed { by: i as u32 });
@@ -1859,13 +1866,12 @@ impl World {
             if eff == Some(MoveEffect::Mimic) {
                 // ST. NULL: copy the struck part's attack.
                 let pdef = self.fighters[j].loadout.get(slot).and_then(|p| content.part(&p.def));
-                if let Some(d) = pdef {
-                    if let Some(mid) =
+                if let Some(d) = pdef
+                    && let Some(mid) =
                         d.moves.iter().find(|x| content.mv(x).is_some_and(|mm| matches!(mm.kind, MoveKind::Light | MoveKind::Heavy)))
-                    {
-                        self.fighters[i].mimic = Some(MoveRef { id: mid.clone(), slot: Slot::RightArm });
-                        self.emit(SimEvent::Mimic { id: i as u32, mv: mid.clone() });
-                    }
+                {
+                    self.fighters[i].mimic = Some(MoveRef { id: mid.clone(), slot: Slot::RightArm });
+                    self.emit(SimEvent::Mimic { id: i as u32, mv: mid.clone() });
                 }
             }
         }
@@ -2252,15 +2258,16 @@ impl World {
                         desired = f.forward() * dist;
                     }
                     // Tracking during windup (bosses track less late in the windup).
-                    if f.act_t < w {
-                        if let Some(tp) = target_pos {
-                            face_to = Some(geom::dir_yaw(tp - f.pos));
-                        }
+                    if f.act_t < w
+                        && let Some(tp) = target_pos
+                    {
+                        face_to = Some(geom::dir_yaw(tp - f.pos));
                     }
-                    if f.burrowed && f.act_t < w {
-                        if let Some(tp) = target_pos {
-                            desired = (tp - f.pos).normalize_or_zero() * speed * 1.6;
-                        }
+                    if f.burrowed
+                        && f.act_t < w
+                        && let Some(tp) = target_pos
+                    {
+                        desired = (tp - f.pos).normalize_or_zero() * speed * 1.6;
                     }
                 }
             }
@@ -2329,7 +2336,9 @@ impl World {
         }
         np = self.city.in_bounds(np);
         let ng = self.city.ground(np.x, np.z);
-        f.pos = Vec3::new(np.x, ng.max(if f.build.deep_water { ng } else { ng }), np.z);
+        // Swimmers ride near the surface in deep water; everyone else wades along the bottom.
+        let y = if f.build.deep_water && water > ng + 1.0 { ng.max(water - f.height() * 0.35) } else { ng };
+        f.pos = Vec3::new(np.x, y, np.z);
         // Flying altitude.
         if f.build.flying {
             let want = match &act {
@@ -2451,12 +2460,12 @@ impl World {
         while i < self.projectiles.len() {
             let mut p = self.projectiles[i].clone();
             let old = p.pos;
-            if p.homing > 0.0 {
-                if let Some(t) = p.target.and_then(|t| self.fighters.get(t as usize)) {
-                    let d = (t.center() - p.pos).normalize_or_zero();
-                    let sp = p.vel.length();
-                    p.vel = (p.vel.normalize_or_zero() + d * p.homing * DT).normalize_or_zero() * sp;
-                }
+            if p.homing > 0.0
+                && let Some(t) = p.target.and_then(|t| self.fighters.get(t as usize))
+            {
+                let d = (t.center() - p.pos).normalize_or_zero();
+                let sp = p.vel.length();
+                p.vel = (p.vel.normalize_or_zero() + d * p.homing * DT).normalize_or_zero() * sp;
             }
             p.vel.y -= p.gravity * DT;
             p.pos += p.vel * DT;
@@ -2704,7 +2713,7 @@ impl World {
     fn hallucinations(&mut self, content: &Content) {
         let Some(p) = self.player(0).map(|p| (p.pos, p.build.fx.hallucinate)) else { return };
         let (ppos, h) = p;
-        if h <= 0.0 || self.tick % 300 != 0 || !self.rng.chance((h * 2.0).min(0.9)) {
+        if h <= 0.0 || !self.tick.is_multiple_of(300) || !self.rng.chance((h * 2.0).min(0.9)) {
             return;
         }
         let side = self.cfg.side;

@@ -106,21 +106,21 @@ pub fn screenshots(dir: &Path) -> anyhow::Result<()> {
     }
     step(&mut g, &mut input, &mut audio, press(&[Action::LockOn], Vec2::new(0.0, 0.3), Vec2::ZERO), 120);
     step(&mut g, &mut input, &mut audio, press(&[Action::Light], Vec2::ZERO, Vec2::ZERO), 20);
-    if std::env::var("ISL_DEBUG").is_ok() {
-        if let Some(m) = g.mission.as_ref() {
-            for f in &m.world.fighters {
-                if f.alive && (f.kind.is_bossish() || f.kind.is_player()) {
-                    eprintln!(
-                        "{:?} pos {:?} act {} alt {} burrowed {} lock {:?} cam {:?}",
-                        f.kind,
-                        f.pos,
-                        f.act.name(),
-                        f.altitude,
-                        f.burrowed,
-                        f.lock,
-                        m.cams[0].pos
-                    );
-                }
+    if std::env::var("ISL_DEBUG").is_ok()
+        && let Some(m) = g.mission.as_ref()
+    {
+        for f in &m.world.fighters {
+            if f.alive && (f.kind.is_bossish() || f.kind.is_player()) {
+                eprintln!(
+                    "{:?} pos {:?} act {} alt {} burrowed {} lock {:?} cam {:?}",
+                    f.kind,
+                    f.pos,
+                    f.act.name(),
+                    f.altitude,
+                    f.burrowed,
+                    f.lock,
+                    m.cams[0].pos
+                );
             }
         }
     }
@@ -180,7 +180,7 @@ pub fn soak(secs: f32, render_every: usize) -> anyhow::Result<()> {
             missions += 1;
             if missions % 5 == 0 {
                 let a = g.active_or_premade(Side::Saint);
-                g.build_mission(&Launch::Arena { loadout: Box::new(a), back_to_foundry: false }, &mut audio);
+                g.build_mission(&Launch::Arena { loadout: Box::new(a) }, &mut audio);
             } else {
                 g.build_mission(&Launch::War { district: d, side, finale: None }, &mut audio);
             }
@@ -218,12 +218,12 @@ pub fn soak(secs: f32, render_every: usize) -> anyhow::Result<()> {
         input.players[0] = p;
         g.update(1.0 / 60.0, &mut input, &mut audio);
         // Retreat after ~90 s to rotate content.
-        if let Some(m) = g.mission.as_ref() {
-            if m.world.tick > 60 * 90 {
-                g.pause = Some(3);
-                input.players[0] = press(&[Action::Confirm], Vec2::ZERO, Vec2::ZERO);
-                g.update(1.0 / 60.0, &mut input, &mut audio);
-            }
+        if let Some(m) = g.mission.as_ref()
+            && m.world.tick > 60 * 90
+        {
+            g.pause = Some(3);
+            input.players[0] = press(&[Action::Confirm], Vec2::ZERO, Vec2::ZERO);
+            g.update(1.0 / 60.0, &mut input, &mut audio);
         }
         if matches!(g.screen, Screen::Results { .. }) {
             input.players[0] = press(&[Action::Confirm], Vec2::ZERO, Vec2::ZERO);

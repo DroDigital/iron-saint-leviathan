@@ -51,7 +51,7 @@ fn run(w: &mut World, cmds: impl Fn(u64, &World) -> Command, ticks: u64) -> Vec<
     for _ in 0..ticks {
         let c = cmds(w.tick, w);
         w.step(content(), &[c]);
-        ev.extend(w.events.drain(..));
+        ev.append(&mut w.events);
     }
     ev
 }
@@ -162,7 +162,7 @@ fn cross_harvest_rule_holds_for_every_drop() {
             let Some(t) = tgt else { break };
             face_and_close(&mut w, t);
             let k = w.tick;
-            w.step(content(), &[Command { light: k % 2 == 0, heavy: k % 7 == 0, ..Default::default() }]);
+            w.step(content(), &[Command { light: k.is_multiple_of(2), heavy: k.is_multiple_of(7), ..Default::default() }]);
             let p = w.player_id(0).unwrap() as usize;
             w.fighters[p].hp = w.fighters[p].build.hp_max;
             w.events.clear();

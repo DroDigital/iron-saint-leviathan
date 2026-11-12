@@ -81,16 +81,16 @@ impl App {
         }
         // Mouse capture only during play.
         let play = self.in_play();
-        if let Some(w) = &self.window {
-            if play != self.grabbed {
-                self.grabbed = play;
-                if play {
-                    let _ = w.set_cursor_grab(CursorGrabMode::Locked).or_else(|_| w.set_cursor_grab(CursorGrabMode::Confined));
-                    w.set_cursor_visible(false);
-                } else {
-                    let _ = w.set_cursor_grab(CursorGrabMode::None);
-                    w.set_cursor_visible(true);
-                }
+        if let Some(w) = &self.window
+            && play != self.grabbed
+        {
+            self.grabbed = play;
+            if play {
+                let _ = w.set_cursor_grab(CursorGrabMode::Locked).or_else(|_| w.set_cursor_grab(CursorGrabMode::Confined));
+                w.set_cursor_visible(false);
+            } else {
+                let _ = w.set_cursor_grab(CursorGrabMode::None);
+                w.set_cursor_visible(true);
             }
         }
         let Some(r) = self.renderer.as_mut() else { return };
@@ -168,15 +168,14 @@ impl ApplicationHandler for App {
             WindowEvent::CloseRequested => {
                 self.game.save_settings();
                 // Quitting soon after a death marks the build for THE GRUDGE.
-                if let Some(m) = &self.game.mission {
-                    if m.dead_timer.is_some() || m.last_death_tick.is_some_and(|d| m.world.tick.saturating_sub(d) < 1200) {
-                        if let Some(p) = m.world.player(0) {
-                            let (w, t) = self.game.campaign.as_ref().map_or((0, 0), |c| (c.war, c.tide.tide_count));
-                            let lo = p.loadout.clone();
-                            self.game.card.system.archive.set_rival("THE GRUDGE", lo, w, t);
-                            self.game.save_card();
-                        }
-                    }
+                if let Some(m) = &self.game.mission
+                    && (m.dead_timer.is_some() || m.last_death_tick.is_some_and(|d| m.world.tick.saturating_sub(d) < 1200))
+                    && let Some(p) = m.world.player(0)
+                {
+                    let (w, t) = self.game.campaign.as_ref().map_or((0, 0), |c| (c.war, c.tide.tide_count));
+                    let lo = p.loadout.clone();
+                    self.game.card.system.archive.set_rival("THE GRUDGE", lo, w, t);
+                    self.game.save_card();
                 }
                 el.exit();
             }
@@ -199,14 +198,13 @@ impl ApplicationHandler for App {
                 if let PhysicalKey::Code(code) = event.physical_key {
                     self.input.on_key(code, event.state);
                 }
-                if event.state.is_pressed() {
-                    if let Some(t) = &event.text {
-                        if matches!(self.game.screen, Screen::Codes { .. }) {
-                            self.game
-                                .typed
-                                .push_str(&t.to_uppercase().chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-').collect::<String>());
-                        }
-                    }
+                if event.state.is_pressed()
+                    && let Some(t) = &event.text
+                    && matches!(self.game.screen, Screen::Codes { .. })
+                {
+                    self.game
+                        .typed
+                        .push_str(&t.to_uppercase().chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-').collect::<String>());
                 }
             }
             WindowEvent::MouseInput { state, button, .. } => self.input.on_mouse_button(button, state),
@@ -216,10 +214,10 @@ impl ApplicationHandler for App {
     }
 
     fn device_event(&mut self, _el: &ActiveEventLoop, _id: DeviceId, event: DeviceEvent) {
-        if let DeviceEvent::MouseMotion { delta } = event {
-            if self.grabbed {
-                self.input.on_mouse_motion(delta.0, delta.1);
-            }
+        if let DeviceEvent::MouseMotion { delta } = event
+            && self.grabbed
+        {
+            self.input.on_mouse_motion(delta.0, delta.1);
         }
     }
 

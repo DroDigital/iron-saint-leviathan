@@ -879,13 +879,13 @@ impl Renderer {
             pass.set_bind_group(0, &self.globals_bg, &[(vi as u64 * GLOBALS_STRIDE) as u32]);
             pass.set_bind_group(1, &self.tex_bg, &[]);
             pass.set_pipeline(&self.world_opaque);
-            if v.draw_static {
-                if let Some((b, n)) = &self.static_vb {
-                    pass.set_vertex_buffer(0, b.slice(..));
-                    pass.draw(0..*n, 0..1);
-                    self.stats.draw_calls += 1;
-                    self.stats.tris += n / 3;
-                }
+            if v.draw_static
+                && let Some((b, n)) = &self.static_vb
+            {
+                pass.set_vertex_buffer(0, b.slice(..));
+                pass.draw(0..*n, 0..1);
+                self.stats.draw_calls += 1;
+                self.stats.tris += n / 3;
             }
             let draws: [(&wgpu::RenderPipeline, &DynBuf, usize); 3] = [
                 (&self.world_opaque, &self.dyn_opaque[vi], dl.opaque.len()),

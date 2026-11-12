@@ -184,10 +184,10 @@ pub fn find_data_dir() -> Option<std::path::PathBuf> {
     if let Ok(cwd) = std::env::current_dir() {
         cands.push(cwd);
     }
-    if let Ok(exe) = std::env::current_exe() {
-        if let Some(p) = exe.parent() {
-            cands.push(p.to_path_buf());
-        }
+    if let Ok(exe) = std::env::current_exe()
+        && let Some(p) = exe.parent()
+    {
+        cands.push(p.to_path_buf());
     }
     for c in cands {
         let mut d: Option<&Path> = Some(&c);

@@ -242,7 +242,7 @@ mod tests {
         for s in [Shape::Box, Shape::Cylinder, Shape::Sphere, Shape::Cone, Shape::Spike, Shape::Wedge, Shape::Tube] {
             let p = Prim { shape: s, at: [0.0; 3], size: [1.0; 3], rot: [0.0; 3], tex: "plate".into(), col: [200; 3], glow: false };
             let m = prim_mesh(&p);
-            assert!(m.tris() >= 4 && m.verts.len() % 3 == 0, "{s:?}");
+            assert!(m.tris() >= 4 && m.verts.len().is_multiple_of(3), "{s:?}");
         }
     }
     #[test]

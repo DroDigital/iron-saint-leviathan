@@ -143,7 +143,7 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
                     5 => Screen::Versus { sel: 0, a: 0, b: 0 },
                     6 => {
                         let lo = g.active_or_premade(Side::Saint);
-                        g.start_launch(Launch::Arena { loadout: Box::new(lo), back_to_foundry: false });
+                        g.start_launch(Launch::Arena { loadout: Box::new(lo) });
                         std::mem::replace(&mut g.screen, Screen::Mission)
                     }
                     7 => Screen::Card { sel: 0, confirm: false },
@@ -205,10 +205,10 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
                             Screen::Foundry(Box::new(Assembly::new(s, lo)))
                         }
                         "@WAIT" => {
-                            if let Some(c) = g.campaign.as_mut() {
-                                if c.rest() {
-                                    g.toast = Some((format!("THE TIDE TURNS. WEATHER: {}", c.tide.weather.name()), 3.0));
-                                }
+                            if let Some(c) = g.campaign.as_mut()
+                                && c.rest()
+                            {
+                                g.toast = Some((format!("THE TIDE TURNS. WEATHER: {}", c.tide.weather.name()), 3.0));
                             }
                             g.save_card();
                             Screen::WarMap { sel, side }
@@ -305,14 +305,14 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
                     let _ = std::fs::write(dir.join(format!("{}.txt", loadout.name.replace(' ', "_"))), &code);
                     g.toast(format!("EXPORTED: {code}"));
                 }
-            } else if nv == Nav::Confirm {
-                if let BlockData::Build { loadout, .. } = &g.card.entries[sel].data {
-                    let lo = loadout.clone();
-                    if let Some(c) = g.campaign.as_mut() {
-                        c.active[side_ix(lo.side)] = lo.clone();
-                        g.toast(format!("{} IS NOW YOUR ACTIVE {}", lo.name, lo.side.name()));
-                        g.save_card();
-                    }
+            } else if nv == Nav::Confirm
+                && let BlockData::Build { loadout, .. } = &g.card.entries[sel].data
+            {
+                let lo = loadout.clone();
+                if let Some(c) = g.campaign.as_mut() {
+                    c.active[side_ix(lo.side)] = lo.clone();
+                    g.toast(format!("{} IS NOW YOUR ACTIVE {}", lo.name, lo.side.name()));
+                    g.save_card();
                 }
             }
             match nv {
@@ -431,12 +431,11 @@ pub fn update(g: &mut Game, screen: Screen, dt: f32, input: &mut Input, audio: &
             let n = g.run.as_ref().map_or(0, |r| r.offer.len()) + 1;
             match nav(&p, &mut sel, n, audio) {
                 Nav::Confirm => {
-                    if let Some(r) = g.run.as_mut() {
-                        if sel < r.offer.len() {
-                            if let Some(name) = r.draft(&g.content, sel) {
-                                g.toast = Some((format!("DRAFTED {name}"), 3.0));
-                            }
-                        }
+                    if let Some(r) = g.run.as_mut()
+                        && sel < r.offer.len()
+                        && let Some(name) = r.draft(&g.content, sel)
+                    {
+                        g.toast = Some((format!("DRAFTED {name}"), 3.0));
                     }
                     g.start_launch(Launch::RunFight);
                     std::mem::replace(&mut g.screen, Screen::Mission)
@@ -629,7 +628,7 @@ fn update_foundry(g: &mut Game, mut a: Assembly, p: &PlayerInput, dt: f32, audio
                     if let Some(cp) = g.campaign.as_mut() {
                         cp.active[side_ix(a.side)] = lo.clone();
                     }
-                    g.start_launch(Launch::Arena { loadout: Box::new(lo), back_to_foundry: true });
+                    g.start_launch(Launch::Arena { loadout: Box::new(lo) });
                     return std::mem::replace(&mut g.screen, Screen::Mission);
                 }
                 "RENAME" => {
@@ -1101,7 +1100,7 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             views.push((v, dl));
             g.ui.text_center_big(w * 0.5 + 1.0, h * 0.16, "IRON SAINT", col::GOLD, 3.0);
             g.ui.text_center_big(w * 0.5, h * 0.16 + 26.0, "// LEVIATHAN", [140, 220, 230, 255], 2.0);
-            if (tt * 2.0) as u32 % 2 == 0 {
+            if ((tt * 2.0) as u32).is_multiple_of(2) {
                 g.ui.text_center(w * 0.5, h * 0.8, "PRESS START", col::WHITE);
             }
             g.ui.text_center(w * 0.5, h - 12.0, "(C) 1998/2026 HARROWMOUTH. NO MEMORY CARD REQUIRED.", col::DARK);
@@ -1204,7 +1203,13 @@ pub fn draw(g: &mut Game, views: &mut Vec<(View, DrawList)>, post: &mut PostSett
             g.ui.rect(0.0, 0.0, w, h, [10, 10, 30, 255]);
             g.ui.panel(10.0, 40.0, w - 20.0, 80.0);
             g.ui.text(18.0, 46.0, "MEMORY CARD EXCHANGE", col::GOLD);
-            g.ui.text_wrap(18.0, 62.0, w - 36.0, &format!("{text}{}", if (t * 2.0) as u32 % 2 == 0 { "_" } else { " " }), col::WHITE);
+            g.ui.text_wrap(
+                18.0,
+                62.0,
+                w - 36.0,
+                &format!("{text}{}", if ((t * 2.0) as u32).is_multiple_of(2) { "_" } else { " " }),
+                col::WHITE,
+            );
             g.ui.text_wrap(18.0, 100.0, w - 36.0, msg, col::GREY);
         }
         Screen::Archive { tab, sel } => {
@@ -1438,17 +1443,17 @@ fn draw_warmap(g: &mut Game, sel: usize, side: Side) {
         }
         g.ui.text(px + 9.0, y, e, if s { col::GOLD } else { col::WHITE });
     }
-    if let Some(d) = rows.get(sel).and_then(|r| g.content.district(r)) {
-        if let Some(dw) = c.district(&d.id) {
-            g.ui.text(
-                mx,
-                h - 34.0,
-                &format!("{} - {}  CONTROL {:+}  RUIN {}%", d.name, dw.state().name(), dw.control, (dw.ruin * 100.0) as u32),
-                col::WHITE,
-            );
-            let lore = &d.lore[(g.time as usize / 5) % d.lore.len()];
-            g.ui.text(mx, h - 24.0, lore, col::GREY);
-        }
+    if let Some(d) = rows.get(sel).and_then(|r| g.content.district(r))
+        && let Some(dw) = c.district(&d.id)
+    {
+        g.ui.text(
+            mx,
+            h - 34.0,
+            &format!("{} - {}  CONTROL {:+}  RUIN {}%", d.name, dw.state().name(), dw.control, (dw.ruin * 100.0) as u32),
+            col::WHITE,
+        );
+        let lore = &d.lore[(g.time as usize / 5) % d.lore.len()];
+        g.ui.text(mx, h - 24.0, lore, col::GREY);
     }
     if let Some(l) = c.log.last() {
         g.ui.text(mx, 8.0, l, col::GREY);

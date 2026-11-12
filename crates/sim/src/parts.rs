@@ -190,22 +190,21 @@ pub fn roll_quirks(rng: &mut SimRng, content: &Content, side: Side, condition: C
             let p = pool(&[Polarity::Mixed, Polarity::Negative]);
             let n = 1 + rng.below(2);
             for _ in 0..n {
-                if let Some(q) = rng.pick(&p) {
-                    if !out.contains(&q.id) {
-                        out.push(q.id.clone());
-                    }
+                if let Some(q) = rng.pick(&p)
+                    && !out.contains(&q.id)
+                {
+                    out.push(q.id.clone());
                 }
             }
         }
     }
     if imported {
         let p: Vec<&QuirkDef> = content.quirks.iter().filter(|q| q.import_only).collect();
-        if rng.chance(0.5) {
-            if let Some(q) = rng.pick(&p) {
-                if !out.contains(&q.id) {
-                    out.push(q.id.clone());
-                }
-            }
+        if rng.chance(0.5)
+            && let Some(q) = rng.pick(&p)
+            && !out.contains(&q.id)
+        {
+            out.push(q.id.clone());
         }
     }
     out

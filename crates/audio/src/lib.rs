@@ -231,34 +231,35 @@ impl Audio {
 
     /// Request a layer; the switch happens on the next beat.
     pub fn set_layer(&mut self, l: Layer) {
-        if let Some(ms) = self.music.as_mut() {
-            if ms.current != l as usize && ms.pending != Some(l as usize) {
-                ms.pending = Some(l as usize);
-            }
+        if let Some(ms) = self.music.as_mut()
+            && ms.current != l as usize
+            && ms.pending != Some(l as usize)
+        {
+            ms.pending = Some(l as usize);
         }
     }
 
     pub fn update(&mut self, dt: f32) {
         self.time += dt;
-        if let Some((key, rx)) = &self.loading {
-            if let Ok(song) = rx.try_recv() {
-                let key = *key;
-                self.loading = None;
-                self.start_song(key, song);
-            }
+        if let Some((key, rx)) = &self.loading
+            && let Ok(song) = rx.try_recv()
+        {
+            let key = *key;
+            self.loading = None;
+            self.start_song(key, song);
         }
         let mv = self.settings.music * self.settings.master;
         if let Some(ms) = self.music.as_mut() {
             let before = (ms.elapsed / ms.beat).floor();
             ms.elapsed += dt;
             let after = (ms.elapsed / ms.beat).floor();
-            if after != before {
-                if let Some(p) = ms.pending.take() {
-                    let tw = Tween { duration: Duration::from_secs_f32(ms.beat), ..Default::default() };
-                    ms.handles[ms.current].set_volume(Decibels::SILENCE, tw);
-                    ms.handles[p].set_volume(db(mv), tw);
-                    ms.current = p;
-                }
+            if after != before
+                && let Some(p) = ms.pending.take()
+            {
+                let tw = Tween { duration: Duration::from_secs_f32(ms.beat), ..Default::default() };
+                ms.handles[ms.current].set_volume(Decibels::SILENCE, tw);
+                ms.handles[p].set_volume(db(mv), tw);
+                ms.current = p;
             }
         }
     }

@@ -431,7 +431,7 @@ impl Visuals {
         self.put(dl, content, p, Slot::Legs, Group::Left, body * tr(-0.6, 0.8, -0.2) * rot(0.0, 0.0, flap + spread), light);
         self.put(dl, content, p, Slot::Legs, Group::Right, body * tr(0.6, 0.8, -0.2) * rot(0.0, 0.0, -flap - spread), light);
         let reach = match p.anim {
-            Anim::Attack { a, .. } => -1.0 * a,
+            Anim::Attack { a, .. } => -a,
             _ => 0.0,
         };
         self.put(dl, content, p, Slot::LeftArm, Group::All, body * tr(-0.9, -0.6, 1.0) * rot(reach, 0.0, 0.0), light);
@@ -525,7 +525,7 @@ impl Visuals {
         self.put(dl, content, p, Slot::Core, Group::All, body * tr(0.0, 0.0, 0.8), light);
         self.put(dl, content, p, Slot::Back, Group::All, body * tr(0.0, 1.2, -0.4), light);
         let reach = match p.anim {
-            Anim::Attack { a, .. } => -1.0 * a,
+            Anim::Attack { a, .. } => -a,
             _ => 0.0,
         };
         self.put(dl, content, p, Slot::LeftArm, Group::All, body * tr(-1.4, -0.4, 1.6) * rot(s + reach, 0.0, 0.0), light);
@@ -600,10 +600,10 @@ pub fn pose_of<'a>(f: &'a Fighter, content: &Content, pos: Vec3, yaw: f32, time:
         alpha = if (time * 9.0).sin() > 0.0 { 150 } else { 90 };
         tint *= Vec3::new(0.7, 0.9, 1.4);
     }
-    if let Act::Dead = f.act {
-        if f.despawn > 150 {
-            alpha = 120;
-        }
+    if let Act::Dead = f.act
+        && f.despawn > 150
+    {
+        alpha = 120;
     }
     Pose {
         id: f.id,

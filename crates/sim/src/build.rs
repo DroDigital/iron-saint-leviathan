@@ -194,10 +194,10 @@ fn first_move<'a>(content: &'a Content, slots: &[Option<(&'a PartDef, bool)>; 7]
     for s in order {
         if let Some((d, _)) = slots[s.index()] {
             for m in &d.moves {
-                if let Some(md) = content.mv(m) {
-                    if kinds.contains(&md.kind) {
-                        return Some(MoveRef { id: m.clone(), slot: *s });
-                    }
+                if let Some(md) = content.mv(m)
+                    && kinds.contains(&md.kind)
+                {
+                    return Some(MoveRef { id: m.clone(), slot: *s });
                 }
             }
         }
@@ -219,34 +219,32 @@ pub fn resolve(lo: &Loadout, content: &Content, extra: &[Effect], destroyed: [bo
     let mut complexity = 0u32;
     let mut quirk_count = 0u32;
     for (i, inst) in lo.slots.iter().enumerate() {
-        if let Some(inst) = inst {
-            if let Some(d) = content.part(&inst.def) {
-                filled += 1;
-                complexity += d.complexity as u32;
-                let heretic = d.side != lo.side;
-                if heretic {
-                    heretic_count += 1;
-                }
-                for q in &inst.quirks {
-                    if let Some(qd) = content.quirk(q) {
-                        quirk_count += 1;
-                        for e in &qd.effects {
-                            fx.add(e, inst.origin.owner_tag());
-                        }
+        if let Some(inst) = inst
+            && let Some(d) = content.part(&inst.def)
+        {
+            filled += 1;
+            complexity += d.complexity as u32;
+            let heretic = d.side != lo.side;
+            if heretic {
+                heretic_count += 1;
+            }
+            for q in &inst.quirks {
+                if let Some(qd) = content.quirk(q) {
+                    quirk_count += 1;
+                    for e in &qd.effects {
+                        fx.add(e, inst.origin.owner_tag());
                     }
                 }
-                if !destroyed[i] {
-                    defs[i] = Some((d, heretic));
-                }
+            }
+            if !destroyed[i] {
+                defs[i] = Some((d, heretic));
             }
         }
     }
     let heretic_form = heretic_count as f32 > filled.max(1) as f32 * 0.5;
-    if heretic_form {
-        if let Some(q) = content.quirk("heretic_instability") {
-            for e in &q.effects {
-                fx.add(e, None);
-            }
+    if heretic_form && let Some(q) = content.quirk("heretic_instability") {
+        for e in &q.effects {
+            fx.add(e, None);
         }
     }
     let sync = (1.0 - heretic_count as f32 * 0.14).clamp(0.0, 1.0);
@@ -424,9 +422,8 @@ pub fn validate(lo: &Loadout, b: &ResolvedBuild, content: &Content) -> Vec<Build
     if b.speed < 3.0 {
         out.push(BuildIssue::NoDodge);
     }
-    match b.heal {
-        HealKind::RepairCharges(0) => out.push(BuildIssue::NoHeal),
-        _ => {}
+    if let HealKind::RepairCharges(0) = b.heal {
+        out.push(BuildIssue::NoHeal)
     }
     let posture = b.can_parry
         || [&b.moves.light, &b.moves.heavy, &b.moves.bash, &b.moves.special]

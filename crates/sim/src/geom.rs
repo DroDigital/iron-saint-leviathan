@@ -137,7 +137,7 @@ mod tests {
         let push = cap.push_out_aabb(&b).unwrap();
         assert!(push.x > 0.0);
         let moved = Capsule { base: cap.base + Vec3::new(push.x, 0.0, push.y), ..cap };
-        assert!(moved.push_out_aabb(&b).map_or(true, |p| p.length() < 1e-3));
+        assert!(moved.push_out_aabb(&b).is_none_or(|p| p.length() < 1e-3));
     }
     #[test]
     fn swept_sphere_catches_tunnelling() {

@@ -88,7 +88,7 @@ fn texel(name: &str, x: u32, y: u32) -> [f32; 4] {
     match name {
         "white" => [1.0, 1.0, 1.0, 1.0],
         "plate" => {
-            let seam = (x % 32 == 0 || y % 24 == 0) as u8 as f32;
+            let seam = (x.is_multiple_of(32) || y.is_multiple_of(24)) as u8 as f32;
             let rivet = ((x % 32 == 3 || x % 32 == 28) && (y % 24 == 3 || y % 24 == 20)) as u8 as f32;
             g(0.62 + n * 0.25 - seam * 0.3 + rivet * 0.25)
         }
@@ -107,7 +107,7 @@ fn texel(name: &str, x: u32, y: u32) -> [f32; 4] {
         "scale" => {
             // Overlapping scale rows.
             let row = (y / 8) as f32;
-            let off = if (y / 8) % 2 == 0 { 0.0 } else { 4.0 };
+            let off = if (y / 8).is_multiple_of(2) { 0.0 } else { 4.0 };
             let lx = ((fx + off) % 8.0) - 4.0;
             let ly = (fy % 8.0) - 1.0;
             let d = (lx * lx + ly * ly).sqrt() / 6.0;
@@ -144,19 +144,19 @@ fn texel(name: &str, x: u32, y: u32) -> [f32; 4] {
         }
         "tread" => g(if (y % 8) < 3 { 0.25 } else { 0.55 } + n * 0.1),
         "hazard" => {
-            let s = ((x + y) / 8) % 2 == 0;
+            let s = ((x + y) / 8).is_multiple_of(2);
             if s { [0.95, 0.8, 0.1, 1.0] } else { [0.1, 0.1, 0.1, 1.0] }
         }
         "concrete" => g(0.6 + n * 0.3 + (hash(x as i32, y as i32, 5) - 0.5) * 0.08),
         "brick" => {
             let row = y / 8;
-            let off = if row % 2 == 0 { 0 } else { 8 };
-            let mortar = y % 8 == 0 || (x + off) % 16 == 0;
+            let off = if row.is_multiple_of(2) { 0 } else { 8 };
+            let mortar = y.is_multiple_of(8) || (x + off).is_multiple_of(16);
             if mortar { [0.75, 0.72, 0.66, 1.0] } else { [0.62 + n * 0.25, 0.32 + n * 0.1, 0.25, 1.0] }
         }
         "corrugated" => g(0.5 + (fx * 0.8).sin() * 0.15 + n * 0.2),
         "stone" => {
-            let blk = (y % 16 == 0) || ((x + (y / 16) * 11) % 21 == 0);
+            let blk = y.is_multiple_of(16) || (x + (y / 16) * 11).is_multiple_of(21);
             g(if blk { 0.4 } else { 0.68 + n * 0.25 })
         }
         "wood" => g(0.5 + ((fx + n * 8.0) * 0.5).sin() * 0.1 + n * 0.15),

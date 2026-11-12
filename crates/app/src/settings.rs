@@ -104,13 +104,6 @@ impl Settings {
             Palette::Tritanopia => [230, 40, 120, 255],
         }
     }
-    pub fn safe(&self) -> [u8; 4] {
-        match self.palette {
-            Palette::Standard => [110, 220, 120, 255],
-            Palette::Deuteranopia | Palette::Protanopia => [80, 160, 255, 255],
-            Palette::Tritanopia => [60, 200, 200, 255],
-        }
-    }
 
     pub fn load(path: &std::path::Path) -> Settings {
         match isl_save::load_ron::<Settings>(path) {

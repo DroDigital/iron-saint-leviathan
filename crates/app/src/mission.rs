@@ -73,7 +73,6 @@ pub struct Mission {
     pub hit_stop: f32,
     pub reverb: Reverb,
     pub water_tint: [u8; 3],
-    pub district: String,
     pub photo: bool,
     pub photo_cam: (Vec3, f32, f32),
     pub boss_seen: bool,
@@ -132,7 +131,6 @@ impl Mission {
             hit_stop: 0.0,
             reverb: d.reverb,
             water_tint,
-            district: d.id.clone(),
             photo: false,
             photo_cam: (Vec3::ZERO, 0.0, 0.0),
             boss_seen: false,
@@ -150,10 +148,6 @@ impl Mission {
             m.fog_far += p.build.fog_vision;
         }
         m
-    }
-
-    pub fn player(&self) -> Option<&Fighter> {
-        self.world.player(0)
     }
 
     pub fn note(&mut self, text: impl Into<String>, color: [u8; 4]) {
@@ -319,7 +313,7 @@ impl Mission {
         }
         self.vfx.update(dt);
         // Ambient VFX from hazards and fires.
-        if (self.time * 20.0) as u32 % 3 == 0 {
+        if ((self.time * 20.0) as u32).is_multiple_of(3) {
             let hz: Vec<_> = self.world.hazards.iter().map(|h| (h.kind, h.pos, h.radius)).collect();
             for (k, p, r) in hz {
                 match k {
@@ -373,12 +367,12 @@ impl Mission {
                     } else {
                         audio.play(Sfx::Swing, Some(*pos), 0.5, pitch);
                     }
-                    if let Some(m) = content.mv(mv) {
-                        if matches!(*telegraph, Telegraph::Ring) || (m.kind == MoveKind::Burst && *boss) {
-                            let r = m.radius * f.size();
-                            let secs = (m.windup + m.feint) as f32 / 60.0 + 0.1;
-                            self.vfx.ring(*pos, r, r, secs, settings.danger(), true);
-                        }
+                    if let Some(m) = content.mv(mv)
+                        && (matches!(*telegraph, Telegraph::Ring) || (m.kind == MoveKind::Burst && *boss))
+                    {
+                        let r = m.radius * f.size();
+                        let secs = (m.windup + m.feint) as f32 / 60.0 + 0.1;
+                        self.vfx.ring(*pos, r, r, secs, settings.danger(), true);
                     }
                 }
                 SimEvent::Hit { target, dmg, pos, blocked, heavy, attacker, .. } => {
@@ -522,10 +516,10 @@ impl Mission {
                 }
                 SimEvent::BossAwake { id } => {
                     let f = &self.world.fighters[*id as usize];
-                    if let FighterKind::Boss(b) = &f.kind {
-                        if let Some(bd) = content.boss(b) {
-                            self.intro = Some(Intro { title: bd.name.clone(), sub: bd.title.clone(), card: bd.intro.clone(), ttl: 4.5 });
-                        }
+                    if let FighterKind::Boss(b) = &f.kind
+                        && let Some(bd) = content.boss(b)
+                    {
+                        self.intro = Some(Intro { title: bd.name.clone(), sub: bd.title.clone(), card: bd.intro.clone(), ttl: 4.5 });
                     }
                     self.boss_seen = true;
                     audio.play(Sfx::Bell, None, 0.8, 0.5);
@@ -681,15 +675,15 @@ impl Mission {
                 crate::vfx::Vfx::blob(dl, pos, f.radius() * 1.1, g);
             }
             // Weak points on huge bosses: revealed by head senses or while broken.
-            if let FighterKind::Boss(b) = &f.kind {
-                if let Some(bd) = content.boss(b) {
-                    let reveal = matches!(f.act, Act::PostureBroken) || self.world.player(0).is_some_and(|p| p.build.reveal);
-                    if bd.huge && reveal {
-                        for wp in bd.weak_points.iter().filter(|w| f.part_alive(w.slot)) {
-                            let p = pos + Vec3::Y * f.height() * wp.height;
-                            let pulse = if settings.photosensitive { 1.0 } else { 0.7 + 0.3 * (t * 6.0).sin() };
-                            billboard(&mut dl.add, p, 3.0 * pulse, cr, cu, textures::layer("particle"), [255, 230, 120, 200]);
-                        }
+            if let FighterKind::Boss(b) = &f.kind
+                && let Some(bd) = content.boss(b)
+            {
+                let reveal = matches!(f.act, Act::PostureBroken) || self.world.player(0).is_some_and(|p| p.build.reveal);
+                if bd.huge && reveal {
+                    for wp in bd.weak_points.iter().filter(|w| f.part_alive(w.slot)) {
+                        let p = pos + Vec3::Y * f.height() * wp.height;
+                        let pulse = if settings.photosensitive { 1.0 } else { 0.7 + 0.3 * (t * 6.0).sin() };
+                        billboard(&mut dl.add, p, 3.0 * pulse, cr, cu, textures::layer("particle"), [255, 230, 120, 200]);
                     }
                 }
             }

@@ -128,10 +128,11 @@ impl Archive {
                     }
                 }
                 // Signature traits only apply to their own chassis.
-                if Some(id.as_str()) == chassis && lic.rank >= 5 {
-                    if let Some(e) = &cd.signature_effect {
-                        v.push(e.clone());
-                    }
+                if Some(id.as_str()) == chassis
+                    && lic.rank >= 5
+                    && let Some(e) = &cd.signature_effect
+                {
+                    v.push(e.clone());
                 }
             }
         }
@@ -151,10 +152,10 @@ impl Archive {
         self.record.deaths += stats.deaths;
         self.record.nemeses_defeated += stats.nemeses_killed.len() as u32;
         for p in harvested {
-            if self.register(&p.def) {
-                if let Some(d) = content.part(&p.def) {
-                    out.push(format!("CODEX: {} registered", d.name));
-                }
+            if self.register(&p.def)
+                && let Some(d) = content.part(&p.def)
+            {
+                out.push(format!("CODEX: {} registered", d.name));
             }
             if content.part(&p.def).is_some_and(|d| d.side != side) {
                 self.cross_harvests += 1;

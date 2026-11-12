@@ -90,10 +90,8 @@ impl Content {
                         e.push(format!("legs `{}` lack locomotion", p.id));
                     }
                 }
-                Slot::Core => {
-                    if p.stamina.is_none() {
-                        e.push(format!("core `{}` lacks a stamina kind", p.id));
-                    }
+                Slot::Core if p.stamina.is_none() => {
+                    e.push(format!("core `{}` lacks a stamina kind", p.id));
                 }
                 _ => {}
             }
@@ -203,10 +201,10 @@ impl Content {
                     }
                 }
             }
-            if let Some(ch) = &b.chassis {
-                if self.chassis_def(ch).is_none() {
-                    e.push(format!("boss `{}` chassis `{ch}` unknown", b.id));
-                }
+            if let Some(ch) = &b.chassis
+                && self.chassis_def(ch).is_none()
+            {
+                e.push(format!("boss `{}` chassis `{ch}` unknown", b.id));
             }
         }
         let normal = self.districts.iter().filter(|d| !d.finale).count();
@@ -254,10 +252,10 @@ impl Content {
                     }
                 }
             }
-            if let Some(q) = &ev.quirk {
-                if self.quirk(q).is_none() {
-                    e.push(format!("event `{}` quirk unknown", ev.id));
-                }
+            if let Some(q) = &ev.quirk
+                && self.quirk(q).is_none()
+            {
+                e.push(format!("event `{}` quirk unknown", ev.id));
             }
         }
         if self.disc_rot.len() != 10 {

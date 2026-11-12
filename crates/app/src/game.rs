@@ -33,7 +33,7 @@ pub enum Launch {
     War { district: String, side: Side, finale: Option<String> },
     RunFight,
     Gauntlet { side: Side, queue: Vec<NemesisSpec>, index: usize },
-    Arena { loadout: Box<Loadout>, back_to_foundry: bool },
+    Arena { loadout: Box<Loadout> },
     Versus { a: Box<Loadout>, b: Box<Loadout> },
 }
 
@@ -96,13 +96,13 @@ pub fn read_content() -> (Content, Option<PathBuf>) {
     // Release: game.pak next to the executable. Dev: loose data/ (hot reloadable).
     if let Ok(exe) = std::env::current_exe() {
         for cand in [exe.with_file_name("game.pak"), exe.parent().map(|p| p.join("../Resources/game.pak")).unwrap_or_default()] {
-            if let Ok(bytes) = std::fs::read(&cand) {
-                if let Ok(files) = isl_assets::pak::read(&bytes) {
-                    let set: FileSet = files.into_iter().map(|(k, v)| (k, String::from_utf8_lossy(&v).to_string())).collect();
-                    match Content::from_files(&set) {
-                        Ok(c) => return (c, None),
-                        Err(e) => tracing::error!("game.pak invalid: {e}"),
-                    }
+            if let Ok(bytes) = std::fs::read(&cand)
+                && let Ok(files) = isl_assets::pak::read(&bytes)
+            {
+                let set: FileSet = files.into_iter().map(|(k, v)| (k, String::from_utf8_lossy(&v).to_string())).collect();
+                match Content::from_files(&set) {
+                    Ok(c) => return (c, None),
+                    Err(e) => tracing::error!("game.pak invalid: {e}"),
                 }
             }
         }
@@ -215,10 +215,10 @@ impl Game {
                 self.toast(format!("MEMORY CARD: {err}. DELETE SOMETHING TO SAVE."));
             }
         }
-        if !self.headless {
-            if let Err(e) = isl_save::save_card(&self.paths.card(), &self.card) {
-                self.toast(format!("SAVE FAILED: {e}"));
-            }
+        if !self.headless
+            && let Err(e) = isl_save::save_card(&self.paths.card(), &self.card)
+        {
+            self.toast(format!("SAVE FAILED: {e}"));
         }
     }
 
@@ -337,20 +337,20 @@ impl Game {
             _ => None,
         };
         let last = self.campaign.as_ref().map(|c| c.last_side);
-        if let (Some(s), Some(ls)) = (side, last) {
-            if s != ls {
-                if let Some(c) = self.campaign.as_mut() {
-                    c.last_side = s;
-                }
-                self.screen = Screen::DiscSwap { t: 0.0, to: s, next: Box::new(l) };
-                return;
+        if let (Some(s), Some(ls)) = (side, last)
+            && s != ls
+        {
+            if let Some(c) = self.campaign.as_mut() {
+                c.last_side = s;
             }
+            self.screen = Screen::DiscSwap { t: 0.0, to: s, next: Box::new(l) };
+            return;
         }
-        if let (Launch::RunFight, Some(s)) = (&l, side) {
-            if self.run.as_ref().is_some_and(|r| r.index > 0) {
-                self.screen = Screen::DiscSwap { t: 0.0, to: s, next: Box::new(l) };
-                return;
-            }
+        if let (Launch::RunFight, Some(s)) = (&l, side)
+            && self.run.as_ref().is_some_and(|r| r.index > 0)
+        {
+            self.screen = Screen::DiscSwap { t: 0.0, to: s, next: Box::new(l) };
+            return;
         }
         let lore = (self.time * 7.0) as usize;
         self.screen = Screen::Loading { t: 0.0, lore, next: Box::new(l) };
@@ -405,28 +405,26 @@ impl Game {
                 } else if self.campaign.as_ref().is_some_and(|c| c.missions[0] + c.missions[1] >= 2) {
                     // A nemesis may stalk the district: one of your saved builds from the other side.
                     let pool = self.nemeses_of(side.other());
-                    if !pool.is_empty() && (seed % 3 == 0) {
+                    if !pool.is_empty() && seed.is_multiple_of(3) {
                         cfg.static_night = vec![pool[(seed as usize / 3) % pool.len()].clone()];
                     }
                 }
                 let (pfx, efx) = self.effects_for(*side, lo.chassis.as_deref());
                 cfg.player_fx = pfx;
                 cfg.enemy_fx = efx;
-                if let Some(ending) = finale {
-                    if ending == "tide_between" {
-                        // Your best custom build of the other side, driven by your own ghost.
-                        let other = self.best_build(side.other());
-                        let spec = self.nemesis_from(&other, &self.card.system.profile, war, 0, Some("YOUR OTHER HALF".into()), 3);
-                        cfg.spawns = Some(vec![SpawnSpec::Nemesis(Box::new(spec))]);
-                        cfg.mode = Mode::Gauntlet;
-                    }
+                if let Some(ending) = finale
+                    && ending == "tide_between"
+                {
+                    // Your best custom build of the other side, driven by your own ghost.
+                    let other = self.best_build(side.other());
+                    let spec = self.nemesis_from(&other, &self.card.system.profile, war, 0, Some("YOUR OTHER HALF".into()), 3);
+                    cfg.spawns = Some(vec![SpawnSpec::Nemesis(Box::new(spec))]);
+                    cfg.mode = Mode::Gauntlet;
                 }
                 let mut w = World::new(c, cfg, vec![lo]);
                 let supply = events.iter().any(|e| c.events.iter().any(|x| &x.id == e && x.kind == EventKind::SupplyDrop));
-                if supply {
-                    if let Some(pid) = w.player_id(0) {
-                        w.fighters[pid as usize].currency += 400;
-                    }
+                if supply && let Some(pid) = w.player_id(0) {
+                    w.fighters[pid as usize].currency += 400;
                 }
                 let k = match finale {
                     Some(e) => MissionKind::Finale { ending: e.clone() },
@@ -484,7 +482,7 @@ impl Game {
                 };
                 (World::new(c, cfg, vec![lo]), MissionKind::Gauntlet)
             }
-            Launch::Arena { loadout, .. } => {
+            Launch::Arena { loadout } => {
                 let dummy = if loadout.side == Side::Saint { "dummy_kaiju" } else { "dummy_saint" };
                 let habits = self.card.system.profile.to_params();
                 let cfg = WorldConfig {
@@ -538,17 +536,16 @@ impl Game {
         if let Launch::Arena { .. } = l {
             m.note("TEST ARENA: LEFT DUMMY IS INERT, RIGHT DUMMY REPLAYS YOUR HABITS", [200, 200, 220, 255]);
         }
-        if let Some(n) = m.world.fighters.iter().find(|f| matches!(f.kind, FighterKind::Nemesis { .. })) {
-            if let Some(spec) = m
+        if let Some(n) = m.world.fighters.iter().find(|f| matches!(f.kind, FighterKind::Nemesis { .. }))
+            && let Some(spec) = m
                 .world
                 .cfg
                 .spawns
                 .as_ref()
                 .and_then(|s| s.iter().find_map(|x| if let SpawnSpec::Nemesis(n) = x { Some(n.clone()) } else { None }))
                 .or(m.world.cfg.static_night.first().cloned().map(Box::new))
-            {
-                m.intro = Some(crate::mission::Intro { title: n.name.clone(), sub: "NEMESIS".into(), card: spec.intro.clone(), ttl: 5.0 });
-            }
+        {
+            m.intro = Some(crate::mission::Intro { title: n.name.clone(), sub: "NEMESIS".into(), card: spec.intro.clone(), ttl: 5.0 });
         }
         let d = c.district(&m.world.cfg.district).unwrap();
         audio.load_music(isl_sim::rng::hash_str(&d.id) ^ m.world.cfg.state as u64, &d.music);
@@ -593,13 +590,12 @@ impl Game {
             self.card.system.archive.note_usage(p.loadout.hash(), m.play_ticks);
         }
         // Rage-quit detection for THE GRUDGE: quitting within 20 s of dying.
-        if end == End::Retreat {
-            if let (Some(d), Some(p)) = (m.last_death_tick, &player) {
-                if m.world.tick.saturating_sub(d) < 1200 {
-                    let (w, t) = self.campaign.as_ref().map_or((0, 0), |c| (c.war, c.tide.tide_count));
-                    self.card.system.archive.set_rival("THE GRUDGE", p.loadout.clone(), w, t);
-                }
-            }
+        if end == End::Retreat
+            && let (Some(d), Some(p)) = (m.last_death_tick, &player)
+            && m.world.tick.saturating_sub(d) < 1200
+        {
+            let (w, t) = self.campaign.as_ref().map_or((0, 0), |c| (c.war, c.tide.tide_count));
+            self.card.system.archive.set_rival("THE GRUDGE", p.loadout.clone(), w, t);
         }
         // Champion: most-used build at its best.
         if let Some(p) = &player {
@@ -766,12 +762,13 @@ impl Game {
         let mut next = Screen::Corrupt { sel: 0, ending: ending.to_string() };
         // Disc 3: the corrupted chain has reached three wars and you found the tide between.
         let chain = self.card.corrupted().map_or(0, |(_, _, _, ch)| ch);
-        if ending == "tide_between" && chain >= 2 {
-            if let Some(d3) = c.endings.iter().find(|e| e.id == "disc3") {
-                let mut lines = d3.card.clone();
-                lines.extend(c.lore.disc3.clone());
-                next = Screen::Cutscene(Box::new(Fmv::ending("disc3", lines, Box::new(next))));
-            }
+        if ending == "tide_between"
+            && chain >= 2
+            && let Some(d3) = c.endings.iter().find(|e| e.id == "disc3")
+        {
+            let mut lines = d3.card.clone();
+            lines.extend(c.lore.disc3.clone());
+            next = Screen::Cutscene(Box::new(Fmv::ending("disc3", lines, Box::new(next))));
         }
         let lines = e.map_or(vec![ending.to_string()], |e| {
             let mut v = vec![e.name.clone()];
@@ -827,18 +824,16 @@ impl Game {
         let seed = (self.time * 977.0) as u64 ^ (war as u64) << 20 ^ 0x1998;
         let mut camp = Campaign::new(c, war, seed, cond, Loadout::premade(s, c, 10), Loadout::premade(k, c, 30));
         camp.disc_rot = rot;
-        if use_corrupt {
-            if let Some((_, item, _, _)) = self.card.corrupted() {
-                match item.clone() {
-                    CorruptItem::Part(mut p) => {
-                        if !p.quirks.iter().any(|q| q == "corrupted") {
-                            p.quirks.push("corrupted".into());
-                        }
-                        p.origin = Origin::Corrupted { war: war - 1 };
-                        camp.store_parts(vec![p], c);
+        if use_corrupt && let Some((_, item, _, _)) = self.card.corrupted() {
+            match item.clone() {
+                CorruptItem::Part(mut p) => {
+                    if !p.quirks.iter().any(|q| q == "corrupted") {
+                        p.quirks.push("corrupted".into());
                     }
-                    CorruptItem::Trait(t) => camp.omens.push(t),
+                    p.origin = Origin::Corrupted { war: war - 1 };
+                    camp.store_parts(vec![p], c);
                 }
+                CorruptItem::Trait(t) => camp.omens.push(t),
             }
         }
         self.campaign = Some(camp);
@@ -1035,12 +1030,12 @@ impl Game {
 
     /// Feed mission events into the static mesh rebuild request.
     pub fn take_static(&mut self) -> Option<Vec<Vertex>> {
-        if let Some(m) = self.mission.as_mut() {
-            if m.static_dirty {
-                m.static_dirty = false;
-                let d = self.content.district(&m.world.cfg.district).unwrap();
-                return Some(crate::district_mesh::build(&m.world.city, d, &m.light));
-            }
+        if let Some(m) = self.mission.as_mut()
+            && m.static_dirty
+        {
+            m.static_dirty = false;
+            let d = self.content.district(&m.world.cfg.district).unwrap();
+            return Some(crate::district_mesh::build(&m.world.city, d, &m.light));
         }
         self.pending_static.take()
     }

@@ -211,10 +211,10 @@ impl Recorder {
                             };
                             self.profile.kinds[k] += 1;
                         }
-                        if let Some((prev, t)) = &self.last_attack {
-                            if tick - t < 70 {
-                                *self.profile.combos.entry(format!("{prev}>{mv}")).or_default() += 1;
-                            }
+                        if let Some((prev, t)) = &self.last_attack
+                            && tick - t < 70
+                        {
+                            *self.profile.combos.entry(format!("{prev}>{mv}")).or_default() += 1;
                         }
                         self.last_attack = Some((mv.clone(), tick));
                     } else if world.fighters.get(*id as usize).is_some_and(|f| f.team.hostile(world.fighters[me as usize].team)) {
@@ -233,7 +233,7 @@ impl Recorder {
             }
         }
         self.feints.retain(|(_, t, w)| tick < t + *w as u64 + 40);
-        if tick % 30 == 0 {
+        if tick.is_multiple_of(30) {
             let f = &world.fighters[me as usize];
             if !matches!(f.act, Act::Dead) {
                 let d = world

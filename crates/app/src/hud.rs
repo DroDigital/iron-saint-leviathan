@@ -89,81 +89,81 @@ pub fn draw(ui: &mut Ui, m: &Mission, content: &Content, settings: &Settings, us
         ui.text_right(vx + vw - 6.0, vy + 6.0, &s, col::GREY);
     }
     // Lock-on reticle and target part readout.
-    if let Some(l) = f.lock {
-        if let Some(t) = m.world.fighters.get(l.target as usize) {
-            let height = t.height()
-                * if l.slot == Slot::Head {
-                    0.9
-                } else if l.slot == Slot::Legs {
-                    0.2
-                } else {
-                    0.55
-                };
-            let (tp, _) = m.interp(t.id as usize, m.alpha());
-            let wp = tp + glam::Vec3::Y * (height + t.altitude);
-            if let Some(s) = Mission::project(view, wp) {
-                let pulse = if matches!(t.act, Act::PostureBroken) { settings.danger() } else { col::WHITE };
-                // Diamond reticle (shape, not just colour).
-                ui.text(s.x - 2.5, s.y - 10.0, &icon::DOWN.to_string(), pulse);
-                ui.text(s.x - 2.5, s.y + 4.0, &icon::UP.to_string(), pulse);
-                ui.text(s.x - 10.0, s.y - 3.0, &icon::RIGHT.to_string(), pulse);
-                ui.text(s.x + 5.0, s.y - 3.0, &icon::LEFT.to_string(), pulse);
+    if let Some(l) = f.lock
+        && let Some(t) = m.world.fighters.get(l.target as usize)
+    {
+        let height = t.height()
+            * if l.slot == Slot::Head {
+                0.9
+            } else if l.slot == Slot::Legs {
+                0.2
+            } else {
+                0.55
+            };
+        let (tp, _) = m.interp(t.id as usize, m.alpha());
+        let wp = tp + glam::Vec3::Y * (height + t.altitude);
+        if let Some(s) = Mission::project(view, wp) {
+            let pulse = if matches!(t.act, Act::PostureBroken) { settings.danger() } else { col::WHITE };
+            // Diamond reticle (shape, not just colour).
+            ui.text(s.x - 2.5, s.y - 10.0, &icon::DOWN.to_string(), pulse);
+            ui.text(s.x - 2.5, s.y + 4.0, &icon::UP.to_string(), pulse);
+            ui.text(s.x - 10.0, s.y - 3.0, &icon::RIGHT.to_string(), pulse);
+            ui.text(s.x + 5.0, s.y - 3.0, &icon::LEFT.to_string(), pulse);
+        }
+        let px = vx + vw - (vw * 0.4).min(120.0) - 6.0;
+        let py = vy + 18.0;
+        ui.text(px, py, &t.name, col::WHITE);
+        let show_hp = f.build.reveal || t.kind.is_bossish() || true;
+        let mut ly = py + 10.0;
+        for s in Slot::ALL {
+            if t.loadout.get(s).is_none() {
+                continue;
             }
-            let px = vx + vw - (vw * 0.4).min(120.0) - 6.0;
-            let py = vy + 18.0;
-            ui.text(px, py, &t.name, col::WHITE);
-            let show_hp = f.build.reveal || t.kind.is_bossish() || true;
-            let mut ly = py + 10.0;
-            for s in Slot::ALL {
-                if t.loadout.get(s).is_none() {
-                    continue;
-                }
-                let maxhp = t.build.parts[s.index()].as_ref().map(|p| p.hp);
-                let frac = if t.destroyed[s.index()] { 0.0 } else { maxhp.map_or(0.0, |mx| t.part_hp[s.index()] / mx) };
-                let sel = s == l.slot;
-                let c = if t.destroyed[s.index()] {
-                    col::DARK
-                } else if sel {
-                    col::GOLD
-                } else {
-                    col::GREY
-                };
-                let short = s.short_for(t.loadout.side);
-                ui.text(px, ly, &format!("{}{}", if sel { icon::CURSOR } else { ' ' }, short), c);
-                if show_hp && !t.destroyed[s.index()] {
-                    ui.bar(px + 62.0, ly + 2.0, 40.0, 3.0, frac, if sel { col::GOLD } else { [150, 150, 160, 255] }, [20, 20, 20, 255]);
-                }
-                ly += 8.0;
+            let maxhp = t.build.parts[s.index()].as_ref().map(|p| p.hp);
+            let frac = if t.destroyed[s.index()] { 0.0 } else { maxhp.map_or(0.0, |mx| t.part_hp[s.index()] / mx) };
+            let sel = s == l.slot;
+            let c = if t.destroyed[s.index()] {
+                col::DARK
+            } else if sel {
+                col::GOLD
+            } else {
+                col::GREY
+            };
+            let short = s.short_for(t.loadout.side);
+            ui.text(px, ly, &format!("{}{}", if sel { icon::CURSOR } else { ' ' }, short), c);
+            if show_hp && !t.destroyed[s.index()] {
+                ui.bar(px + 62.0, ly + 2.0, 40.0, 3.0, frac, if sel { col::GOLD } else { [150, 150, 160, 255] }, [20, 20, 20, 255]);
             }
-            if matches!(t.act, Act::PostureBroken) {
-                let k = prompt(&settings.bindings, Action::Heavy, using_pad);
-                ui.text_center(vx + vw * 0.5, vy + vh * 0.62, &format!("[{k}] SEVER"), settings.danger());
-            }
+            ly += 8.0;
+        }
+        if matches!(t.act, Act::PostureBroken) {
+            let k = prompt(&settings.bindings, Action::Heavy, using_pad);
+            ui.text_center(vx + vw * 0.5, vy + vh * 0.62, &format!("[{k}] SEVER"), settings.danger());
         }
     }
     // Boss bar.
-    if m.kind != MissionKind::Versus {
-        if let Some(b) = m.world.fighters.iter().find(|b| {
+    if m.kind != MissionKind::Versus
+        && let Some(b) = m.world.fighters.iter().find(|b| {
             b.alive
                 && !matches!(b.act, Act::Dead)
                 && b.kind.is_bossish()
                 && b.ai.as_ref().is_some_and(|a| a.awake)
                 && b.team.hostile(f.team)
                 && b.pos.distance(f.pos) < 160.0
-        }) {
-            let bw = vw * 0.7;
-            let bx = vx + (vw - bw) * 0.5;
-            let by = vy + vh - 34.0;
-            ui.text(bx, by - 9.0, &b.name, col::WHITE);
-            ui.bar(bx, by, bw, 4.0, b.hp_frac(), [200, 40, 40, 255], [40, 10, 10, 255]);
-            ui.bar(bx + bw * 0.3, by + 6.0, bw * 0.4, 2.0, b.posture_frac(), col::YELLOW, [30, 30, 10, 255]);
-        }
+        })
+    {
+        let bw = vw * 0.7;
+        let bx = vx + (vw - bw) * 0.5;
+        let by = vy + vh - 34.0;
+        ui.text(bx, by - 9.0, &b.name, col::WHITE);
+        ui.bar(bx, by, bw, 4.0, b.hp_frac(), [200, 40, 40, 255], [40, 10, 10, 255]);
+        ui.bar(bx + bw * 0.3, by + 6.0, bw * 0.4, 2.0, b.posture_frac(), col::YELLOW, [30, 30, 10, 255]);
     }
     // Versus: opponent HP on top.
-    if m.kind == MissionKind::Versus {
-        if let Some(o) = m.world.player(1 - p) {
-            ui.text(vx + vw - 70.0, vy + vh - 22.0, &o.name.chars().take(10).collect::<String>(), col::GREY);
-        }
+    if m.kind == MissionKind::Versus
+        && let Some(o) = m.world.player(1 - p)
+    {
+        ui.text(vx + vw - 70.0, vy + vh - 22.0, &o.name.chars().take(10).collect::<String>(), col::GREY);
     }
     // Context prompts.
     let pad = using_pad;

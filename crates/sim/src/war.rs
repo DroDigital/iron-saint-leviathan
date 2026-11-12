@@ -41,16 +41,10 @@ impl DistrictWar {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Default)]
 pub struct Inventory {
     pub parts: Vec<PartInstance>,
     pub currency: u32,
-}
-
-impl Default for Inventory {
-    fn default() -> Self {
-        Inventory { parts: vec![], currency: 0 }
-    }
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
