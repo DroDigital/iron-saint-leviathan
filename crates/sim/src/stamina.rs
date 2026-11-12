@@ -131,7 +131,7 @@ impl Stamina {
                 // Hunger drains slowly with time and activity; starving halves regen.
                 let drain = 0.006 * ctx.famine * if self.since_spend < 1.0 { 2.0 } else { 1.0 };
                 self.food = (self.food - drain * DT).max(0.0);
-                let k = if self.food > 0.0 { 1.0 } else { 0.4 };
+                let k = if self.food > 0.0 { 1.0 } else { 0.55 };
                 if self.since_spend > 0.5 {
                     self.value += r * k * DT;
                 }
@@ -160,8 +160,14 @@ impl Stamina {
     }
 
     pub fn on_damage_dealt(&mut self, dmg: f32) {
-        if self.kind == StaminaKind::Blood {
-            self.value = (self.value + dmg * 0.6).min(self.max);
+        match self.kind {
+            StaminaKind::Blood => self.value = (self.value + dmg * 0.6).min(self.max),
+            // Hunger eats "buildings or units": every bite of the enemy feeds a little.
+            StaminaKind::Hunger => {
+                self.food = (self.food + dmg * 0.0015).min(1.0);
+                self.value = (self.value + dmg * 0.15).min(self.max);
+            }
+            _ => {}
         }
     }
 

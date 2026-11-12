@@ -278,13 +278,18 @@ impl City {
                 }
             }
             Landmark::Seawall => {
-                add(
-                    &mut buildings,
-                    BuildingKind::Wall,
-                    Vec3::new(0.0, 0.0, shore_z - 2.0),
-                    Vec3::new(size * 0.9, 9.0, 6.0),
-                    [130, 130, 124],
-                );
+                // The breakwater has sluice gates: the sea always has a way in.
+                let gates = [-60.0f32, 0.0, 34.0];
+                let gw = 22.0;
+                let mut x0 = -size * 0.45;
+                for g in gates.iter().chain(std::iter::once(&(size * 0.45 + gw * 0.5))) {
+                    let x1 = g - gw * 0.5;
+                    if x1 - x0 > 4.0 {
+                        let c = Vec3::new((x0 + x1) * 0.5, 0.0, shore_z - 2.0);
+                        add(&mut buildings, BuildingKind::Wall, c, Vec3::new(x1 - x0, 9.0, 6.0), [130, 130, 124]);
+                    }
+                    x0 = g + gw * 0.5;
+                }
             }
         }
         // City blocks on a grid.

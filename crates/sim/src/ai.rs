@@ -127,6 +127,13 @@ pub struct Brain {
     pub awake: bool,
     /// Wakes when a hostile comes within this range.
     pub aggro: f32,
+    /// Stuck detection (no navmesh): last sampled position and detour timer/side.
+    #[serde(default)]
+    pub last_pos: Vec3,
+    #[serde(default)]
+    pub detour: u16,
+    #[serde(default)]
+    pub detour_side: f32,
 }
 
 impl Brain {
@@ -146,6 +153,9 @@ impl Brain {
             guard_hold: 0,
             awake: false,
             aggro: 70.0,
+            last_pos: Vec3::ZERO,
+            detour: 0,
+            detour_side: 1.0,
         }
     }
 }
@@ -180,7 +190,13 @@ pub struct Think {
 pub fn think(b: &mut Brain, p: &Percept, rng: &mut SimRng) -> Think {
     let mut cmd = Command::default();
     let mut script = None;
-    b.timer += 1;
+    // Cadence counts *idle* time only: every attack is followed by a readable gap
+    // (the window a player punishes), instead of chaining swings back to back.
+    if p.me_busy {
+        b.timer = 0;
+    } else {
+        b.timer += 1;
+    }
     let Some(t) = p.target else {
         b.state = if b.archetype == Archetype::Ambusher { AiState::Ambush } else { AiState::Dormant };
         return Think { cmd, script };
@@ -265,6 +281,15 @@ pub fn think(b: &mut Brain, p: &Percept, rng: &mut SimRng) -> Think {
         return Think { cmd, script };
     }
 
+    // Stuck against a building while approaching? Detour sideways for a moment.
+    if b.timer % 30 == 0 || p.me_busy {
+        let moved = p.me_pos.distance(b.last_pos);
+        if b.state == AiState::Approach && moved < 0.8 && !p.me_busy && b.detour == 0 {
+            b.detour = 75;
+            b.detour_side = if rng.chance(0.5) { 1.0 } else { -1.0 };
+        }
+        b.last_pos = p.me_pos;
+    }
     let want = (p.me_reach * b.params.engage).max(2.0);
     let speed_k = p.boss_speed.max(0.3);
     // Movement.
@@ -273,6 +298,11 @@ pub fn think(b: &mut Brain, p: &Percept, rng: &mut SimRng) -> Think {
         _ => {
             if gap > want * 1.15 {
                 cmd.move_dir = dir * speed_k.min(1.0);
+                if b.detour > 0 {
+                    b.detour -= 1;
+                    let side = Vec2::new(-dir.y, dir.x) * b.detour_side;
+                    cmd.move_dir = (side * 0.9 + dir * 0.3).normalize_or_zero() * speed_k.min(1.0);
+                }
                 b.state = AiState::Approach;
             } else if gap < want * 0.5 && b.params.engage > 2.0 {
                 cmd.move_dir = -dir;

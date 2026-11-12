@@ -1515,11 +1515,18 @@ impl World {
         }
         match m.effect {
             Some(MoveEffect::Split) => {
-                // Split off verses (Pale Choir / Brood).
-                let n = 3;
+                // Split off verses (Pale Choir / Brood). Capped so a split is a puzzle, not a swarm
+                // you cannot avoid; verses hit far softer than the whole choir.
+                let alive_verses =
+                    self.fighters.iter().filter(|v| v.owner == Some(i as u32) && v.alive && !matches!(v.act, Act::Dead)).count();
+                let per = self.fighters[i].build.hp_max * 0.08;
+                // HP is body count: splitting moves bodies (and their HP) out of the choir.
+                let affordable = ((self.fighters[i].hp - 1.0) / per).floor().max(0.0) as usize;
+                let n = 4usize.saturating_sub(alive_verses).min(3).min(affordable);
+                self.fighters[i].hp -= per * n as f32;
                 let f = self.fighters[i].clone();
                 for k in 0..n {
-                    let a = k as f32 / n as f32 * std::f32::consts::TAU;
+                    let a = k as f32 / n.max(1) as f32 * std::f32::consts::TAU;
                     let p = f.pos + Vec3::new(a.sin(), 0.0, a.cos()) * (f.radius() + 6.0);
                     let lo = f.loadout.clone();
                     let id = self.spawn_loadout(
@@ -1534,15 +1541,25 @@ impl World {
                         f.scale * 0.45,
                     );
                     let v = &mut self.fighters[id as usize];
-                    v.build.hp_max = f.build.hp_max * 0.08;
-                    v.hp = v.build.hp_max;
+                    v.build.hp_max = per;
+                    v.hp = per;
                     v.owner = Some(i as u32);
-                    v.ai = Some(Brain::new(Archetype::Swarmer, 14));
+                    v.dmg_mul = f.dmg_mul * 0.35;
+                    // Verses are fragments: they never split (or recombine) themselves.
+                    v.build.moves.special = None;
+                    v.build.moves.heretic = None;
+                    // Boss-spawned: swings are slowed so even verse attacks telegraph (~250 ms+),
+                    // and they pace themselves rather than mobbing every frame.
+                    v.anim_speed = 0.55;
+                    let mut vb = Brain::new(Archetype::Swarmer, 18);
+                    vb.params.cadence = 80;
+                    vb.params.aggression = 0.45;
+                    v.ai = Some(vb);
                     v.currency_value = 10;
                     v.bodies = 3;
                 }
                 let me = &mut self.fighters[i];
-                me.bodies = me.bodies.saturating_sub(3).max(3);
+                me.bodies = me.bodies.saturating_sub(n as u8).max(3);
             }
             Some(MoveEffect::Recombine) => {
                 let mut heal = 0.0;
