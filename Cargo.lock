@@ -972,6 +972,14 @@ version = "0.9.0"
 [[package]]
 name = "isl-sim"
 version = "0.9.0"
+dependencies = [
+ "glam",
+ "isl-data",
+ "rand_core",
+ "rand_pcg",
+ "ron",
+ "serde",
+]
 
 [[package]]
 name = "isl-ui"
@@ -1973,6 +1981,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "caa0f4137e1c0a72f4c651489402276c8e8e1cf081f3b0ba156d2cbeef09e86a"
 dependencies = [
  "rand_core",
+ "serde",
 ]
 
 [[package]]
