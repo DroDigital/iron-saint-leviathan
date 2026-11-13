@@ -1,0 +1,61 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "goliath_moth_lamp_eyes",
+    name: "Lamp-Eye Crown",
+    slot: Head,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 100.0,
+        lock_range: 56.0,
+        reveal: true,
+        fog_vision: 40.0,
+        power: 1.05,
+    ),
+    moves: ["moth_stab"],
+    source: Chassis("goliath_moth"),
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (1.6, 1.4, 1.4),
+                tex: "fur",
+                col: (120, 110, 90),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.6, 0.2, 0.5),
+                size: (0.8, 0.8, 0.8),
+                tex: "glow",
+                col: (255, 230, 120),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.6, 0.2, 0.5),
+                size: (0.8, 0.8, 0.8),
+                tex: "glow",
+                col: (255, 230, 120),
+                glow: true,
+            ),
+            (
+                shape: Spike,
+                at: (-0.4, 1.2, 0.2),
+                size: (0.15, 1.6, 0.15),
+                rot: (-20.0, 0.0, 20.0),
+                tex: "bone",
+                col: (70, 60, 50),
+            ),
+            (
+                shape: Spike,
+                at: (0.4, 1.2, 0.2),
+                size: (0.15, 1.6, 0.15),
+                rot: (-20.0, 0.0, -20.0),
+                tex: "bone",
+                col: (70, 60, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

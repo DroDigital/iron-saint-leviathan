@@ -1,0 +1,42 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "st_anchor_lamp",
+    name: "Harbor Lamp",
+    slot: Head,
+    side: Saint,
+    weight: 6.0,
+    stats: (
+        hp: 120.0,
+        lock_range: 44.0,
+        fog_vision: 26.0,
+    ),
+    source: Chassis("st_anchor"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (60, 80, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (120, 255, 200),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 1.4, 0.2),
+                size: (1.0, 0.8, 1.0),
+                tex: "glow",
+                col: (120, 255, 200),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

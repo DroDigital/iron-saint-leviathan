@@ -1,0 +1,54 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "shell_barnacles",
+    name: "Barnacle Crust",
+    slot: Back,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 120.0,
+        armor: 20.0,
+    ),
+    quirks: ["barnacled"],
+    source: Enemy("shellback"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, 0.0),
+                size: (0.6, 1.4, 0.6),
+                tex: "bone",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 0.3, -1.0),
+                size: (0.5, 1.1, 0.5),
+                tex: "bone",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.6, 0.3, 0.4),
+                size: (0.6, 0.5, 0.6),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Sphere,
+                at: (0.7, 0.3, -0.2),
+                size: (0.6, 0.5, 0.6),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 0.3, -0.8),
+                size: (0.6, 0.5, 0.6),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

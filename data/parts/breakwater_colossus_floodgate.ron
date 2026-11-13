@@ -1,0 +1,33 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "breakwater_colossus_floodgate",
+    name: "Floodgate",
+    slot: Back,
+    side: Saint,
+    weight: 20.0,
+    stats: (
+        hp: 170.0,
+        armor: 20.0,
+    ),
+    moves: ["floodgate"],
+    source: Boss("breakwater_colossus"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (130, 130, 120),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.4, -1.0),
+                size: (3.2, 2.6, 0.5),
+                tex: "concrete",
+                col: (120, 120, 110),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

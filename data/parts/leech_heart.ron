@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "leech_heart",
+    name: "Leech Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 3.0,
+    stats: (
+        hp: 50.0,
+        stamina: 80.0,
+        regen: 30.0,
+    ),
+    source: Enemy("hull_leech"),
+    stamina: Blood,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.9),
+                tex: "glow",
+                col: (255, 90, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

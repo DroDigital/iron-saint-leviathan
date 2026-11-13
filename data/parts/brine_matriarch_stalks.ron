@@ -1,0 +1,57 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "brine_matriarch_stalks",
+    name: "Eye Stalks",
+    slot: Head,
+    side: Kaiju,
+    weight: 6.0,
+    stats: (
+        hp: 130.0,
+        lock_range: 46.0,
+        reveal: true,
+        fog_vision: 28.0,
+    ),
+    source: Boss("brine_matriarch"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.6),
+                size: (1.6, 1.4, 1.8),
+                tex: "hide",
+                col: (130, 70, 50),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 120, 90),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 120, 90),
+                glow: true,
+            ),
+            (
+                shape: Tube,
+                at: (-0.5, 0.8, 1.0),
+                size: (0.2, 1.2, 0.2),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+            (
+                shape: Tube,
+                at: (0.5, 0.8, 1.0),
+                size: (0.2, 1.2, 0.2),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,67 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "st_vesper_legs",
+    name: "Vigil Legs",
+    slot: Legs,
+    side: Saint,
+    weight: 22.0,
+    stats: (
+        hp: 240.0,
+        armor: 22.0,
+    ),
+    source: Boss("st_vesper"),
+    locomotion: (
+        kind: Biped,
+        speed: 7.8,
+        swim: 0.7,
+        deep_water: false,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (120, 100, 70),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Box,
+                at: (0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (120, 100, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (210, 200, 170),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

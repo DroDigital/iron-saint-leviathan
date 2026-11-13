@@ -1,0 +1,32 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "deacon_pack",
+    name: "Deacon Pack",
+    slot: Back,
+    side: Saint,
+    weight: 6.0,
+    stats: (
+        hp: 80.0,
+        armor: 6.0,
+    ),
+    source: Enemy("deacon"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, -0.3),
+                size: (2.0, 2.2, 1.0),
+                tex: "plate",
+                col: (110, 110, 100),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.8, -0.6),
+                size: (0.5, 1.0, 0.5),
+                tex: "steel",
+                col: (80, 80, 80),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

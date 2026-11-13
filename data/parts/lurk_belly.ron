@@ -1,0 +1,48 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "lurk_belly",
+    name: "Lurk Belly",
+    slot: Legs,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 130.0,
+        armor: 10.0,
+    ),
+    source: Enemy("gravelurk"),
+    locomotion: (
+        kind: Burrow,
+        speed: 8.0,
+        swim: 0.5,
+        deep_water: false,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.0),
+                size: (4.0, 0.8, 6.0),
+                tex: "chitin",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Spike,
+                at: (-2.0, 0.0, 0.0),
+                size: (0.6, 1.2, 0.6),
+                rot: (0.0, 0.0, 90.0),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+            (
+                shape: Spike,
+                at: (2.0, 0.0, 0.0),
+                size: (0.6, 1.2, 0.6),
+                rot: (0.0, 0.0, -90.0),
+                tex: "bone",
+                col: (56, 50, 44),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

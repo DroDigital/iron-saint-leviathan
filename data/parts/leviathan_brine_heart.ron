@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "leviathan_brine_heart",
+    name: "Brine Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 160.0,
+        stamina: 120.0,
+        regen: 40.0,
+    ),
+    source: Chassis("leviathan"),
+    stamina: Breath,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.2, 0.0),
+                size: (1.2, 1.2, 1.2),
+                tex: "glow",
+                col: (120, 255, 230),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

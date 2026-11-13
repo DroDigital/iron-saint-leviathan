@@ -1,0 +1,53 @@
+// Disc Rot NG+ tiers 1-10. Each tier adds its rule on top of all lower tiers.
+[
+    (
+        tier: 1,
+        rule: "Enemies have +10% HP.",
+        effects: [EnemyHp(1.1)],
+    ),
+    (
+        tier: 2,
+        rule: "Enemies deal +10% damage.",
+        effects: [EnemyDamage(1.1)],
+    ),
+    (
+        tier: 3,
+        rule: "Heals restore 15% less.",
+        effects: [HealMul(0.85)],
+    ),
+    (
+        tier: 4,
+        rule: "Enemies move 8% faster.",
+        effects: [EnemySpeed(1.08)],
+    ),
+    (
+        tier: 5,
+        rule: "Your posture is 10% lower.",
+        effects: [StatMul(Posture, 0.9)],
+    ),
+    (
+        tier: 6,
+        rule: "Enemies have +15% more HP.",
+        effects: [EnemyHp(1.15)],
+    ),
+    (
+        tier: 7,
+        rule: "Enemies deal +15% more damage.",
+        effects: [EnemyDamage(1.15)],
+    ),
+    (
+        tier: 8,
+        rule: "Death drops sink.",
+        effects: [NoRecovery],
+    ),
+    (
+        tier: 9,
+        rule: "Stamina recovers 10% slower.",
+        effects: [StatMul(StaminaRegen, 0.9)],
+    ),
+    (
+        tier: 10,
+        rule: "The disc is rotting. Enemies copy your moves.",
+        effects: [Echo],
+    ),
+]

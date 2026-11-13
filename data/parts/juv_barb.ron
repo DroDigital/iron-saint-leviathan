@@ -1,0 +1,37 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "juv_barb",
+    name: "Juvenile Barb",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 6.0,
+    stats: (
+        hp: 90.0,
+        armor: 6.0,
+        power: 1.0,
+        impact: 1.0,
+    ),
+    moves: ["juv_lash"],
+    source: Enemy("juvenile"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.4, 0.0, 0.0),
+                size: (0.9, 2.6, 0.9),
+                rot: (0.0, 0.0, -70.0),
+                tex: "scale",
+                col: (50, 90, 100),
+            ),
+            (
+                shape: Spike,
+                at: (2.4, -0.6, 0.4),
+                size: (0.5, 1.6, 0.5),
+                rot: (20.0, 0.0, -110.0),
+                tex: "bone",
+                col: (130, 160, 140),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

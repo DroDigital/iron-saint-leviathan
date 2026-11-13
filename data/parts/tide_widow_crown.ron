@@ -1,0 +1,50 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "tide_widow_crown",
+    name: "Veiled Crown",
+    slot: Head,
+    side: Kaiju,
+    weight: 5.0,
+    stats: (
+        hp: 110.0,
+        lock_range: 50.0,
+        reveal: true,
+        fog_vision: 34.0,
+    ),
+    source: Chassis("tide_widow"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.6),
+                size: (1.6, 1.4, 1.8),
+                tex: "hide",
+                col: (60, 80, 100),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (150, 220, 255),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (150, 220, 255),
+                glow: true,
+            ),
+            (
+                shape: Cone,
+                at: (0.0, 1.0, 0.4),
+                size: (2.2, 1.6, 1.6),
+                tex: "hide",
+                col: (210, 220, 228),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

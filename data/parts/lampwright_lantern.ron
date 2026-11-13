@@ -1,0 +1,51 @@
+// Part definition. Slot LeftArm, side Saint.
+(
+    id: "lampwright_lantern",
+    name: "Storm Lantern",
+    slot: LeftArm,
+    side: Saint,
+    weight: 13.0,
+    stats: (
+        hp: 180.0,
+        armor: 18.0,
+        guard: 0.6,
+        impact: 1.0,
+    ),
+    moves: ["beam_sweep"],
+    source: Boss("lampwright"),
+    parry: true,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.15, 0.25, 0.0),
+                size: (1.3, 0.9, 1.3),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Tube,
+                at: (0.0, -1.3, 0.0),
+                size: (0.8, 2.0, 0.8),
+                tex: "grate",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, -3.0, 0.15),
+                size: (0.95, 1.9, 0.95),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Cone,
+                at: (0.0, -3.8, 2.4),
+                size: (0.6, 4.0, 0.6),
+                rot: (90.0, 0.0, 0.0),
+                tex: "steel",
+                col: (220, 220, 190),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,15 @@
+[package]
+name = "xtask"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "Offline pipeline: pak builder, license manifest check, glTF/texture import, budgets, packaging."
+
+[dependencies]
+isl-data.workspace = true
+isl-assets.workspace = true
+isl-render.workspace = true
+gltf.workspace = true
+image.workspace = true
+anyhow.workspace = true

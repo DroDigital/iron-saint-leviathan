@@ -1,0 +1,37 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "iron_saint_reliquary",
+    name: "Heat Reliquary",
+    slot: Core,
+    side: Saint,
+    weight: 10.0,
+    stats: (
+        hp: 150.0,
+        stamina: 110.0,
+        regen: 38.0,
+    ),
+    source: Chassis("iron_saint"),
+    stamina: Heat,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (255, 210, 120),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (90, 92, 100),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "A furnace in the shape of a reliquary. Overheat it and it vents like a sigh.",
+)

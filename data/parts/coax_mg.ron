@@ -1,0 +1,29 @@
+// Part definition. Slot LeftArm, side Saint.
+(
+    id: "coax_mg",
+    name: "Coaxial MG",
+    slot: LeftArm,
+    side: Saint,
+    weight: 6.0,
+    stats: (
+        hp: 90.0,
+        armor: 10.0,
+        guard: 0.3,
+        impact: 0.8,
+    ),
+    moves: ["coax_mg"],
+    source: Enemy("tank"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, 0.8),
+                size: (0.2, 1.4, 0.2),
+                rot: (90.0, 0.0, 0.0),
+                tex: "steel",
+                col: (40, 40, 40),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

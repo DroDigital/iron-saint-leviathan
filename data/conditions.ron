@@ -1,0 +1,40 @@
+// War Conditions unlocked through the War Record.
+[
+    (
+        id: "harbor_flooded",
+        name: "Harbor Flooded",
+        desc: "The harbor starts the war already Flooded.",
+        kind: HarborFlooded,
+        wars: 1,
+    ),
+    (
+        id: "one_saint",
+        name: "Last of Their Kind",
+        desc: "One chassis per side; no premade swaps.",
+        kind: OneSaintPerSide,
+        wars: 2,
+    ),
+    (
+        id: "all_contested",
+        name: "Open War",
+        desc: "Every district starts Contested.",
+        kind: AllContested,
+        wars: 1,
+    ),
+    (
+        id: "blackout_war",
+        name: "The Long Blackout",
+        desc: "The grid never comes back.",
+        kind: Blackout,
+        wars: 3,
+        endings: ["the_city_stands"],
+    ),
+    (
+        id: "eternal_night",
+        name: "Eternal Night",
+        desc: "The sun never rises on Harrowmouth.",
+        kind: EternalNight,
+        wars: 3,
+        endings: ["drown_the_city"],
+    ),
+]

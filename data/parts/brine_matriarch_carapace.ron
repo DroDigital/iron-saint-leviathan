@@ -1,0 +1,46 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "brine_matriarch_carapace",
+    name: "Market Carapace",
+    slot: Frame,
+    side: Kaiju,
+    weight: 42.0,
+    stats: (
+        hp: 840.0,
+        armor: 38.0,
+        capacity: 118.0,
+        poise: 150.0,
+        size: 1.3,
+    ),
+    moves: ["devour"],
+    source: Boss("brine_matriarch"),
+    heal: Regrowth,
+    rig: Quadruped,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (3.2, 2.6, 4.6),
+                tex: "hide",
+                col: (130, 70, 50),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.4, -1.6),
+                size: (2.6, 2.2, 2.8),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 0.8, 0.0),
+                size: (4.0, 2.0, 5.2),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+        ],
+    ),
+    complexity: 2,
+    lore: "The market stalls are still on her back. Some are still open.",
+)

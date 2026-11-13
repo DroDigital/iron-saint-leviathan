@@ -1,0 +1,52 @@
+// Part definition. Slot Frame, side Saint.
+(
+    id: "st_wren_frame",
+    name: "Sparrow Frame",
+    slot: Frame,
+    side: Saint,
+    weight: 24.0,
+    stats: (
+        hp: 520.0,
+        armor: 14.0,
+        capacity: 95.0,
+        poise: 60.0,
+        size: 0.92,
+    ),
+    source: Chassis("st_wren"),
+    heal: RepairCharges(4),
+    rig: Humanoid,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 2.1, 0.0),
+                size: (2.72, 3.0, 2.0),
+                tex: "plate",
+                col: (70, 110, 140),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, 0.0),
+                size: (1.904, 1.0, 1.4),
+                tex: "grate",
+                col: (40, 50, 60),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 3.75, 0.0),
+                size: (1.0, 0.5, 1.0),
+                tex: "plate",
+                col: (40, 50, 60),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, 3.0, 0.9),
+                size: (2.4, 0.6, 0.4),
+                rot: (0.0, 0.0, 180.0),
+                tex: "plate",
+                col: (40, 50, 60),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

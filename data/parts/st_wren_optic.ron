@@ -1,0 +1,43 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "st_wren_optic",
+    name: "Starling Optic",
+    slot: Head,
+    side: Saint,
+    weight: 3.0,
+    stats: (
+        hp: 80.0,
+        lock_range: 60.0,
+        reveal: true,
+        fog_vision: 18.0,
+    ),
+    source: Chassis("st_wren"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (70, 110, 140),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (140, 230, 255),
+                glow: true,
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.3, -0.2),
+                size: (0.25, 0.9, 0.5),
+                rot: (-30.0, 0.0, 0.0),
+                tex: "plate",
+                col: (40, 50, 60),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

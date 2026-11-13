@@ -1,0 +1,48 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "tide_mother_tail",
+    name: "Tide Tail",
+    slot: Legs,
+    side: Kaiju,
+    weight: 26.0,
+    stats: (
+        hp: 300.0,
+        armor: 18.0,
+    ),
+    source: Boss("tide_mother"),
+    locomotion: (
+        kind: Serpent,
+        speed: 8.5,
+        swim: 2.0,
+        deep_water: true,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Wedge,
+                at: (0.0, 0.2, -1.2),
+                size: (0.4, 2.6, 2.4),
+                tex: "fin",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Wedge,
+                at: (-1.2, -0.4, 0.0),
+                size: (1.8, 0.3, 1.4),
+                rot: (0.0, 0.0, 20.0),
+                tex: "fin",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Wedge,
+                at: (1.2, -0.4, 0.0),
+                size: (1.8, 0.3, 1.4),
+                rot: (0.0, 0.0, -20.0),
+                tex: "fin",
+                col: (230, 230, 220),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "lurk_body",
+    name: "Gravelurk Hide",
+    slot: Frame,
+    side: Kaiju,
+    weight: 20.0,
+    stats: (
+        hp: 360.0,
+        armor: 16.0,
+        capacity: 85.0,
+        poise: 70.0,
+        size: 0.5,
+    ),
+    moves: ["devour"],
+    source: Enemy("gravelurk"),
+    heal: Regrowth,
+    rig: Burrower,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (5.0, 3.4, 7.0),
+                tex: "hide",
+                col: (80, 74, 64),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.8, -3.0),
+                size: (3.6, 2.4, 4.0),
+                tex: "chitin",
+                col: (56, 50, 44),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

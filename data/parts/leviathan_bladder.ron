@@ -1,0 +1,48 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "leviathan_bladder",
+    name: "Tidal Bladder",
+    slot: Back,
+    side: Kaiju,
+    weight: 12.0,
+    stats: (
+        hp: 130.0,
+        armor: 8.0,
+    ),
+    moves: ["constrict"],
+    source: Chassis("leviathan"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 1.2, -0.8),
+                size: (0.5, 1.4, 0.6),
+                tex: "bone",
+                col: (150, 170, 150),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.0),
+                size: (0.5, 1.2, 0.6),
+                tex: "bone",
+                col: (150, 170, 150),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.2, 0.8),
+                size: (0.5, 1.0, 0.6),
+                tex: "bone",
+                col: (150, 170, 150),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 1.0, -1.5),
+                size: (1.6, 1.2, 1.6),
+                tex: "hide",
+                col: (120, 255, 230),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

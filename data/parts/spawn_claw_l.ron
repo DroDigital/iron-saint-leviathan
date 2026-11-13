@@ -1,0 +1,35 @@
+// Part definition. Slot LeftArm, side Kaiju.
+(
+    id: "spawn_claw_l",
+    name: "Spawn Claw",
+    slot: LeftArm,
+    side: Kaiju,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+        guard: 0.2,
+        impact: 1.0,
+    ),
+    moves: ["spawn_nip"],
+    source: Enemy("brood_spawn"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (60, 90, 80),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (40, 60, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

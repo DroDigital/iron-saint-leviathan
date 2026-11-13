@@ -1,0 +1,53 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "brine_matriarch_legs",
+    name: "Stilt Legs",
+    slot: Legs,
+    side: Kaiju,
+    weight: 26.0,
+    stats: (
+        hp: 300.0,
+        armor: 26.0,
+    ),
+    source: Boss("brine_matriarch"),
+    locomotion: (
+        kind: Biped,
+        speed: 7.0,
+        swim: 1.2,
+        deep_water: true,
+        climb: true,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (-1.2, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (130, 70, 50),
+            ),
+            (
+                shape: Box,
+                at: (-1.2, -2.5, 0.2),
+                size: (0.9, 0.3, 1.2),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+            (
+                shape: Tube,
+                at: (1.2, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (130, 70, 50),
+            ),
+            (
+                shape: Box,
+                at: (1.2, -2.5, 0.2),
+                size: (0.9, 0.3, 1.2),
+                tex: "chitin",
+                col: (200, 160, 110),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

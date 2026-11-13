@@ -1,0 +1,28 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "drone_eye",
+    name: "Seraph Eye",
+    slot: Head,
+    side: Saint,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+        lock_range: 66.0,
+        reveal: true,
+        fog_vision: 30.0,
+    ),
+    source: Enemy("drone"),
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.6, 0.6, 0.6),
+                tex: "glow",
+                col: (120, 200, 255),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

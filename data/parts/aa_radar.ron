@@ -1,0 +1,35 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "aa_radar",
+    name: "AA Radar",
+    slot: Head,
+    side: Saint,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        lock_range: 80.0,
+        reveal: true,
+        fog_vision: 40.0,
+    ),
+    source: Enemy("aa_battery"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.4, 0.0),
+                size: (0.2, 0.8, 0.2),
+                tex: "steel",
+                col: (80, 84, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.9, 0.0),
+                size: (1.6, 0.6, 0.1),
+                tex: "grate",
+                col: (255, 80, 60),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

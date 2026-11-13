@@ -1,0 +1,38 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "leech_body",
+    name: "Hull Leech",
+    slot: Frame,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 220.0,
+        armor: 4.0,
+        capacity: 70.0,
+        poise: 30.0,
+        size: 0.3,
+    ),
+    moves: ["devour"],
+    source: Enemy("hull_leech"),
+    heal: Regrowth,
+    rig: Quadruped,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (3.2, 2.6, 4.6),
+                tex: "hide",
+                col: (90, 60, 70),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.4, -1.6),
+                size: (2.6, 2.2, 2.8),
+                tex: "chitin",
+                col: (60, 40, 46),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

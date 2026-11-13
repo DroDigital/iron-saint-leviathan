@@ -1,0 +1,35 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "diesel_pack",
+    name: "Diesel Pack",
+    slot: Core,
+    side: Saint,
+    weight: 10.0,
+    stats: (
+        hp: 110.0,
+        stamina: 110.0,
+        regen: 30.0,
+    ),
+    source: Enemy("tank"),
+    stamina: Fuel,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.0),
+                size: (1.6, 0.8, 1.0),
+                tex: "grate",
+                col: (60, 66, 50),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.45, 0.0),
+                size: (0.6, 0.1, 0.6),
+                tex: "glow",
+                col: (255, 220, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

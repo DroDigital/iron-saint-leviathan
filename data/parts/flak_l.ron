@@ -1,0 +1,37 @@
+// Part definition. Slot LeftArm, side Saint.
+(
+    id: "flak_l",
+    name: "Flak Barrel L",
+    slot: LeftArm,
+    side: Saint,
+    weight: 10.0,
+    stats: (
+        hp: 120.0,
+        armor: 14.0,
+        guard: 0.2,
+        impact: 0.9,
+    ),
+    moves: ["flak_burst"],
+    source: Enemy("aa_battery"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (0.0, 0.4, 1.0),
+                size: (0.35, 2.6, 0.35),
+                rot: (60.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 50, 50),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.4, 0.4, 1.0),
+                size: (0.35, 2.6, 0.35),
+                rot: (60.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 50, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

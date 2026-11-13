@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "pale_choir_pulse",
+    name: "Shared Pulse",
+    slot: Core,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 120.0,
+        stamina: 110.0,
+        regen: 30.0,
+    ),
+    source: Chassis("pale_choir"),
+    stamina: Blood,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.6, 0.6, 0.6),
+                tex: "glow",
+                col: (255, 80, 80),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,37 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "st_anchor_coupling",
+    name: "Grid Coupling",
+    slot: Core,
+    side: Saint,
+    weight: 12.0,
+    stats: (
+        hp: 170.0,
+        stamina: 120.0,
+        regen: 46.0,
+    ),
+    source: Chassis("st_anchor"),
+    stamina: Battery,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (120, 255, 200),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (150, 140, 60),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "Plugged into Harrowmouth's grid. When the lights go out, so does she.",
+)

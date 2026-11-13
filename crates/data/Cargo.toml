@@ -1,0 +1,11 @@
+[package]
+name = "isl-data"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "RON content definitions (parts, moves, quirks, chassis, enemies, bosses, districts, omens) with schema validation."
+
+[dependencies]
+serde.workspace = true
+ron.workspace = true
+thiserror.workspace = true

@@ -1,0 +1,33 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "tide_widow_floodmourn",
+    name: "Floodmourn",
+    slot: Back,
+    side: Kaiju,
+    weight: 10.0,
+    stats: (
+        hp: 120.0,
+        armor: 6.0,
+    ),
+    moves: ["floodmourn"],
+    source: Chassis("tide_widow"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, 0.0),
+                size: (0.6, 1.4, 0.6),
+                tex: "bone",
+                col: (200, 210, 220),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 0.3, -1.0),
+                size: (0.5, 1.1, 0.5),
+                tex: "bone",
+                col: (200, 210, 220),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,29 @@
+// Part definition. Slot RightArm, side Saint.
+(
+    id: "tank_cannon",
+    name: "Militia Cannon",
+    slot: RightArm,
+    side: Saint,
+    weight: 14.0,
+    stats: (
+        hp: 120.0,
+        armor: 16.0,
+        power: 1.15,
+        impact: 1.0,
+    ),
+    moves: ["tank_shell", "coax_mg"],
+    source: Enemy("tank"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, 1.6),
+                size: (0.4, 3.0, 0.4),
+                rot: (90.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 54, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

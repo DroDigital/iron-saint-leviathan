@@ -1,0 +1,39 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "leviathan_coil",
+    name: "Abyssal Coil",
+    slot: Frame,
+    side: Kaiju,
+    weight: 30.0,
+    stats: (
+        hp: 680.0,
+        armor: 18.0,
+        capacity: 100.0,
+        poise: 90.0,
+        size: 1.15,
+    ),
+    moves: ["devour"],
+    source: Chassis("leviathan"),
+    heal: Regrowth,
+    rig: Serpent,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (2.6, 2.3, 3.0),
+                tex: "scale",
+                col: (40, 70, 90),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.5, 0.2),
+                size: (2.0, 1.4, 2.6),
+                tex: "belly",
+                col: (150, 170, 150),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "Eleven ribs per segment. Nobody has counted the segments.",
+)

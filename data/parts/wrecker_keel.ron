@@ -1,0 +1,39 @@
+// Part definition. Slot Frame, side Kaiju.
+(
+    id: "wrecker_keel",
+    name: "Keel-Spine",
+    slot: Frame,
+    side: Kaiju,
+    weight: 32.0,
+    stats: (
+        hp: 700.0,
+        armor: 20.0,
+        capacity: 104.0,
+        poise: 100.0,
+        size: 1.2,
+    ),
+    moves: ["devour"],
+    source: Boss("wrecker"),
+    heal: Regrowth,
+    rig: Serpent,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (2.6, 2.3, 3.0),
+                tex: "scale",
+                col: (30, 40, 50),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, -0.5, 0.2),
+                size: (2.0, 1.4, 2.6),
+                tex: "belly",
+                col: (90, 110, 100),
+            ),
+        ],
+    ),
+    complexity: 2,
+    lore: "Its spine is a ship's keel. Its lure is a ship's lamp. It is very patient.",
+)

@@ -1,0 +1,38 @@
+// Part definition. Slot LeftArm, side Kaiju.
+(
+    id: "goliath_moth_dust_leg",
+    name: "Dust Foreleg",
+    slot: LeftArm,
+    side: Kaiju,
+    weight: 7.0,
+    stats: (
+        hp: 120.0,
+        armor: 6.0,
+        guard: 0.5,
+        impact: 1.0,
+    ),
+    moves: ["dust_swipe"],
+    source: Chassis("goliath_moth"),
+    parry: true,
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -0.9, 0.2),
+                size: (0.4, 2.0, 0.4),
+                rot: (20.0, 0.0, -10.0),
+                tex: "chitin",
+                col: (70, 60, 50),
+            ),
+            (
+                shape: Spike,
+                at: (-0.2, -2.5, 0.8),
+                size: (0.3, 1.4, 0.3),
+                rot: (50.0, 0.0, 0.0),
+                tex: "bone",
+                col: (120, 110, 90),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

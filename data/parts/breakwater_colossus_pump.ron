@@ -1,0 +1,36 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "breakwater_colossus_pump",
+    name: "Pumphouse Core",
+    slot: Core,
+    side: Saint,
+    weight: 14.0,
+    stats: (
+        hp: 190.0,
+        stamina: 140.0,
+        regen: 36.0,
+    ),
+    source: Boss("breakwater_colossus"),
+    stamina: Fuel,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (120, 200, 255),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (90, 90, 84),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

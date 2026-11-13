@@ -1,0 +1,36 @@
+// Part definition. Slot LeftArm, side Kaiju.
+(
+    id: "spitter_claw",
+    name: "Spitter Claw",
+    slot: LeftArm,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        armor: 4.0,
+        guard: 0.3,
+        impact: 1.0,
+    ),
+    moves: ["spitter_claw"],
+    source: Enemy("brine_spitter"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (100, 110, 60),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (70, 80, 40),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,37 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "wrecker_lash",
+    name: "Rigging Lash",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 13.0,
+    stats: (
+        hp: 180.0,
+        armor: 14.0,
+        power: 1.1,
+        impact: 1.0,
+    ),
+    moves: ["wrecker_lash", "hull_breaker"],
+    source: Boss("wrecker"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.4, 0.0, 0.0),
+                size: (0.9, 2.6, 0.9),
+                rot: (0.0, 0.0, -70.0),
+                tex: "scale",
+                col: (30, 40, 50),
+            ),
+            (
+                shape: Spike,
+                at: (2.4, -0.6, 0.4),
+                size: (0.5, 1.6, 0.5),
+                rot: (20.0, 0.0, -110.0),
+                tex: "bone",
+                col: (90, 110, 100),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,81 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "lampwright_legs",
+    name: "Rock Legs",
+    slot: Legs,
+    side: Saint,
+    weight: 26.0,
+    stats: (
+        hp: 280.0,
+        armor: 28.0,
+    ),
+    source: Boss("lampwright"),
+    locomotion: (
+        kind: Biped,
+        speed: 6.8,
+        swim: 0.8,
+        deep_water: true,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (-1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (60, 60, 70),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

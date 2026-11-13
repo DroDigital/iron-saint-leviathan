@@ -1,0 +1,13 @@
+[package]
+name = "isl-input"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Action mapping, full rebinding, gamepad + keyboard/mouse, hold/toggle, rumble."
+
+[dependencies]
+winit.workspace = true
+gilrs.workspace = true
+glam.workspace = true
+serde.workspace = true
+tracing.workspace = true

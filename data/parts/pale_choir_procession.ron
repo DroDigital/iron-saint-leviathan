@@ -1,0 +1,39 @@
+// Part definition. Slot Legs, side Kaiju.
+(
+    id: "pale_choir_procession",
+    name: "Shuffling Procession",
+    slot: Legs,
+    side: Kaiju,
+    weight: 12.0,
+    stats: (
+        hp: 170.0,
+        armor: 4.0,
+    ),
+    source: Chassis("pale_choir"),
+    locomotion: (
+        kind: Swarm,
+        speed: 9.0,
+        swim: 1.0,
+        deep_water: false,
+        climb: true,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (-0.3, -1.0, 0.0),
+                size: (0.3, 2.0, 0.3),
+                tex: "pale",
+                col: (225, 220, 210),
+            ),
+            (
+                shape: Tube,
+                at: (0.3, -1.0, 0.0),
+                size: (0.3, 2.0, 0.3),
+                tex: "pale",
+                col: (225, 220, 210),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

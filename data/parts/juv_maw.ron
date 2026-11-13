@@ -1,0 +1,51 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "juv_maw",
+    name: "Juvenile Maw",
+    slot: Head,
+    side: Kaiju,
+    weight: 4.0,
+    stats: (
+        hp: 80.0,
+        armor: 4.0,
+        lock_range: 36.0,
+        fog_vision: 24.0,
+    ),
+    moves: ["juv_bite"],
+    source: Enemy("juvenile"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.2, 1.4),
+                size: (2.2, 1.6, 3.0),
+                tex: "scale",
+                col: (50, 90, 100),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, -0.5, 1.8),
+                size: (2.0, 0.8, 2.6),
+                tex: "belly",
+                col: (130, 160, 140),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (140, 255, 220),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (140, 255, 220),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

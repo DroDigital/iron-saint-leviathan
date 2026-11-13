@@ -1,0 +1,28 @@
+// Part definition. Slot Core, side Kaiju.
+(
+    id: "goliath_moth_pollen_heart",
+    name: "Pollen Heart",
+    slot: Core,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 120.0,
+        stamina: 110.0,
+        regen: 46.0,
+    ),
+    source: Chassis("goliath_moth"),
+    stamina: Hunger,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (1.0, 1.0, 1.0),
+                tex: "glow",
+                col: (255, 230, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

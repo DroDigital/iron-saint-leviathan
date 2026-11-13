@@ -1,0 +1,25 @@
+// Part definition. Slot Back, side Saint.
+(
+    id: "drone_antenna",
+    name: "Seraph Antenna",
+    slot: Back,
+    side: Saint,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+        armor: 2.0,
+    ),
+    source: Enemy("drone"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, 0.0),
+                size: (0.1, 1.2, 0.1),
+                tex: "steel",
+                col: (120, 120, 130),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

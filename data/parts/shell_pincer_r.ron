@@ -1,0 +1,43 @@
+// Part definition. Slot RightArm, side Kaiju.
+(
+    id: "shell_pincer_r",
+    name: "Shellback Crusher",
+    slot: RightArm,
+    side: Kaiju,
+    weight: 12.0,
+    stats: (
+        hp: 150.0,
+        armor: 22.0,
+        power: 1.1,
+        impact: 1.2,
+    ),
+    moves: ["shell_pinch", "shell_ram"],
+    source: Enemy("shellback"),
+    visual: (
+        prims: [
+            (
+                shape: Tube,
+                at: (0.0, -1.2, 0.0),
+                size: (0.8, 2.4, 0.8),
+                tex: "hide",
+                col: (120, 80, 60),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, -2.6, 0.6),
+                size: (0.4, 1.0, 0.4),
+                rot: (70.0, 0.0, 0.0),
+                tex: "bone",
+                col: (180, 150, 110),
+            ),
+            (
+                shape: Wedge,
+                at: (0.3, -2.8, 1.0),
+                size: (1.2, 0.6, 1.8),
+                tex: "chitin",
+                col: (180, 150, 110),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

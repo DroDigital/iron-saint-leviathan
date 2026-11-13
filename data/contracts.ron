@@ -1,0 +1,67 @@
+// District contracts: optional bounties that pay in rare quirks.
+[
+    (
+        id: "sever_left_arms",
+        name: "Sever three left arms",
+        goal: SeverSlot(LeftArm, 3),
+        reward_quirk: "severer",
+        reward_currency: 400,
+    ),
+    (
+        id: "sever_heads",
+        name: "Take two heads",
+        goal: SeverSlot(Head, 2),
+        reward_quirk: "keen_sight",
+        reward_currency: 400,
+    ),
+    (
+        id: "no_heal",
+        name: "Win without healing",
+        goal: NoHeal,
+        reward_quirk: "untouched",
+        reward_currency: 500,
+    ),
+    (
+        id: "flawless",
+        name: "Win without taking damage",
+        goal: NoDamage,
+        reward_quirk: "borrowed_luck",
+        reward_currency: 900,
+    ),
+    (
+        id: "parry_five",
+        name: "Parry five attacks",
+        goal: Parries(5),
+        reward_quirk: "oathbound",
+        reward_currency: 450,
+    ),
+    (
+        id: "cull_ten",
+        name: "Destroy ten enemies",
+        goal: KillCount(10),
+        reward_quirk: "bounty_mark",
+        reward_currency: 350,
+    ),
+    (
+        id: "fast",
+        name: "Win in under four minutes",
+        goal: UnderTime(14400),
+        reward_quirk: "light_footed",
+        reward_currency: 400,
+    ),
+    (
+        id: "gorge",
+        name: "Eat eight buildings",
+        goal: EatBuildings(8),
+        reward_quirk: "bloodthirsty",
+        reward_currency: 350,
+        side: Kaiju,
+    ),
+    (
+        id: "sever_legs",
+        name: "Sever two locomotion parts",
+        goal: SeverSlot(Legs, 2),
+        reward_quirk: "stubborn",
+        reward_currency: 450,
+    ),
+]

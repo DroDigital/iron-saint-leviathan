@@ -1,0 +1,42 @@
+// Part definition. Slot Head, side Saint.
+(
+    id: "lancer_scope",
+    name: "Lancer Scope",
+    slot: Head,
+    side: Saint,
+    weight: 4.0,
+    stats: (
+        hp: 70.0,
+        lock_range: 64.0,
+        fog_vision: 20.0,
+    ),
+    source: Enemy("lancer"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.6, 0.0),
+                size: (1.1, 1.2, 1.2),
+                tex: "plate",
+                col: (90, 100, 110),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.65, 0.62),
+                size: (0.8, 0.18, 0.1),
+                tex: "glow",
+                col: (255, 80, 60),
+                glow: true,
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 1.3, -0.2),
+                size: (0.25, 0.9, 0.5),
+                rot: (-30.0, 0.0, 0.0),
+                tex: "plate",
+                col: (60, 64, 70),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

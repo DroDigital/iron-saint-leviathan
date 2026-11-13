@@ -1,0 +1,39 @@
+// Part definition. Slot Back, side Kaiju.
+(
+    id: "leech_sac",
+    name: "Leech Sac",
+    slot: Back,
+    side: Kaiju,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+    ),
+    source: Enemy("hull_leech"),
+    visual: (
+        prims: [
+            (
+                shape: Spike,
+                at: (0.0, 0.4, 0.0),
+                size: (0.6, 1.4, 0.6),
+                tex: "bone",
+                col: (60, 40, 46),
+            ),
+            (
+                shape: Spike,
+                at: (0.0, 0.3, -1.0),
+                size: (0.5, 1.1, 0.5),
+                tex: "bone",
+                col: (60, 40, 46),
+            ),
+            (
+                shape: Sphere,
+                at: (0.0, 0.4, -0.6),
+                size: (1.4, 1.0, 1.4),
+                tex: "hide",
+                col: (255, 90, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

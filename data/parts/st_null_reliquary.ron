@@ -1,0 +1,52 @@
+// Part definition. Slot Frame, side Saint.
+(
+    id: "st_null_reliquary",
+    name: "Hollow Reliquary",
+    slot: Frame,
+    side: Saint,
+    weight: 22.0,
+    stats: (
+        hp: 560.0,
+        armor: 16.0,
+        capacity: 104.0,
+        poise: 80.0,
+        size: 1.0,
+    ),
+    source: Chassis("st_null"),
+    heal: RepairCharges(4),
+    rig: Humanoid,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 2.1, 0.0),
+                size: (3.2, 3.0, 2.0),
+                tex: "rust",
+                col: (30, 30, 36),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, 0.0),
+                size: (2.24, 1.0, 1.4),
+                tex: "grate",
+                col: (60, 58, 66),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 3.75, 0.0),
+                size: (1.0, 0.5, 1.0),
+                tex: "plate",
+                col: (60, 58, 66),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 2.1, 0.0),
+                size: (1.6, 2.0, 2.1),
+                tex: "grate",
+                col: (20, 20, 24),
+            ),
+        ],
+    ),
+    complexity: 1,
+    lore: "There was never a pilot. There was never not a pilot.",
+)

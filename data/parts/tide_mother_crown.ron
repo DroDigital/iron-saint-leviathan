@@ -1,0 +1,59 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "tide_mother_crown",
+    name: "Pearl Crown",
+    slot: Head,
+    side: Kaiju,
+    weight: 8.0,
+    stats: (
+        hp: 150.0,
+        lock_range: 60.0,
+        reveal: true,
+        fog_vision: 60.0,
+        power: 1.1,
+    ),
+    moves: ["abyss_bite"],
+    source: Boss("tide_mother"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.2, 1.4),
+                size: (2.2, 1.6, 3.0),
+                tex: "hide",
+                col: (20, 50, 70),
+            ),
+            (
+                shape: Wedge,
+                at: (0.0, -0.5, 1.8),
+                size: (2.0, 0.8, 2.6),
+                tex: "belly",
+                col: (230, 230, 220),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (120, 255, 255),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.8, 0.7, 2.4),
+                size: (0.45, 0.35, 0.35),
+                tex: "glow",
+                col: (120, 255, 255),
+                glow: true,
+            ),
+            (
+                shape: Cone,
+                at: (0.0, 1.2, 0.6),
+                size: (2.6, 1.6, 2.0),
+                tex: "hide",
+                col: (200, 210, 220),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

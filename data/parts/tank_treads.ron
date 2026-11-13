@@ -1,0 +1,39 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "tank_treads",
+    name: "Militia Treads",
+    slot: Legs,
+    side: Saint,
+    weight: 22.0,
+    stats: (
+        hp: 200.0,
+        armor: 24.0,
+    ),
+    source: Enemy("tank"),
+    locomotion: (
+        kind: Treads,
+        speed: 6.0,
+        swim: 0.3,
+        deep_water: false,
+        climb: true,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-1.7, 0.0, 0.0),
+                size: (0.8, 1.0, 4.8),
+                tex: "tread",
+                col: (40, 40, 38),
+            ),
+            (
+                shape: Box,
+                at: (1.7, 0.0, 0.0),
+                size: (0.8, 1.0, 4.8),
+                tex: "tread",
+                col: (40, 40, 38),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

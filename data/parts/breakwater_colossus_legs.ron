@@ -1,0 +1,81 @@
+// Part definition. Slot Legs, side Saint.
+(
+    id: "breakwater_colossus_legs",
+    name: "Caisson Legs",
+    slot: Legs,
+    side: Saint,
+    weight: 32.0,
+    stats: (
+        hp: 340.0,
+        armor: 34.0,
+    ),
+    source: Boss("breakwater_colossus"),
+    locomotion: (
+        kind: Biped,
+        speed: 6.0,
+        swim: 1.0,
+        deep_water: true,
+        climb: false,
+    ),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (130, 130, 120),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (90, 90, 84),
+            ),
+            (
+                shape: Box,
+                at: (-0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (130, 130, 120),
+            ),
+            (
+                shape: Box,
+                at: (-1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (90, 90, 84),
+            ),
+            (
+                shape: Box,
+                at: (0.8, -1.2, 0.0),
+                size: (1.0, 2.2, 1.1),
+                tex: "plate",
+                col: (130, 130, 120),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -3.4, 0.1),
+                size: (1.0, 2.3, 1.2),
+                tex: "grate",
+                col: (90, 90, 84),
+            ),
+            (
+                shape: Box,
+                at: (0.85, -4.4, 0.3),
+                size: (1.1, 0.4, 1.8),
+                tex: "plate",
+                col: (130, 130, 120),
+            ),
+            (
+                shape: Box,
+                at: (1.1, -2.4, 0.0),
+                size: (0.5, 1.2, 1.4),
+                tex: "hazard",
+                col: (90, 90, 84),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

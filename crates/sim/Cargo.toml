@@ -1,0 +1,16 @@
+[package]
+name = "isl-sim"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Deterministic 60 Hz gameplay simulation: combat, builds, AI, city, tide, war. No rendering or audio."
+
+[dependencies]
+isl-data.workspace = true
+glam.workspace = true
+serde.workspace = true
+rand_pcg = { workspace = true, features = ["serde"] }
+rand_core.workspace = true
+
+[dev-dependencies]
+ron.workspace = true

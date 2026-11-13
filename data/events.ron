@@ -1,0 +1,47 @@
+// Random war events rolled after each mission.
+[
+    (
+        id: "demo_disc",
+        name: "DEMO DISC INVASION",
+        kind: DemoDisc,
+        chance: 0.08,
+        desc: "A monster that was never in the finished game has wandered in. Its parts are cursed.",
+        spawn: ("demo_kaiju", "demo_saint"),
+        quirk: "demo_curse",
+    ),
+    (
+        id: "evacuation",
+        name: "EVACUATION",
+        kind: Evacuation,
+        chance: 0.12,
+        desc: "Civilian convoys are moving through the district. Saints escort them; Kaiju hunt them.",
+    ),
+    (
+        id: "bell",
+        name: "THE BELL",
+        kind: CathedralBell,
+        chance: 0.06,
+        desc: "Someone rang the Cathedral bell. St. Vesper is awake.",
+    ),
+    (
+        id: "static",
+        name: "NIGHT OF STATIC",
+        kind: NightOfStatic,
+        chance: 0.05,
+        desc: "The memory card hums. Every ghost walks tonight.",
+    ),
+    (
+        id: "blackout",
+        name: "BLACKOUT",
+        kind: Blackout,
+        chance: 0.1,
+        desc: "The grid is down across Harrowmouth.",
+    ),
+    (
+        id: "supply",
+        name: "SUPPLY DROP",
+        kind: SupplyDrop,
+        chance: 0.1,
+        desc: "A supply drop lands in the district: salvage for Saints, a meal for Kaiju.",
+    ),
+]

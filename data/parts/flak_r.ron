@@ -1,0 +1,37 @@
+// Part definition. Slot RightArm, side Saint.
+(
+    id: "flak_r",
+    name: "Flak Barrel R",
+    slot: RightArm,
+    side: Saint,
+    weight: 10.0,
+    stats: (
+        hp: 120.0,
+        armor: 14.0,
+        power: 1.1,
+        impact: 1.0,
+    ),
+    moves: ["flak_salvo", "flak_burst"],
+    source: Enemy("aa_battery"),
+    visual: (
+        prims: [
+            (
+                shape: Cylinder,
+                at: (0.0, 0.4, 1.0),
+                size: (0.35, 2.6, 0.35),
+                rot: (60.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 50, 50),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.4, 0.4, 1.0),
+                size: (0.35, 2.6, 0.35),
+                rot: (60.0, 0.0, 0.0),
+                tex: "steel",
+                col: (50, 50, 50),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

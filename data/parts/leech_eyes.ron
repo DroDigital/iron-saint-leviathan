@@ -1,0 +1,42 @@
+// Part definition. Slot Head, side Kaiju.
+(
+    id: "leech_eyes",
+    name: "Leech Eyes",
+    slot: Head,
+    side: Kaiju,
+    weight: 2.0,
+    stats: (
+        hp: 40.0,
+        lock_range: 30.0,
+        fog_vision: 20.0,
+    ),
+    source: Enemy("hull_leech"),
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 0.0, 0.6),
+                size: (1.6, 1.4, 1.8),
+                tex: "hide",
+                col: (90, 60, 70),
+            ),
+            (
+                shape: Sphere,
+                at: (-0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 90, 120),
+                glow: true,
+            ),
+            (
+                shape: Sphere,
+                at: (0.5, 0.4, 1.4),
+                size: (0.35, 0.35, 0.35),
+                tex: "glow",
+                col: (255, 90, 120),
+                glow: true,
+            ),
+        ],
+    ),
+    complexity: 1,
+)

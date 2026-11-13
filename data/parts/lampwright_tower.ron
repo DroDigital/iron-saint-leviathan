@@ -1,0 +1,51 @@
+// Part definition. Slot Frame, side Saint.
+(
+    id: "lampwright_tower",
+    name: "Lighthouse Hull",
+    slot: Frame,
+    side: Saint,
+    weight: 40.0,
+    stats: (
+        hp: 760.0,
+        armor: 26.0,
+        capacity: 110.0,
+        poise: 110.0,
+        size: 1.25,
+    ),
+    source: Boss("lampwright"),
+    heal: RepairCharges(5),
+    rig: Humanoid,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (0.0, 2.1, 0.0),
+                size: (3.84, 3.0, 2.0),
+                tex: "plate",
+                col: (200, 190, 120),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 0.2, 0.0),
+                size: (2.688, 1.0, 1.4),
+                tex: "grate",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 3.75, 0.0),
+                size: (1.0, 0.5, 1.0),
+                tex: "plate",
+                col: (60, 60, 70),
+            ),
+            (
+                shape: Box,
+                at: (0.0, 2.6, 1.05),
+                size: (3.072, 1.0, 0.4),
+                tex: "hazard",
+                col: (60, 60, 70),
+            ),
+        ],
+    ),
+    complexity: 2,
+)

@@ -1,0 +1,36 @@
+// Part definition. Slot Core, side Saint.
+(
+    id: "st_cinder_furnace",
+    name: "Furnace Heart",
+    slot: Core,
+    side: Saint,
+    weight: 12.0,
+    stats: (
+        hp: 170.0,
+        stamina: 130.0,
+        regen: 34.0,
+    ),
+    source: Chassis("st_cinder"),
+    stamina: Heat,
+    visual: (
+        prims: [
+            (
+                shape: Sphere,
+                at: (0.0, 0.0, 0.0),
+                size: (0.9, 0.9, 0.45),
+                tex: "glow",
+                col: (255, 120, 40),
+                glow: true,
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, 0.0, -0.1),
+                size: (1.3, 0.3, 1.3),
+                rot: (90.0, 0.0, 0.0),
+                tex: "grate",
+                col: (70, 62, 58),
+            ),
+        ],
+    ),
+    complexity: 1,
+)

@@ -1,0 +1,51 @@
+// Part definition. Slot LeftArm, side Saint.
+(
+    id: "st_anchor_winch",
+    name: "Chain Winch",
+    slot: LeftArm,
+    side: Saint,
+    weight: 18.0,
+    stats: (
+        hp: 220.0,
+        armor: 26.0,
+        guard: 0.75,
+        impact: 1.1,
+    ),
+    moves: ["winch_snare"],
+    source: Chassis("st_anchor"),
+    parry: true,
+    visual: (
+        prims: [
+            (
+                shape: Box,
+                at: (-0.15, 0.25, 0.0),
+                size: (1.3, 0.9, 1.3),
+                tex: "plate",
+                col: (60, 80, 70),
+            ),
+            (
+                shape: Tube,
+                at: (0.0, -1.3, 0.0),
+                size: (0.8, 2.0, 0.8),
+                tex: "grate",
+                col: (150, 140, 60),
+            ),
+            (
+                shape: Box,
+                at: (0.0, -3.0, 0.15),
+                size: (0.95, 1.9, 0.95),
+                tex: "plate",
+                col: (60, 80, 70),
+            ),
+            (
+                shape: Cylinder,
+                at: (0.0, -3.4, 0.7),
+                size: (1.0, 1.0, 1.0),
+                rot: (0.0, 0.0, 90.0),
+                tex: "rust",
+                col: (90, 90, 70),
+            ),
+        ],
+    ),
+    complexity: 1,
+)
